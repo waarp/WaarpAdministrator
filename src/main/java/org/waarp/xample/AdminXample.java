@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with Waarp .  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.waarp.administrator.xample;
+package org.waarp.xample;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -53,7 +53,6 @@ public class AdminXample extends XAmple {
 		this.list.add(this);
 	}
 
-	@Override
 	public void exit() {
 		if (!confirmation())
 			return;

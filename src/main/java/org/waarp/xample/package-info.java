@@ -20,4 +20,4 @@
  * @author Frederic Bregier
  * 
  */
-package org.waarp.administrator.xample;
+package org.waarp.xample;

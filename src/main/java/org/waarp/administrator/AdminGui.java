@@ -31,7 +31,6 @@ import javax.swing.JButton;
 
 import org.jboss.netty.logging.InternalLoggerFactory;
 import org.waarp.administrator.guipwd.AdminUiPassword;
-import org.waarp.administrator.xample.AdminXample;
 import org.waarp.common.logging.WaarpInternalLogger;
 import org.waarp.common.logging.WaarpInternalLoggerFactory;
 import org.waarp.common.logging.WaarpSlf4JLoggerFactory;
@@ -43,6 +42,7 @@ import org.waarp.openr66.r66gui.AdminSimpleR66ClientGui;
 import org.waarp.openr66.r66gui.R66Environment;
 import org.waarp.openr66.serveraction.AdminR66OperationsGui;
 import org.waarp.uip.WaarpPassword;
+import org.waarp.xample.AdminXample;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
