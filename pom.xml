@@ -235,6 +235,8 @@
 	            -link http://www.slf4j.org/apidocs/
 
 				-group "Waarp Administrator Gui package" "org.waarp.administrator*"
+				-group "Waarp Administrator R66 package" "org.waarp.openr66*"
+				-group "Waarp Xml Editor Gui package" "org.waarp.xample*"
 
 	            -sourceclasspath ${basedir}/target/classes
 	          </additionalparam>
