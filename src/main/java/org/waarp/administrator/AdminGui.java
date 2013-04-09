@@ -20,6 +20,7 @@ package org.waarp.administrator;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
@@ -48,6 +49,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +67,15 @@ public class AdminGui {
 	protected static boolean getParams(String[] args) {
 		if (args.length < 1) {
 			logger.error("Need the configuration file as first argument");
-			return false;
+			JFileChooser chooser = new JFileChooser();
+			int returnvval = chooser.showOpenDialog(null);
+			if (returnvval == JFileChooser.APPROVE_OPTION) {
+				File file = chooser.getSelectedFile();
+				args = new String[] {file.getAbsolutePath()};
+			} else {
+				JOptionPane.showMessageDialog(null, "Need the configuration file as first argument");
+				return false;
+			}
 		}
 		if (!FileBasedConfiguration
 				.setClientConfigurationFromXml(Configuration.configuration, args[0])) {
