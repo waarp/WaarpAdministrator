@@ -1017,6 +1017,7 @@ public class AdminR66OperationsGui extends JFrame {
 		R66Future future = new R66Future(true);
 		boolean getHost = chckbxHosts.isSelected();
 		boolean getRule = chckbxRules.isSelected();
+		String ruleToGet = textRuleUsedToGet.getText();
 		ConfigExport export = new ConfigExport(future, getHost, getRule,
 				AdminGui.environnement.networkTransaction);
 		export.setHost(host);
@@ -1035,49 +1036,57 @@ public class AdminR66OperationsGui extends JFrame {
 				if (values.length > 1) {
 					srule = values[1];
 				}
-				// XXX FIXME should get config files
-				if (getHost && shost != null && shost.length() > 1) {
-					future = new R66Future(true);
-					DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), shost,
-							textRuleUsedToGet.getText(), "Get Host Configuration from "
-									+ AdminGui.environnement.hostId,
-							AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
-							DbConstant.ILLEGALVALUE,
-							AdminGui.environnement.networkTransaction);
-					transfer.run();
-					if (future.isSuccess()) {
-						R66Result resultHost = future.getResult();
-						shost = resultHost.file.getTrueFile().getAbsolutePath();
-						message += " Host file into: " + shost;
-					} else {
-						shost = "Cannot get Host file: " + shost;
-						message += shost;
+				if (ruleToGet == null || ruleToGet.isEmpty()) {
+					message = "No rule passed to download configuration, so cannot get configuration";
+				}
+				if (message.length() > 1) {
+					// error
+					message = "Get Config in FAILURE: " + message;
+				} else {
+					// XXX FIXME should get config files
+					if (getHost && shost != null && shost.length() > 1) {
+						future = new R66Future(true);
+						DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), shost,
+								ruleToGet, "Get Host Configuration from "
+										+ AdminGui.environnement.hostId,
+								AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+								DbConstant.ILLEGALVALUE,
+								AdminGui.environnement.networkTransaction);
+						transfer.run();
+						if (future.isSuccess()) {
+							R66Result resultHost = future.getResult();
+							shost = resultHost.file.getTrueFile().getAbsolutePath();
+							message += " Host file into: " + shost;
+						} else {
+							shost = "Cannot get Host file: " + shost;
+							message += shost;
+						}
 					}
-				}
-				if (getRule && srule != null && srule.length() > 1) {
-					future = new R66Future(true);
-					DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), srule,
-							textRuleUsedToGet.getText(), "Get Rule Configuration from "
-									+ AdminGui.environnement.hostId,
-							AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
-							DbConstant.ILLEGALVALUE,
-							AdminGui.environnement.networkTransaction);
-					transfer.run();
-					if (future.isSuccess()) {
-						R66Result resultRule = future.getResult();
-						srule = resultRule.file.getTrueFile().getAbsolutePath();
-						message += " Ruke file into: " + srule;
-					} else {
-						srule = "Cannot get Rule file: " + srule;
-						message += srule;
+					if (getRule && srule != null && srule.length() > 1) {
+						future = new R66Future(true);
+						DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), srule,
+								ruleToGet, "Get Rule Configuration from "
+										+ AdminGui.environnement.hostId,
+								AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+								DbConstant.ILLEGALVALUE,
+								AdminGui.environnement.networkTransaction);
+						transfer.run();
+						if (future.isSuccess()) {
+							R66Result resultRule = future.getResult();
+							srule = resultRule.file.getTrueFile().getAbsolutePath();
+							message += " Ruke file into: " + srule;
+						} else {
+							srule = "Cannot get Rule file: " + srule;
+							message += srule;
+						}
 					}
-				}
-				// XXX FIXME then set downloaded file to text fields
-				if (getHost) {
-					textFieldHosts.setText(shost);
-				}
-				if (getRule) {
-					textFieldRules.setText(srule);
+					// XXX FIXME then set downloaded file to text fields
+					if (getHost) {
+						textFieldHosts.setText(shost);
+					}
+					if (getRule) {
+						textFieldRules.setText(srule);
+					}
 				}
 			}
 			if (result.code == ErrorCode.Warning) {
@@ -1117,13 +1126,28 @@ public class AdminR66OperationsGui extends JFrame {
 		String rulefile = textFieldRules.getText();
 		boolean erazeHost = chckbxPurgeHosts.isSelected();
 		boolean erazeRule = chckbxPurgeRules.isSelected();
+		String ruleToPut = textRuleToPut.getText();
 		String error = "";
 		String msg = "";
 		// XXX FIXME should send config files first
+		if ((hostfile == null || hostfile.isEmpty()) &&
+			(rulefile == null || rulefile.isEmpty())) {
+			error = "No rule file neither host file passed as argument, so cannot set configuration";
+		}
+		if (ruleToPut == null || ruleToPut.isEmpty()) {
+			error = "No rule passed to upload configuration, so cannot set configuration";
+		}
+		String message = null;
+		if (error.length() > 1) {
+			// error
+			message = "Get Config in FAILURE: " + error;
+			AdminGui.environnement.GuiResultat = message;
+			return;
+		}
 		if (hostfile != null && hostfile.length() > 1) {
 			future = new R66Future(true);
 			DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), hostfile,
-					textRuleToPut.getText(), "Set Host Configuration from "
+					ruleToPut, "Set Host Configuration from "
 							+ AdminGui.environnement.hostId,
 					AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
 					DbConstant.ILLEGALVALUE,
@@ -1138,7 +1162,7 @@ public class AdminR66OperationsGui extends JFrame {
 		if (rulefile != null && rulefile.length() > 1) {
 			future = new R66Future(true);
 			DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), rulefile,
-					textRuleToPut.getText(), "Set Rule Configuration from "
+					ruleToPut, "Set Rule Configuration from "
 							+ AdminGui.environnement.hostId,
 					AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
 					DbConstant.ILLEGALVALUE,
@@ -1150,7 +1174,6 @@ public class AdminR66OperationsGui extends JFrame {
 				msg += " Rule Configuration transmitted";
 			}
 		}
-		String message = null;
 		if (error.length() > 1) {
 			// error
 			message = "Get Config in FAILURE: " + error;
@@ -1235,39 +1258,44 @@ public class AdminR66OperationsGui extends JFrame {
 				textFieldResult.setText(fileExported);
 				// XXX FIXME download logs
 				if (fileExported != null && fileExported.length() > 1) {
-					future = new R66Future(true);
-					DirectTransfer transfer = new DirectTransfer(future, host.getHostid(),
-							fileExported,
-							textRuleToExportLog.getText(), "Get Exported Logs from "
-									+ AdminGui.environnement.hostId,
-							AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
-							DbConstant.ILLEGALVALUE,
-							AdminGui.environnement.networkTransaction);
-					transfer.run();
-					if (!future.isSuccess()) {
-						message = "Cannot get: " + fileExported + "\n";
+					String ruleToExport = textRuleToExportLog.getText();
+					if (ruleToExport == null || ruleToExport.isEmpty()) {
+						message = "Cannot get: " + fileExported + " since no rule to export specified\n";
 					} else {
-						textFieldResult.setText(future.getResult().file.getTrueFile()
-								.getAbsolutePath());
+						future = new R66Future(true);
+						DirectTransfer transfer = new DirectTransfer(future, host.getHostid(),
+								fileExported,
+								ruleToExport, "Get Exported Logs from "
+										+ AdminGui.environnement.hostId,
+								AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+								DbConstant.ILLEGALVALUE,
+								AdminGui.environnement.networkTransaction);
+						transfer.run();
+						if (!future.isSuccess()) {
+							message = "Cannot get: " + fileExported + "\n";
+						} else {
+							textFieldResult.setText(future.getResult().file.getTrueFile()
+									.getAbsolutePath());
+						}
 					}
 				}
 			}
 			if (result.code == ErrorCode.Warning) {
-				message += "WARNED on Export Logs:\n    " +
+				message += "\nWARNED on Export Logs:\n    " +
 						(result.other != null ? ((ValidPacket) result.other).getSheader() :
 								"no information given")
-						+ "\n    delay: " + delay;
+						+ "\n    delay: " + delay+"\n";
 			} else {
-				message += "SUCCESS on Export Logs:\n    " +
+				message += "\nSUCCESS on Export Logs:\n    " +
 						(result.other != null ? ((ValidPacket) result.other).getSheader() :
 								"no information given")
 						+ "\n    delay: " + delay;
 			}
 		} else {
 			if (result.code == ErrorCode.Warning) {
-				message += "Export Logs is WARNED: " + future.getCause();
+				message += "\nExport Logs is WARNED: " + future.getCause();
 			} else {
-				message += "Export Logs in FAILURE: " + future.getCause();
+				message += "\nExport Logs in FAILURE: " + future.getCause();
 			}
 		}
 		AdminGui.environnement.GuiResultat = message;
@@ -1282,6 +1310,10 @@ public class AdminR66OperationsGui extends JFrame {
 		String skey = null;
 		try {
 			char[] pwd = passwordField.getPassword();
+			if (pwd == null || pwd.length == 0) {
+				AdminGui.environnement.GuiResultat = "No Password given!";
+				return;
+			}
 			skey = new String(pwd);
 		} catch (NullPointerException e) {
 			AdminGui.environnement.GuiResultat = "No Password given!";
