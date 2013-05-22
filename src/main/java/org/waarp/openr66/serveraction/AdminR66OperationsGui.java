@@ -58,6 +58,7 @@ import org.waarp.openr66.protocol.localhandler.packet.ShutdownPacket;
 import org.waarp.openr66.protocol.localhandler.packet.ValidPacket;
 import org.waarp.openr66.protocol.utils.ChannelUtils;
 import org.waarp.openr66.protocol.utils.R66Future;
+import org.waarp.openr66.r66gui.R66Environment;
 import org.waarp.openr66.server.ChangeBandwidthLimits;
 import org.waarp.openr66.server.ConfigExport;
 import org.waarp.openr66.server.ConfigImport;
@@ -255,10 +256,10 @@ public class AdminR66OperationsGui extends JFrame {
 	private JTextField textFieldStop;
 	private JButton btnExportLogs;
 	private JTextField textFieldResult;
-	private JTextField textRuleUsedToGet;
-	private JTextField textRuleToPut;
+	private JComboBox textRuleUsedToGet;
+	private JComboBox textRuleToPut;
 	private JLabel lblDates;
-	private JTextField textRuleToExportLog;
+	private JComboBox textRuleToExportLog;
 	private JSeparator separator;
 	private JLabel lblRuleToGet;
 	private JLabel lblRuleToPut;
@@ -407,6 +408,9 @@ public class AdminR66OperationsGui extends JFrame {
 	}
 
 	private void initConfig(JTabbedPane tabbedPane) {
+		String [] srulesSend = R66Environment.getRules(true);
+		String [] srulesRecv = R66Environment.getRules(false);
+		
 		JPanel configPanel = new JPanel();
 		tabbedPane.addTab("Configuration management", null, configPanel, null);
 		GridBagLayout gbl_toolsPanel = new GridBagLayout();
@@ -434,14 +438,13 @@ public class AdminR66OperationsGui extends JFrame {
 				configPanel.add(lblRuleToGet, gbc_lblRuleToGet);
 			}
 			{
-				textRuleUsedToGet = new JTextField();
+				textRuleUsedToGet = new JComboBox(srulesRecv);
 				GridBagConstraints gbc_textRuleUsedToGet = new GridBagConstraints();
 				gbc_textRuleUsedToGet.fill = GridBagConstraints.HORIZONTAL;
 				gbc_textRuleUsedToGet.insets = new Insets(0, 0, 5, 5);
 				gbc_textRuleUsedToGet.gridx = 1;
 				gbc_textRuleUsedToGet.gridy = 4;
 				configPanel.add(textRuleUsedToGet, gbc_textRuleUsedToGet);
-				textRuleUsedToGet.setColumns(10);
 			}
 			{
 				chckbxHosts = new JCheckBox("Hosts");
@@ -547,14 +550,13 @@ public class AdminR66OperationsGui extends JFrame {
 			configPanel.add(lblRuleToPut, gbc_lblRuleToPut);
 		}
 		{
-			textRuleToPut = new JTextField();
+			textRuleToPut = new JComboBox(srulesSend);
 			GridBagConstraints gbc_textRuleToPut = new GridBagConstraints();
 			gbc_textRuleToPut.insets = new Insets(0, 0, 5, 5);
 			gbc_textRuleToPut.fill = GridBagConstraints.HORIZONTAL;
 			gbc_textRuleToPut.gridx = 1;
 			gbc_textRuleToPut.gridy = 7;
 			configPanel.add(textRuleToPut, gbc_textRuleToPut);
-			textRuleToPut.setColumns(10);
 		}
 		{
 			chckbxPurgeHosts = new JCheckBox("Purge Hosts");
@@ -591,6 +593,7 @@ public class AdminR66OperationsGui extends JFrame {
 	}
 
 	private void initLog(JTabbedPane tabbedPane) {
+		String [] srulesRecv = R66Environment.getRules(false);
 		JPanel logPanel = new JPanel();
 		tabbedPane.addTab("Log management", null, logPanel, null);
 		GridBagLayout gbl_toolsPanel = new GridBagLayout();
@@ -678,14 +681,13 @@ public class AdminR66OperationsGui extends JFrame {
 				logPanel.add(lblRuleToExport, gbc_lblRuleToExport);
 			}
 			{
-				textRuleToExportLog = new JTextField();
+				textRuleToExportLog = new JComboBox(srulesRecv);
 				GridBagConstraints gbc_textRuleToExportLog = new GridBagConstraints();
 				gbc_textRuleToExportLog.insets = new Insets(0, 0, 5, 5);
 				gbc_textRuleToExportLog.fill = GridBagConstraints.HORIZONTAL;
 				gbc_textRuleToExportLog.gridx = 2;
 				gbc_textRuleToExportLog.gridy = 6;
 				logPanel.add(textRuleToExportLog, gbc_textRuleToExportLog);
-				textRuleToExportLog.setColumns(10);
 			}
 			GridBagConstraints gbc_btnExportLogs = new GridBagConstraints();
 			gbc_btnExportLogs.insets = new Insets(0, 0, 5, 5);
@@ -1017,7 +1019,7 @@ public class AdminR66OperationsGui extends JFrame {
 		R66Future future = new R66Future(true);
 		boolean getHost = chckbxHosts.isSelected();
 		boolean getRule = chckbxRules.isSelected();
-		String ruleToGet = textRuleUsedToGet.getText();
+		String ruleToGet = (String) textRuleUsedToGet.getSelectedItem();
 		ConfigExport export = new ConfigExport(future, getHost, getRule,
 				AdminGui.environnement.networkTransaction);
 		export.setHost(host);
@@ -1126,7 +1128,7 @@ public class AdminR66OperationsGui extends JFrame {
 		String rulefile = textFieldRules.getText();
 		boolean erazeHost = chckbxPurgeHosts.isSelected();
 		boolean erazeRule = chckbxPurgeRules.isSelected();
-		String ruleToPut = textRuleToPut.getText();
+		String ruleToPut = (String) textRuleToPut.getSelectedItem();
 		String error = "";
 		String msg = "";
 		// XXX FIXME should send config files first
@@ -1258,7 +1260,7 @@ public class AdminR66OperationsGui extends JFrame {
 				textFieldResult.setText(fileExported);
 				// XXX FIXME download logs
 				if (fileExported != null && fileExported.length() > 1) {
-					String ruleToExport = textRuleToExportLog.getText();
+					String ruleToExport = (String) textRuleToExportLog.getSelectedItem();
 					if (ruleToExport == null || ruleToExport.isEmpty()) {
 						message = "Cannot get: " + fileExported + " since no rule to export specified\n";
 					} else {

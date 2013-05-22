@@ -5,8 +5,10 @@
 		<author email="waarp1 at free.fr">Frederic Bregier</author>
 	</properties>
 	<body>
-		<release version="1.0.1" date="2013-04-15" description="Fix release">
+		<release version="1.0.1" date="2013-06-01" description="Fix release">
 			<action dev="Frederic Bregier" type="fix">Add Open file if no argument and allow direct execution by double-clic</action>
+			<action dev="Frederic Bregier" type="fix">Fix issue on R66Gui not functional due to bad handling of Logging</action>
+			<action dev="Frederic Bregier" type="add">Improve the interface</action>
 		</release>
 	    <release version="1.0.0" date="2013-04-02" description="First release">
 			<action dev="Frederic Bregier" type="add">First release</action>
