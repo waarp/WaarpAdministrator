@@ -20,6 +20,7 @@ package org.waarp.administrator;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
@@ -31,13 +32,19 @@ import javax.swing.JButton;
 
 import org.jboss.netty.logging.InternalLoggerFactory;
 import org.waarp.administrator.guipwd.AdminUiPassword;
+import org.waarp.common.database.exception.WaarpDatabaseNoConnectionException;
+import org.waarp.common.database.exception.WaarpDatabaseSqlException;
 import org.waarp.common.logging.WaarpInternalLogger;
 import org.waarp.common.logging.WaarpInternalLoggerFactory;
 import org.waarp.common.logging.WaarpSlf4JLoggerFactory;
+import org.waarp.openr66.client.Message;
 import org.waarp.openr66.configuration.FileBasedConfiguration;
 import org.waarp.openr66.database.DbConstant;
+import org.waarp.openr66.database.data.DbHostAuth;
 import org.waarp.openr66.protocol.configuration.Configuration;
+import org.waarp.openr66.protocol.localhandler.packet.TestPacket;
 import org.waarp.openr66.protocol.networkhandler.NetworkTransaction;
+import org.waarp.openr66.protocol.utils.R66Future;
 import org.waarp.openr66.r66gui.AdminSimpleR66ClientGui;
 import org.waarp.openr66.r66gui.R66Environment;
 import org.waarp.openr66.serveraction.AdminR66OperationsGui;
@@ -48,6 +55,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +75,15 @@ public class AdminGui {
 	protected static boolean getParams(String[] args) {
 		if (args.length < 1) {
 			logger.error("Need the configuration file as first argument");
-			return false;
+			JFileChooser chooser = new JFileChooser();
+			int returnvval = chooser.showOpenDialog(null);
+			if (returnvval == JFileChooser.APPROVE_OPTION) {
+				File file = chooser.getSelectedFile();
+				args = new String[] {file.getAbsolutePath()};
+			} else {
+				JOptionPane.showMessageDialog(null, "Need the configuration file as first argument");
+				return false;
+			}
 		}
 		if (!FileBasedConfiguration
 				.setClientConfigurationFromXml(Configuration.configuration, args[0])) {
@@ -142,7 +160,7 @@ public class AdminGui {
 	private void initialize() {
 		frmWaarpRCentral = new JFrame();
 		frmWaarpRCentral.setTitle("Waarp R66 Central Administrator");
-		frmWaarpRCentral.setBounds(100, 100, 532, 300);
+		frmWaarpRCentral.setBounds(100, 100, 710, 300);
 		frmWaarpRCentral.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -166,6 +184,45 @@ public class AdminGui {
 				AdminXample.start(xamples);
 			}
 		});
+		
+		JButton btnCheckPartners = new JButton("Check Partners");
+		btnCheckPartners.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// Check all Known Partners
+				try {
+					TestPacket packet;
+					String myhost = null;
+					try {
+						myhost = (AdminGui.environnement.hostId == null ? 
+								InetAddress.getLocalHost().getHostName() : AdminGui.environnement.hostId);
+					} catch (UnknownHostException e) {
+						myhost = "NameUnknown";
+					}
+					packet = new TestPacket("MSG", "Administrator checking from "+myhost
+							, 100);
+					String result = "Checked Hosts:\n";
+					for (DbHostAuth host : DbHostAuth.getAllHosts(null)) {
+						R66Future future = new R66Future(true);
+						Message mesg = new Message(AdminGui.environnement.networkTransaction, future, host, packet);
+						mesg.run();
+						future.awaitUninterruptibly();
+						if (future.isSuccess()) {
+							result += "OK: "+host.toString()+"\n";
+						} else {
+							result += "KO: "+host.toString()+"\n";
+						}
+					}
+					JOptionPane.showMessageDialog(null, result);
+				} catch (WaarpDatabaseNoConnectionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (WaarpDatabaseSqlException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		toolBar.add(btnCheckPartners);
 		toolBar.add(btnEditXml);
 		
 		JButton btnEditPassword = new JButton("Edit Password");
