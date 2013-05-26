@@ -20,3 +20,8 @@
 *.PDF	 diff=astextplain
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
+
+# Specific
+*.sh text eol=lf
+ENV_R66 text eol=lf
+

@@ -27,6 +27,7 @@
     </directory>
     <limit>
         <usefastmd5>True</usefastmd5>
-        <fastmd5>D:\NEWJARS\gglib\win32\MD5.dll</fastmd5>
+        <digest>4</digest>
+        <checkversion>True</checkversion>
     </limit>
 </config>

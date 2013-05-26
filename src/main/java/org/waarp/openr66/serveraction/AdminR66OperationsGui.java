@@ -58,6 +58,7 @@ import org.waarp.openr66.protocol.localhandler.packet.ShutdownPacket;
 import org.waarp.openr66.protocol.localhandler.packet.ValidPacket;
 import org.waarp.openr66.protocol.utils.ChannelUtils;
 import org.waarp.openr66.protocol.utils.R66Future;
+import org.waarp.openr66.r66gui.R66Environment;
 import org.waarp.openr66.server.ChangeBandwidthLimits;
 import org.waarp.openr66.server.ConfigExport;
 import org.waarp.openr66.server.ConfigImport;
@@ -121,13 +122,13 @@ public class AdminR66OperationsGui extends JFrame {
 
 	private void initializePanel() {
 		JPanel buttonPanel = new JPanel();
-		buttonPanel.setPreferredSize(new Dimension(10, 250));
-		buttonPanel.setMinimumSize(new Dimension(10, 250));
+		buttonPanel.setPreferredSize(new Dimension(50, 250));
+		buttonPanel.setMinimumSize(new Dimension(50, 250));
 		GridBagLayout buttons = new GridBagLayout();
 		buttons.columnWidths = new int[] { 194, 124, 0, 0, 0 };
-		buttons.rowHeights = new int[] { 0, 0 };
+		buttons.rowHeights = new int[] { 0, 0, 0, 0 };
 		buttons.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		buttons.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
+		buttons.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0 };
 		buttonPanel.setLayout(buttons);
 		mainPanel.setBottomComponent(buttonPanel);
 
@@ -136,33 +137,11 @@ public class AdminR66OperationsGui extends JFrame {
 		tabbedPane.setPreferredSize(new Dimension(5, 300));
 		mainPanel.setTopComponent(tabbedPane);
 
-		progressBarTransfer = new JProgressBar();
-		progressBarTransfer.setPreferredSize(new Dimension(500, 14));
-		GridBagConstraints gbc_pb = new GridBagConstraints();
-		gbc_pb.gridwidth = 3;
-		gbc_pb.insets = new Insets(0, 0, 0, 5);
-		gbc_pb.fill = GridBagConstraints.BOTH;
-		gbc_pb.gridx = 0;
-		gbc_pb.gridy = 2;
-		buttonPanel.add(progressBarTransfer, gbc_pb);
-
-		JButton btnCancel = new JButton("Close");
-		btnCancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				close();
-			}
-		});
-		GridBagConstraints gbc_btnCancel = new GridBagConstraints();
-		gbc_btnCancel.insets = new Insets(0, 0, 0, 5);
-		gbc_btnCancel.gridx = 3;
-		gbc_btnCancel.gridy = 2;
-		buttonPanel.add(btnCancel, gbc_btnCancel);
-		progressBarTransfer.setVisible(false);
-
 		scrollPane_1 = new JScrollPane();
 		scrollPane_1
 				.setViewportBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		GridBagConstraints gbc_scrollPane_1 = new GridBagConstraints();
+		gbc_scrollPane_1.insets = new Insets(0, 0, 5, 0);
 		gbc_scrollPane_1.weighty = 1.0;
 		gbc_scrollPane_1.weightx = 1.0;
 		gbc_scrollPane_1.fill = GridBagConstraints.BOTH;
@@ -184,6 +163,7 @@ public class AdminR66OperationsGui extends JFrame {
 		scrollPane.setViewportBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null,
 				null));
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.insets = new Insets(0, 0, 5, 0);
 		gbc_scrollPane.weighty = 1.0;
 		gbc_scrollPane.weightx = 1.0;
 		gbc_scrollPane.fill = GridBagConstraints.BOTH;
@@ -199,6 +179,49 @@ public class AdminR66OperationsGui extends JFrame {
 
 		System.setOut(new PrintStream(new JTextAreaOutputStream(textPaneLog)));
 
+		try {
+			comboBoxServer = new JComboBox(DbHostAuth.getAllHosts(null));
+		} catch (WaarpDatabaseNoConnectionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return;
+		} catch (WaarpDatabaseSqlException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return;
+		}
+		comboBoxServer.setMinimumSize(new Dimension(28, 22));
+		GridBagConstraints gbc_comboBoxServer = new GridBagConstraints();
+		gbc_comboBoxServer.gridwidth = 2;
+		gbc_comboBoxServer.insets = new Insets(0, 0, 5, 5);
+		gbc_comboBoxServer.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBoxServer.gridx = 0;
+		gbc_comboBoxServer.gridy = 2;
+		buttonPanel.add(comboBoxServer, gbc_comboBoxServer);
+
+		progressBarTransfer = new JProgressBar();
+		progressBarTransfer.setPreferredSize(new Dimension(500, 14));
+		GridBagConstraints gbc_pb = new GridBagConstraints();
+		gbc_pb.gridwidth = 3;
+		gbc_pb.insets = new Insets(0, 0, 0, 5);
+		gbc_pb.fill = GridBagConstraints.BOTH;
+		gbc_pb.gridx = 0;
+		gbc_pb.gridy = 3;
+		buttonPanel.add(progressBarTransfer, gbc_pb);
+
+		JButton btnCancel = new JButton("Close");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				close();
+			}
+		});
+		GridBagConstraints gbc_btnCancel = new GridBagConstraints();
+		gbc_btnCancel.insets = new Insets(0, 0, 0, 5);
+		gbc_btnCancel.gridx = 3;
+		gbc_btnCancel.gridy = 3;
+		buttonPanel.add(btnCancel, gbc_btnCancel);
+		progressBarTransfer.setVisible(false);
+
 		initBandwidth(tabbedPane);
 		initConfig(tabbedPane);
 		initLog(tabbedPane);
@@ -206,7 +229,6 @@ public class AdminR66OperationsGui extends JFrame {
 		mainPanel.setDividerLocation(200);
 	}
 
-	JComboBox comboBoxHostBdw, comboBoxHostCfg, comboBoxHostShut, comboBoxHostLog;
 	JButton btnGetBandwidthCurrent, btnGetConfigCurrent;
 	JButton btnSetBandwidthConfiguration, btnSetConfigConfiguration;
 	JFormattedTextField globWriteLimit;
@@ -234,15 +256,16 @@ public class AdminR66OperationsGui extends JFrame {
 	private JTextField textFieldStop;
 	private JButton btnExportLogs;
 	private JTextField textFieldResult;
-	private JTextField textRuleUsedToGet;
-	private JTextField textRuleToPut;
+	private JComboBox textRuleUsedToGet;
+	private JComboBox textRuleToPut;
 	private JLabel lblDates;
-	private JTextField textRuleToExportLog;
+	private JComboBox textRuleToExportLog;
 	private JSeparator separator;
 	private JLabel lblRuleToGet;
 	private JLabel lblRuleToPut;
 	private JLabel lblRuleToExport;
 	private JLabel lblNbIfNo;
+	private JComboBox comboBoxServer;
 
 	private void initBandwidth(JTabbedPane tabbedPane) {
 		JPanel bandwidthPanel = new JPanel();
@@ -253,27 +276,6 @@ public class AdminR66OperationsGui extends JFrame {
 		gbl_xmlFilePanel.columnWeights = new double[] { 0.0, 0.0, 1.0, 1.0, 1.0, 1.0 };
 		gbl_xmlFilePanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0 };
 		bandwidthPanel.setLayout(gbl_xmlFilePanel);
-		{
-			try {
-				comboBoxHostBdw = new JComboBox(DbHostAuth.getAllHosts(null));
-			} catch (WaarpDatabaseNoConnectionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return;
-			} catch (WaarpDatabaseSqlException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return;
-			}
-			comboBoxHostBdw.setMinimumSize(new Dimension(28, 22));
-			GridBagConstraints gbc_comboBoxHostBdw = new GridBagConstraints();
-			gbc_comboBoxHostBdw.gridwidth = 4;
-			gbc_comboBoxHostBdw.insets = new Insets(0, 0, 5, 5);
-			gbc_comboBoxHostBdw.fill = GridBagConstraints.HORIZONTAL;
-			gbc_comboBoxHostBdw.gridx = 0;
-			gbc_comboBoxHostBdw.gridy = 0;
-			bandwidthPanel.add(comboBoxHostBdw, gbc_comboBoxHostBdw);
-		}
 		{
 			btnGetBandwidthCurrent = new JButton("Get Bandwidth current configuration");
 			btnGetBandwidthCurrent.addActionListener(new ActionListener() {
@@ -406,6 +408,9 @@ public class AdminR66OperationsGui extends JFrame {
 	}
 
 	private void initConfig(JTabbedPane tabbedPane) {
+		String [] srulesSend = R66Environment.getRules(true);
+		String [] srulesRecv = R66Environment.getRules(false);
+		
 		JPanel configPanel = new JPanel();
 		tabbedPane.addTab("Configuration management", null, configPanel, null);
 		GridBagLayout gbl_toolsPanel = new GridBagLayout();
@@ -423,25 +428,6 @@ public class AdminR66OperationsGui extends JFrame {
 					action.execute();
 				}
 			});
-			try {
-				comboBoxHostCfg = new JComboBox(DbHostAuth.getAllHosts(null));
-			} catch (WaarpDatabaseNoConnectionException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-				return;
-			} catch (WaarpDatabaseSqlException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-				return;
-			}
-			comboBoxHostCfg.setMinimumSize(new Dimension(28, 22));
-			GridBagConstraints gbc_comboBoxHostBdw = new GridBagConstraints();
-			gbc_comboBoxHostBdw.gridwidth = 4;
-			gbc_comboBoxHostBdw.insets = new Insets(0, 0, 5, 5);
-			gbc_comboBoxHostBdw.fill = GridBagConstraints.HORIZONTAL;
-			gbc_comboBoxHostBdw.gridx = 1;
-			gbc_comboBoxHostBdw.gridy = 3;
-			configPanel.add(comboBoxHostCfg, gbc_comboBoxHostBdw);
 			{
 				lblRuleToGet = new JLabel("Rule to Get");
 				GridBagConstraints gbc_lblRuleToGet = new GridBagConstraints();
@@ -452,14 +438,13 @@ public class AdminR66OperationsGui extends JFrame {
 				configPanel.add(lblRuleToGet, gbc_lblRuleToGet);
 			}
 			{
-				textRuleUsedToGet = new JTextField();
+				textRuleUsedToGet = new JComboBox(srulesRecv);
 				GridBagConstraints gbc_textRuleUsedToGet = new GridBagConstraints();
 				gbc_textRuleUsedToGet.fill = GridBagConstraints.HORIZONTAL;
 				gbc_textRuleUsedToGet.insets = new Insets(0, 0, 5, 5);
 				gbc_textRuleUsedToGet.gridx = 1;
 				gbc_textRuleUsedToGet.gridy = 4;
 				configPanel.add(textRuleUsedToGet, gbc_textRuleUsedToGet);
-				textRuleUsedToGet.setColumns(10);
 			}
 			{
 				chckbxHosts = new JCheckBox("Hosts");
@@ -565,14 +550,13 @@ public class AdminR66OperationsGui extends JFrame {
 			configPanel.add(lblRuleToPut, gbc_lblRuleToPut);
 		}
 		{
-			textRuleToPut = new JTextField();
+			textRuleToPut = new JComboBox(srulesSend);
 			GridBagConstraints gbc_textRuleToPut = new GridBagConstraints();
 			gbc_textRuleToPut.insets = new Insets(0, 0, 5, 5);
 			gbc_textRuleToPut.fill = GridBagConstraints.HORIZONTAL;
 			gbc_textRuleToPut.gridx = 1;
 			gbc_textRuleToPut.gridy = 7;
 			configPanel.add(textRuleToPut, gbc_textRuleToPut);
-			textRuleToPut.setColumns(10);
 		}
 		{
 			chckbxPurgeHosts = new JCheckBox("Purge Hosts");
@@ -609,6 +593,7 @@ public class AdminR66OperationsGui extends JFrame {
 	}
 
 	private void initLog(JTabbedPane tabbedPane) {
+		String [] srulesRecv = R66Environment.getRules(false);
 		JPanel logPanel = new JPanel();
 		tabbedPane.addTab("Log management", null, logPanel, null);
 		GridBagLayout gbl_toolsPanel = new GridBagLayout();
@@ -618,25 +603,6 @@ public class AdminR66OperationsGui extends JFrame {
 		gbl_toolsPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 		logPanel.setLayout(gbl_toolsPanel);
 
-		try {
-			comboBoxHostLog = new JComboBox(DbHostAuth.getAllHosts(null));
-		} catch (WaarpDatabaseNoConnectionException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return;
-		} catch (WaarpDatabaseSqlException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return;
-		}
-		comboBoxHostLog.setMinimumSize(new Dimension(28, 22));
-		GridBagConstraints gbc_comboBoxHostBdw = new GridBagConstraints();
-		gbc_comboBoxHostBdw.gridwidth = 4;
-		gbc_comboBoxHostBdw.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBoxHostBdw.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboBoxHostBdw.gridx = 1;
-		gbc_comboBoxHostBdw.gridy = 3;
-		logPanel.add(comboBoxHostLog, gbc_comboBoxHostBdw);
 		{
 			chckbxPurge = new JCheckBox("Purge");
 			GridBagConstraints gbc_chckbxPurge = new GridBagConstraints();
@@ -654,7 +620,8 @@ public class AdminR66OperationsGui extends JFrame {
 			logPanel.add(chckbxClean, gbc_chckbxClean);
 		}
 		{
-			lblNbIfNo = new JLabel("NB: if no dates specified, all before yesterday midnight \r\n; Date format : yyyyMMddHHmmssSSS (completed on right side by '0')");
+			lblNbIfNo = new JLabel(
+					"NB: if no dates specified, all before yesterday midnight \r\n; Date format : yyyyMMddHHmmssSSS (completed on right side by '0')");
 			lblNbIfNo.setPreferredSize(new Dimension(601, 30));
 			lblNbIfNo.setFocusTraversalKeysEnabled(false);
 			lblNbIfNo.setFocusable(false);
@@ -714,14 +681,13 @@ public class AdminR66OperationsGui extends JFrame {
 				logPanel.add(lblRuleToExport, gbc_lblRuleToExport);
 			}
 			{
-				textRuleToExportLog = new JTextField();
+				textRuleToExportLog = new JComboBox(srulesRecv);
 				GridBagConstraints gbc_textRuleToExportLog = new GridBagConstraints();
 				gbc_textRuleToExportLog.insets = new Insets(0, 0, 5, 5);
 				gbc_textRuleToExportLog.fill = GridBagConstraints.HORIZONTAL;
 				gbc_textRuleToExportLog.gridx = 2;
 				gbc_textRuleToExportLog.gridy = 6;
 				logPanel.add(textRuleToExportLog, gbc_textRuleToExportLog);
-				textRuleToExportLog.setColumns(10);
 			}
 			GridBagConstraints gbc_btnExportLogs = new GridBagConstraints();
 			gbc_btnExportLogs.insets = new Insets(0, 0, 5, 5);
@@ -754,25 +720,6 @@ public class AdminR66OperationsGui extends JFrame {
 		gbl_toolsPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 		shutdownPanel.setLayout(gbl_toolsPanel);
 
-		try {
-			comboBoxHostShut = new JComboBox(DbHostAuth.getAllHosts(null));
-		} catch (WaarpDatabaseNoConnectionException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return;
-		} catch (WaarpDatabaseSqlException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return;
-		}
-		comboBoxHostShut.setMinimumSize(new Dimension(28, 22));
-		GridBagConstraints gbc_comboBoxHostBdw = new GridBagConstraints();
-		gbc_comboBoxHostBdw.gridwidth = 4;
-		gbc_comboBoxHostBdw.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBoxHostBdw.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboBoxHostBdw.gridx = 1;
-		gbc_comboBoxHostBdw.gridy = 3;
-		shutdownPanel.add(comboBoxHostShut, gbc_comboBoxHostBdw);
 		{
 			btnShutdown = new JButton("Shutdown");
 			btnShutdown.addActionListener(new ActionListener() {
@@ -894,7 +841,7 @@ public class AdminR66OperationsGui extends JFrame {
 		}
 		return null;
 	}
-	
+
 	private void showDialog() {
 		disableAllButtons();
 		if (dialog != null) {
@@ -936,21 +883,39 @@ public class AdminR66OperationsGui extends JFrame {
 
 	public void disableAllButtons() {
 		// frmRClientGui.setEnabled(false);
-		comboBoxHostBdw.setEnabled(false);
+		comboBoxServer.setEnabled(false);
 		btnGetBandwidthCurrent.setEnabled(false);
 		btnSetBandwidthConfiguration.setEnabled(false);
 	}
 
 	public void enableAllButtons() {
 		// frmRClientGui.setEnabled(true);
-		comboBoxHostBdw.setEnabled(true);
+		//System.err.println("Versions: "+Configuration.configuration.versions);
+		try {
+			int idx = comboBoxServer.getSelectedIndex();
+			comboBoxServer.removeAllItems();
+			for (DbHostAuth auth : DbHostAuth.getAllHosts(null)) {
+				//System.err.println("Add: "+auth.toString());
+				comboBoxServer.addItem(auth);
+			}
+			comboBoxServer.setSelectedIndex(idx);
+		} catch (WaarpDatabaseNoConnectionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return;
+		} catch (WaarpDatabaseSqlException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return;
+		}
+		comboBoxServer.setEnabled(true);
 		btnGetBandwidthCurrent.setEnabled(true);
 		btnSetBandwidthConfiguration.setEnabled(true);
 		myself.toFront();
 	}
 
 	public void getBandwidth() {
-		DbHostAuth host = (DbHostAuth) comboBoxHostBdw.getSelectedItem();
+		DbHostAuth host = (DbHostAuth) comboBoxServer.getSelectedItem();
 		if (host == null) {
 			AdminGui.environnement.GuiResultat = "No Host selected!";
 			return;
@@ -1002,7 +967,7 @@ public class AdminR66OperationsGui extends JFrame {
 	}
 
 	public void setBandwidth() {
-		DbHostAuth host = (DbHostAuth) comboBoxHostBdw.getSelectedItem();
+		DbHostAuth host = (DbHostAuth) comboBoxServer.getSelectedItem();
 		if (host == null) {
 			AdminGui.environnement.GuiResultat = "No Host selected!";
 			return;
@@ -1045,7 +1010,7 @@ public class AdminR66OperationsGui extends JFrame {
 	}
 
 	public void getConfig() {
-		DbHostAuth host = (DbHostAuth) comboBoxHostCfg.getSelectedItem();
+		DbHostAuth host = (DbHostAuth) comboBoxServer.getSelectedItem();
 		if (host == null) {
 			AdminGui.environnement.GuiResultat = "No Host selected!";
 			return;
@@ -1054,6 +1019,7 @@ public class AdminR66OperationsGui extends JFrame {
 		R66Future future = new R66Future(true);
 		boolean getHost = chckbxHosts.isSelected();
 		boolean getRule = chckbxRules.isSelected();
+		String ruleToGet = (String) textRuleUsedToGet.getSelectedItem();
 		ConfigExport export = new ConfigExport(future, getHost, getRule,
 				AdminGui.environnement.networkTransaction);
 		export.setHost(host);
@@ -1072,55 +1038,71 @@ public class AdminR66OperationsGui extends JFrame {
 				if (values.length > 1) {
 					srule = values[1];
 				}
-				// XXX FIXME should get config files
-				if (getHost && shost != null && shost.length() > 1) {
-					future = new R66Future(true);
-					DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), shost, 
-							textRuleUsedToGet.getText(), "Get Host Configuration from "+AdminGui.environnement.hostId,  
-							AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE, DbConstant.ILLEGALVALUE, 
-							AdminGui.environnement.networkTransaction);
-					transfer.run();
-					if (future.isSuccess()) {
-						R66Result resultHost = future.getResult();
-						shost = resultHost.file.getTrueFile().getAbsolutePath();
-						message += " Host file into: "+shost;
-					} else {
-						shost = "Cannot get Host file: "+shost;
-						message += shost;
+				if (ruleToGet == null || ruleToGet.isEmpty()) {
+					message = "No rule passed to download configuration, so cannot get configuration";
+				}
+				if (message.length() > 1) {
+					// error
+					message = "Get Config in FAILURE: " + message;
+				} else {
+					// XXX FIXME should get config files
+					if (getHost && shost != null && shost.length() > 1) {
+						future = new R66Future(true);
+						DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), shost,
+								ruleToGet, "Get Host Configuration from "
+										+ AdminGui.environnement.hostId,
+								AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+								DbConstant.ILLEGALVALUE,
+								AdminGui.environnement.networkTransaction);
+						transfer.run();
+						if (future.isSuccess()) {
+							R66Result resultHost = future.getResult();
+							shost = resultHost.file.getTrueFile().getAbsolutePath();
+							message += " Host file into: " + shost;
+						} else {
+							shost = "Cannot get Host file: " + shost;
+							message += shost;
+						}
 					}
-				}
-				if (getRule && srule != null && srule.length() > 1) {
-					future = new R66Future(true);
-					DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), srule, 
-							textRuleUsedToGet.getText(), "Get Rule Configuration from "+AdminGui.environnement.hostId,  
-							AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE, DbConstant.ILLEGALVALUE, 
-							AdminGui.environnement.networkTransaction);
-					transfer.run();
-					if (future.isSuccess()) {
-						R66Result resultRule = future.getResult();
-						srule = resultRule.file.getTrueFile().getAbsolutePath();
-						message += " Ruke file into: "+srule;
-					} else {
-						srule = "Cannot get Rule file: "+srule;
-						message += srule;
+					if (getRule && srule != null && srule.length() > 1) {
+						future = new R66Future(true);
+						DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), srule,
+								ruleToGet, "Get Rule Configuration from "
+										+ AdminGui.environnement.hostId,
+								AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+								DbConstant.ILLEGALVALUE,
+								AdminGui.environnement.networkTransaction);
+						transfer.run();
+						if (future.isSuccess()) {
+							R66Result resultRule = future.getResult();
+							srule = resultRule.file.getTrueFile().getAbsolutePath();
+							message += " Ruke file into: " + srule;
+						} else {
+							srule = "Cannot get Rule file: " + srule;
+							message += srule;
+						}
 					}
-				}
-				// XXX FIXME then set downloaded file to text fields
-				if (getHost) {
-					textFieldHosts.setText(shost);
-				}
-				if (getRule) {
-					textFieldRules.setText(srule);
+					// XXX FIXME then set downloaded file to text fields
+					if (getHost) {
+						textFieldHosts.setText(shost);
+					}
+					if (getRule) {
+						textFieldRules.setText(srule);
+					}
 				}
 			}
 			if (result.code == ErrorCode.Warning) {
-				message = "WARNED on Get Config:\n    " +
-						(result.other != null ? ((ValidPacket) result.other).getSheader() + message :
+				message = "WARNED on Get Config:\n    "
+						+
+						(result.other != null ? ((ValidPacket) result.other).getSheader() + message
+								:
 								"no information given")
 						+ "\n    delay: " + delay;
 			} else {
-				message = "SUCCESS on Get Config:\n    " +
-						(result.other != null ? ((ValidPacket) result.other).getSheader() + message :
+				message = "SUCCESS on Get Config:\n    "
+						+
+						(result.other != null ? ((ValidPacket) result.other).getSheader() + message
+								:
 								"no information given")
 						+ "\n    delay: " + delay;
 			}
@@ -1135,7 +1117,7 @@ public class AdminR66OperationsGui extends JFrame {
 	}
 
 	public void setConfig() {
-		DbHostAuth host = (DbHostAuth) comboBoxHostCfg.getSelectedItem();
+		DbHostAuth host = (DbHostAuth) comboBoxServer.getSelectedItem();
 		if (host == null) {
 			AdminGui.environnement.GuiResultat = "No Host selected!";
 			return;
@@ -1146,36 +1128,54 @@ public class AdminR66OperationsGui extends JFrame {
 		String rulefile = textFieldRules.getText();
 		boolean erazeHost = chckbxPurgeHosts.isSelected();
 		boolean erazeRule = chckbxPurgeRules.isSelected();
+		String ruleToPut = (String) textRuleToPut.getSelectedItem();
 		String error = "";
 		String msg = "";
 		// XXX FIXME should send config files first
+		if ((hostfile == null || hostfile.isEmpty()) &&
+			(rulefile == null || rulefile.isEmpty())) {
+			error = "No rule file neither host file passed as argument, so cannot set configuration";
+		}
+		if (ruleToPut == null || ruleToPut.isEmpty()) {
+			error = "No rule passed to upload configuration, so cannot set configuration";
+		}
+		String message = null;
+		if (error.length() > 1) {
+			// error
+			message = "Get Config in FAILURE: " + error;
+			AdminGui.environnement.GuiResultat = message;
+			return;
+		}
 		if (hostfile != null && hostfile.length() > 1) {
 			future = new R66Future(true);
-			DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), hostfile, 
-					textRuleToPut.getText(), "Set Host Configuration from "+AdminGui.environnement.hostId,  
-					AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE, DbConstant.ILLEGALVALUE, 
+			DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), hostfile,
+					ruleToPut, "Set Host Configuration from "
+							+ AdminGui.environnement.hostId,
+					AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+					DbConstant.ILLEGALVALUE,
 					AdminGui.environnement.networkTransaction);
 			transfer.run();
-			if (! future.isSuccess()) {
-				error = "Cannot set: "+hostfile;
+			if (!future.isSuccess()) {
+				error = "Cannot set: " + hostfile;
 			} else {
 				msg += " Host Configuration transmitted";
 			}
 		}
 		if (rulefile != null && rulefile.length() > 1) {
 			future = new R66Future(true);
-			DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), rulefile, 
-					textRuleToPut.getText(), "Set Rule Configuration from "+AdminGui.environnement.hostId,  
-					AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE, DbConstant.ILLEGALVALUE, 
+			DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), rulefile,
+					ruleToPut, "Set Rule Configuration from "
+							+ AdminGui.environnement.hostId,
+					AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+					DbConstant.ILLEGALVALUE,
 					AdminGui.environnement.networkTransaction);
 			transfer.run();
-			if (! future.isSuccess()) {
-				error += "&& Cannot Set: "+rulefile;
+			if (!future.isSuccess()) {
+				error += "&& Cannot Set: " + rulefile;
 			} else {
 				msg += " Rule Configuration transmitted";
 			}
 		}
-		String message = null;
 		if (error.length() > 1) {
 			// error
 			message = "Get Config in FAILURE: " + error;
@@ -1214,7 +1214,7 @@ public class AdminR66OperationsGui extends JFrame {
 	}
 
 	public void exportLog() {
-		DbHostAuth host = (DbHostAuth) comboBoxHostLog.getSelectedItem();
+		DbHostAuth host = (DbHostAuth) comboBoxServer.getSelectedItem();
 		if (host == null) {
 			AdminGui.environnement.GuiResultat = "No Host selected!";
 			return;
@@ -1236,14 +1236,15 @@ public class AdminR66OperationsGui extends JFrame {
 			stop = LogExport.getTodayMidnight();
 		}
 		if (start != null) {
-			System.err.println("Start: "+ (new Date(start.getTime())).toString());
+			System.err.println("Start: " + (new Date(start.getTime())).toString());
 		}
 		if (stop != null) {
-			System.err.println("Stop: "+ (new Date(stop.getTime())).toString());
+			System.err.println("Stop: " + (new Date(stop.getTime())).toString());
 		}
-			
+
 		R66Future future = new R66Future(true);
-		LogExport export = new LogExport(future, purgeLog, clean, start, stop, AdminGui.environnement.networkTransaction);
+		LogExport export = new LogExport(future, purgeLog, clean, start, stop,
+				AdminGui.environnement.networkTransaction);
 		export.setHost(host);
 		export.run();
 		future.awaitUninterruptibly();
@@ -1259,49 +1260,62 @@ public class AdminR66OperationsGui extends JFrame {
 				textFieldResult.setText(fileExported);
 				// XXX FIXME download logs
 				if (fileExported != null && fileExported.length() > 1) {
-					future = new R66Future(true);
-					DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), fileExported, 
-							textRuleToExportLog.getText(), "Get Exported Logs from "+AdminGui.environnement.hostId,  
-							AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE, DbConstant.ILLEGALVALUE, 
-							AdminGui.environnement.networkTransaction);
-					transfer.run();
-					if (! future.isSuccess()) {
-						message = "Cannot get: "+fileExported+"\n";
+					String ruleToExport = (String) textRuleToExportLog.getSelectedItem();
+					if (ruleToExport == null || ruleToExport.isEmpty()) {
+						message = "Cannot get: " + fileExported + " since no rule to export specified\n";
 					} else {
-						textFieldResult.setText(future.getResult().file.getTrueFile().getAbsolutePath());
+						future = new R66Future(true);
+						DirectTransfer transfer = new DirectTransfer(future, host.getHostid(),
+								fileExported,
+								ruleToExport, "Get Exported Logs from "
+										+ AdminGui.environnement.hostId,
+								AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+								DbConstant.ILLEGALVALUE,
+								AdminGui.environnement.networkTransaction);
+						transfer.run();
+						if (!future.isSuccess()) {
+							message = "Cannot get: " + fileExported + "\n";
+						} else {
+							textFieldResult.setText(future.getResult().file.getTrueFile()
+									.getAbsolutePath());
+						}
 					}
 				}
 			}
 			if (result.code == ErrorCode.Warning) {
-				message += "WARNED on Export Logs:\n    " +
+				message += "\nWARNED on Export Logs:\n    " +
 						(result.other != null ? ((ValidPacket) result.other).getSheader() :
 								"no information given")
-						+ "\n    delay: " + delay;
+						+ "\n    delay: " + delay+"\n";
 			} else {
-				message += "SUCCESS on Export Logs:\n    " +
+				message += "\nSUCCESS on Export Logs:\n    " +
 						(result.other != null ? ((ValidPacket) result.other).getSheader() :
 								"no information given")
 						+ "\n    delay: " + delay;
 			}
 		} else {
 			if (result.code == ErrorCode.Warning) {
-				message += "Export Logs is WARNED: " + future.getCause();
+				message += "\nExport Logs is WARNED: " + future.getCause();
 			} else {
-				message += "Export Logs in FAILURE: " + future.getCause();
+				message += "\nExport Logs in FAILURE: " + future.getCause();
 			}
 		}
 		AdminGui.environnement.GuiResultat = message;
 	}
 
 	public void shutdown() {
-		DbHostAuth host = (DbHostAuth) comboBoxHostShut.getSelectedItem();
+		DbHostAuth host = (DbHostAuth) comboBoxServer.getSelectedItem();
 		if (host == null) {
 			AdminGui.environnement.GuiResultat = "No Host selected!";
 			return;
 		}
 		String skey = null;
 		try {
-			char [] pwd = passwordField.getPassword();
+			char[] pwd = passwordField.getPassword();
+			if (pwd == null || pwd.length == 0) {
+				AdminGui.environnement.GuiResultat = "No Password given!";
+				return;
+			}
 			skey = new String(pwd);
 		} catch (NullPointerException e) {
 			AdminGui.environnement.GuiResultat = "No Password given!";
@@ -1326,7 +1340,8 @@ public class AdminR66OperationsGui extends JFrame {
 		try {
 			ChannelUtils.writeAbstractLocalPacket(localChannelReference, packet, false);
 		} catch (OpenR66ProtocolPacketException e) {
-			message = "Bandwidth in FAILURE: " + "Cannot send order to " + host.getSocketAddress() + "[" + e.getMessage()+"]";
+			message = "Bandwidth in FAILURE: " + "Cannot send order to " + host.getSocketAddress()
+					+ "[" + e.getMessage() + "]";
 			AdminGui.environnement.GuiResultat = message;
 			return;
 		}
@@ -1343,8 +1358,8 @@ public class AdminR66OperationsGui extends JFrame {
 			} else if (result.code == ErrorCode.Shutdown) {
 				message = "SUCCESS on Shutdown command done";
 			} else {
-				message = "FAILURE on Shutdown: " + result.toString() + "["+ localChannelReference
-						.getFutureRequest().getCause()+"]";
+				message = "FAILURE on Shutdown: " + result.toString() + "[" + localChannelReference
+						.getFutureRequest().getCause() + "]";
 			}
 		}
 		long time2 = System.currentTimeMillis();
