@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.3" timestamp="2013-04-02T20:56:57.129">
+<pmd version="4.3" timestamp="2013-05-26T15:41:08.718">
 <file name="J:\Git\github\waarp-digest\WaarpAdministrator\src\main\java\org\waarp\administrator\AdminGui.java">
-<violation beginline="61" endline="61" begincolumn="35" endcolumn="41" rule="ImmutableField" ruleset="Design Rules" package="org.waarp.administrator" class="AdminGui" variable="xamples" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ImmutableField" priority="3">
+<violation beginline="71" endline="71" begincolumn="35" endcolumn="41" rule="ImmutableField" ruleset="Design Rules" package="org.waarp.administrator" class="AdminGui" variable="xamples" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ImmutableField" priority="3">
 Private field 'xamples' could be made final; it is only initialized in the declaration or constructor.
 </violation>
-<violation beginline="62" endline="62" begincolumn="39" endcolumn="47" rule="ImmutableField" ruleset="Design Rules" package="org.waarp.administrator" class="AdminGui" variable="passwords" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ImmutableField" priority="3">
+<violation beginline="72" endline="72" begincolumn="39" endcolumn="47" rule="ImmutableField" ruleset="Design Rules" package="org.waarp.administrator" class="AdminGui" variable="passwords" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ImmutableField" priority="3">
 Private field 'passwords' could be made final; it is only initialized in the declaration or constructor.
 </violation>
-<violation beginline="85" endline="87" begincolumn="17" endcolumn="17" rule="NonThreadSafeSingleton" ruleset="Design Rules" package="org.waarp.administrator" class="AdminGui" method="main" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#NonThreadSafeSingleton" priority="3">
+<violation beginline="75" endline="75" begincolumn="53" endcolumn="56" rule="AvoidReassigningParameters" ruleset="Design Rules" package="org.waarp.administrator" class="AdminGui" method="getParams" variable="args" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#AvoidReassigningParameters" priority="2">
+Avoid reassigning parameters such as 'args'
+</violation>
+<violation beginline="103" endline="105" begincolumn="17" endcolumn="17" rule="NonThreadSafeSingleton" ruleset="Design Rules" package="org.waarp.administrator" class="AdminGui" method="main" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#NonThreadSafeSingleton" priority="3">
 Singleton is not thread safe
 </violation>
 </file>
@@ -17,70 +20,70 @@ Private field 'list' could be made final; it is only initialized in the declarat
 </violation>
 </file>
 <file name="J:\Git\github\waarp-digest\WaarpAdministrator\src\main\java\org\waarp\openr66\serveraction\AdminR66OperationsGui.java">
-<violation beginline="93" endline="93" begincolumn="24" endcolumn="31" rule="ImmutableField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="adminGui" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ImmutableField" priority="3">
+<violation beginline="94" endline="94" begincolumn="24" endcolumn="31" rule="ImmutableField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="adminGui" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ImmutableField" priority="3">
 Private field 'adminGui' could be made final; it is only initialized in the declaration or constructor.
 </violation>
-<violation beginline="94" endline="94" begincolumn="39" endcolumn="44" rule="ImmutableField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="myself" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ImmutableField" priority="3">
+<violation beginline="95" endline="95" begincolumn="39" endcolumn="44" rule="ImmutableField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="myself" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ImmutableField" priority="3">
 Private field 'myself' could be made final; it is only initialized in the declaration or constructor.
 </violation>
-<violation beginline="95" endline="95" begincolumn="28" endcolumn="36" rule="ImmutableField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="mainPanel" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ImmutableField" priority="3">
+<violation beginline="96" endline="96" begincolumn="28" endcolumn="36" rule="ImmutableField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="mainPanel" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ImmutableField" priority="3">
 Private field 'mainPanel' could be made final; it is only initialized in the declaration or constructor.
 </violation>
-<violation beginline="226" endline="226" begincolumn="17" endcolumn="37" rule="SingularField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="btnHostsFile" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#SingularField" priority="3">
+<violation beginline="248" endline="248" begincolumn="17" endcolumn="37" rule="SingularField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="btnHostsFile" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#SingularField" priority="3">
 Perhaps 'btnHostsFile' could be replaced by a local variable.
 </violation>
-<violation beginline="227" endline="227" begincolumn="17" endcolumn="37" rule="SingularField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="btnRulesFile" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#SingularField" priority="3">
+<violation beginline="249" endline="249" begincolumn="17" endcolumn="37" rule="SingularField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="btnRulesFile" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#SingularField" priority="3">
 Perhaps 'btnRulesFile' could be replaced by a local variable.
 </violation>
-<violation beginline="228" endline="228" begincolumn="17" endcolumn="36" rule="SingularField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="btnShutdown" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#SingularField" priority="3">
+<violation beginline="250" endline="250" begincolumn="17" endcolumn="36" rule="SingularField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="btnShutdown" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#SingularField" priority="3">
 Perhaps 'btnShutdown' could be replaced by a local variable.
 </violation>
-<violation beginline="230" endline="230" begincolumn="17" endcolumn="35" rule="SingularField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="lblPassword" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#SingularField" priority="3">
+<violation beginline="252" endline="252" begincolumn="17" endcolumn="35" rule="SingularField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="lblPassword" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#SingularField" priority="3">
 Perhaps 'lblPassword' could be replaced by a local variable.
 </violation>
-<violation beginline="235" endline="235" begincolumn="17" endcolumn="38" rule="SingularField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="btnExportLogs" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#SingularField" priority="3">
+<violation beginline="257" endline="257" begincolumn="17" endcolumn="38" rule="SingularField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="btnExportLogs" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#SingularField" priority="3">
 Perhaps 'btnExportLogs' could be replaced by a local variable.
 </violation>
-<violation beginline="239" endline="239" begincolumn="17" endcolumn="32" rule="SingularField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="lblDates" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#SingularField" priority="3">
+<violation beginline="261" endline="261" begincolumn="17" endcolumn="32" rule="SingularField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="lblDates" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#SingularField" priority="3">
 Perhaps 'lblDates' could be replaced by a local variable.
 </violation>
-<violation beginline="241" endline="241" begincolumn="17" endcolumn="37" rule="SingularField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="separator" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#SingularField" priority="3">
+<violation beginline="263" endline="263" begincolumn="17" endcolumn="37" rule="SingularField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="separator" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#SingularField" priority="3">
 Perhaps 'separator' could be replaced by a local variable.
 </violation>
-<violation beginline="242" endline="242" begincolumn="17" endcolumn="36" rule="SingularField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="lblRuleToGet" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#SingularField" priority="3">
+<violation beginline="264" endline="264" begincolumn="17" endcolumn="36" rule="SingularField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="lblRuleToGet" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#SingularField" priority="3">
 Perhaps 'lblRuleToGet' could be replaced by a local variable.
 </violation>
-<violation beginline="243" endline="243" begincolumn="17" endcolumn="36" rule="SingularField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="lblRuleToPut" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#SingularField" priority="3">
+<violation beginline="265" endline="265" begincolumn="17" endcolumn="36" rule="SingularField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="lblRuleToPut" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#SingularField" priority="3">
 Perhaps 'lblRuleToPut' could be replaced by a local variable.
 </violation>
-<violation beginline="244" endline="244" begincolumn="17" endcolumn="39" rule="SingularField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="lblRuleToExport" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#SingularField" priority="3">
+<violation beginline="266" endline="266" begincolumn="17" endcolumn="39" rule="SingularField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="lblRuleToExport" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#SingularField" priority="3">
 Perhaps 'lblRuleToExport' could be replaced by a local variable.
 </violation>
-<violation beginline="245" endline="245" begincolumn="17" endcolumn="33" rule="SingularField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="lblNbIfNo" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#SingularField" priority="3">
+<violation beginline="267" endline="267" begincolumn="17" endcolumn="33" rule="SingularField" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" variable="lblNbIfNo" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#SingularField" priority="3">
 Perhaps 'lblNbIfNo' could be replaced by a local variable.
 </violation>
-<violation beginline="985" endline="986" begincolumn="50" endcolumn="86" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="getBandwidth" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
+<violation beginline="950" endline="951" begincolumn="50" endcolumn="86" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="getBandwidth" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
 Avoid if (x != y) ..; else ..;
 </violation>
-<violation beginline="990" endline="991" begincolumn="50" endcolumn="86" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="getBandwidth" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
+<violation beginline="955" endline="956" begincolumn="50" endcolumn="86" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="getBandwidth" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
 Avoid if (x != y) ..; else ..;
 </violation>
-<violation beginline="1028" endline="1029" begincolumn="50" endcolumn="86" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="setBandwidth" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
+<violation beginline="993" endline="994" begincolumn="50" endcolumn="86" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="setBandwidth" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
 Avoid if (x != y) ..; else ..;
 </violation>
-<violation beginline="1033" endline="1034" begincolumn="50" endcolumn="86" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="setBandwidth" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
+<violation beginline="998" endline="999" begincolumn="50" endcolumn="86" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="setBandwidth" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
 Avoid if (x != y) ..; else ..;
 </violation>
-<violation beginline="1118" endline="1119" begincolumn="50" endcolumn="86" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="getConfig" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
+<violation beginline="1097" endline="1099" begincolumn="50" endcolumn="86" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="getConfig" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
 Avoid if (x != y) ..; else ..;
 </violation>
-<violation beginline="1123" endline="1124" begincolumn="50" endcolumn="86" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="getConfig" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
+<violation beginline="1104" endline="1106" begincolumn="50" endcolumn="86" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="getConfig" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
 Avoid if (x != y) ..; else ..;
 </violation>
-<violation beginline="1159" endline="1163" begincolumn="25" endcolumn="25" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="setConfig" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
+<violation beginline="1158" endline="1162" begincolumn="25" endcolumn="25" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="setConfig" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
 Avoid if (x != y) ..; else ..;
 </violation>
-<violation beginline="1172" endline="1176" begincolumn="25" endcolumn="25" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="setConfig" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
+<violation beginline="1173" endline="1177" begincolumn="25" endcolumn="25" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="setConfig" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
 Avoid if (x != y) ..; else ..;
 </violation>
 <violation beginline="1197" endline="1198" begincolumn="50" endcolumn="67" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="setConfig" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
@@ -89,13 +92,13 @@ Avoid if (x != y) ..; else ..;
 <violation beginline="1202" endline="1203" begincolumn="50" endcolumn="67" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="setConfig" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
 Avoid if (x != y) ..; else ..;
 </violation>
-<violation beginline="1268" endline="1272" begincolumn="41" endcolumn="41" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="exportLog" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
+<violation beginline="1276" endline="1281" begincolumn="49" endcolumn="49" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="exportLog" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
 Avoid if (x != y) ..; else ..;
 </violation>
-<violation beginline="1277" endline="1278" begincolumn="50" endcolumn="86" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="exportLog" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
+<violation beginline="1287" endline="1288" begincolumn="50" endcolumn="86" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="exportLog" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
 Avoid if (x != y) ..; else ..;
 </violation>
-<violation beginline="1282" endline="1283" begincolumn="50" endcolumn="86" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="exportLog" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
+<violation beginline="1292" endline="1293" begincolumn="50" endcolumn="86" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.openr66.serveraction" class="AdminR66OperationsGui" method="exportLog" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
 Avoid if (x != y) ..; else ..;
 </violation>
 </file>

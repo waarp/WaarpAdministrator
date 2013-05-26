@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
 <duplication lines="22" tokens="122">
-<file line="983" path="J:\Git\github\waarp-digest\WaarpAdministrator\src\main\java\org\waarp\openr66\serveraction\AdminR66OperationsGui.java"/>
-<file line="1026" path="J:\Git\github\waarp-digest\WaarpAdministrator\src\main\java\org\waarp\openr66\serveraction\AdminR66OperationsGui.java"/>
+<file line="948" path="J:\Git\github\waarp-digest\WaarpAdministrator\src\main\java\org\waarp\openr66\serveraction\AdminR66OperationsGui.java"/>
+<file line="991" path="J:\Git\github\waarp-digest\WaarpAdministrator\src\main\java\org\waarp\openr66\serveraction\AdminR66OperationsGui.java"/>
 <codefragment>
 <![CDATA[
 			if (result.code == ErrorCode.Warning) {
@@ -31,8 +31,8 @@
 </codefragment>
 </duplication>
 <duplication lines="6" tokens="108">
-<file line="613" path="J:\Git\github\waarp-digest\WaarpAdministrator\src\main\java\org\waarp\openr66\serveraction\AdminR66OperationsGui.java"/>
-<file line="749" path="J:\Git\github\waarp-digest\WaarpAdministrator\src\main\java\org\waarp\openr66\serveraction\AdminR66OperationsGui.java"/>
+<file line="598" path="J:\Git\github\waarp-digest\WaarpAdministrator\src\main\java\org\waarp\openr66\serveraction\AdminR66OperationsGui.java"/>
+<file line="715" path="J:\Git\github\waarp-digest\WaarpAdministrator\src\main\java\org\waarp\openr66\serveraction\AdminR66OperationsGui.java"/>
 <codefragment>
 <![CDATA[
 		tabbedPane.addTab("Log management", null, logPanel, null);
