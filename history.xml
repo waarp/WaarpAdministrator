@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <history>
+    <xsd-doc file="J:/Git/fredericBregier/WaarpProxyR66/src/main/xample/OpenR66-Server-Proxy.xsd">
+        <xml-doc file="J:/GG/R66/conf/proxy-example.xml"/>
+    </xsd-doc>
     <xsd-doc file="J:/Git/fredericBregier/WaarpAdministrator/src/main/waarpr66/xample/OpenR66-Client.xsd">
         <xml-doc file="J:/Git/fredericBregier/WaarpAdministrator/src/main/waarpr66/config/config-clientA.xml"/>
     </xsd-doc>
