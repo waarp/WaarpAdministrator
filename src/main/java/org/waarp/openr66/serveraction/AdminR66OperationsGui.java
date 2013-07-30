@@ -44,6 +44,10 @@ import org.waarp.administrator.AdminGui;
 import org.waarp.common.database.exception.WaarpDatabaseNoConnectionException;
 import org.waarp.common.database.exception.WaarpDatabaseSqlException;
 import org.waarp.common.digest.FilesystemBasedDigest;
+import org.waarp.common.json.JsonHandler;
+import org.waarp.common.logging.WaarpInternalLogger;
+import org.waarp.common.logging.WaarpInternalLoggerFactory;
+import org.waarp.common.utility.WaarpStringUtils;
 import org.waarp.openr66.client.DirectTransfer;
 import org.waarp.openr66.context.ErrorCode;
 import org.waarp.openr66.context.R66FiniteDualStates;
@@ -51,8 +55,11 @@ import org.waarp.openr66.context.R66Result;
 import org.waarp.openr66.database.DbConstant;
 import org.waarp.openr66.database.data.DbHostAuth;
 import org.waarp.openr66.protocol.configuration.Configuration;
+import org.waarp.openr66.protocol.configuration.PartnerConfiguration;
 import org.waarp.openr66.protocol.exception.OpenR66ProtocolPacketException;
 import org.waarp.openr66.protocol.localhandler.LocalChannelReference;
+import org.waarp.openr66.protocol.localhandler.packet.AbstractLocalPacket;
+import org.waarp.openr66.protocol.localhandler.packet.JsonCommandPacket;
 import org.waarp.openr66.protocol.localhandler.packet.LocalPacketFactory;
 import org.waarp.openr66.protocol.localhandler.packet.ShutdownPacket;
 import org.waarp.openr66.protocol.localhandler.packet.ValidPacket;
@@ -63,6 +70,9 @@ import org.waarp.openr66.server.ChangeBandwidthLimits;
 import org.waarp.openr66.server.ConfigExport;
 import org.waarp.openr66.server.ConfigImport;
 import org.waarp.openr66.server.LogExport;
+import org.waarp.openr66.server.LogExtendedExport;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -88,6 +98,12 @@ import java.awt.Cursor;
  * 
  */
 public class AdminR66OperationsGui extends JFrame {
+	/**
+	 * Internal Logger
+	 */
+	private static final WaarpInternalLogger logger = WaarpInternalLoggerFactory
+			.getLogger(AdminR66OperationsGui.class);
+	
 	public static AdminR66OperationsGui window;
 
 	private static final long serialVersionUID = -7289307852740863337L;
@@ -102,8 +118,8 @@ public class AdminR66OperationsGui extends JFrame {
 	 */
 	public AdminR66OperationsGui(JFrame adminGui) throws HeadlessException {
 		super("Admin R66 Operations GUI");
-		setMinimumSize(new Dimension(1000, 500));
-		setPreferredSize(new Dimension(1000, 600));
+		setMinimumSize(new Dimension(1100, 700));
+		setPreferredSize(new Dimension(1100, 800));
 		this.adminGui = adminGui;
 		mainPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true);
 		mainPanel.addComponentListener(new ComponentAdapter() {
@@ -266,6 +282,26 @@ public class AdminR66OperationsGui extends JFrame {
 	private JLabel lblRuleToExport;
 	private JLabel lblNbIfNo;
 	private JComboBox comboBoxServer;
+	private JCheckBox chckbxPending;
+	private JCheckBox chckbxRunning;
+	private JCheckBox chckbxInError;
+	private JCheckBox chckbxDone;
+	private JCheckBox chckbxBusiness;
+	private JCheckBox chckbxAlias;
+	private JCheckBox chckbxRoles;
+	private JButton btnBusinessFile;
+	private JButton btnAliasFile;
+	private JButton btnRolesFile;
+	private JTextField textFieldBusiness;
+	private JTextField textFieldAlias;
+	private JTextField textFieldRoles;
+	private JCheckBox chckbxPurgeBusiness;
+	private JCheckBox chckbxPurgeAlias;
+	private JCheckBox chckbxPurgeRoles;
+	private JTextField textFieldLogRule;
+	private JTextField textFieldLogHost;
+	private JLabel lblRuleUsedIn;
+	private JLabel lblHostUsedIn;
 
 	private void initBandwidth(JTabbedPane tabbedPane) {
 		JPanel bandwidthPanel = new JPanel();
@@ -415,26 +451,18 @@ public class AdminR66OperationsGui extends JFrame {
 		tabbedPane.addTab("Configuration management", null, configPanel, null);
 		GridBagLayout gbl_toolsPanel = new GridBagLayout();
 		gbl_toolsPanel.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0 };
-		gbl_toolsPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-		gbl_toolsPanel.columnWeights = new double[] { 0.0, 1.0, 1.0, 1.0 };
-		gbl_toolsPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+		gbl_toolsPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_toolsPanel.columnWeights = new double[] { 0.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
+		gbl_toolsPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 		configPanel.setLayout(gbl_toolsPanel);
 		{
-			btnGetConfigCurrent = new JButton("Get current configuration");
-			btnGetConfigCurrent.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					R66AdminGuiActions action = new R66AdminGuiActions(
-							R66AdminGuiActions.CONFIGEXPORT);
-					action.execute();
-				}
-			});
 			{
 				lblRuleToGet = new JLabel("Rule to Get");
 				GridBagConstraints gbc_lblRuleToGet = new GridBagConstraints();
 				gbc_lblRuleToGet.insets = new Insets(0, 0, 5, 5);
 				gbc_lblRuleToGet.anchor = GridBagConstraints.EAST;
 				gbc_lblRuleToGet.gridx = 0;
-				gbc_lblRuleToGet.gridy = 4;
+				gbc_lblRuleToGet.gridy = 2;
 				configPanel.add(lblRuleToGet, gbc_lblRuleToGet);
 			}
 			{
@@ -443,7 +471,7 @@ public class AdminR66OperationsGui extends JFrame {
 				gbc_textRuleUsedToGet.fill = GridBagConstraints.HORIZONTAL;
 				gbc_textRuleUsedToGet.insets = new Insets(0, 0, 5, 5);
 				gbc_textRuleUsedToGet.gridx = 1;
-				gbc_textRuleUsedToGet.gridy = 4;
+				gbc_textRuleUsedToGet.gridy = 2;
 				configPanel.add(textRuleUsedToGet, gbc_textRuleUsedToGet);
 			}
 			{
@@ -451,94 +479,204 @@ public class AdminR66OperationsGui extends JFrame {
 				GridBagConstraints gbc_chckbxHosts = new GridBagConstraints();
 				gbc_chckbxHosts.insets = new Insets(0, 0, 5, 5);
 				gbc_chckbxHosts.gridx = 2;
-				gbc_chckbxHosts.gridy = 4;
+				gbc_chckbxHosts.gridy = 2;
 				configPanel.add(chckbxHosts, gbc_chckbxHosts);
 			}
+		}
+		{
 			{
 				chckbxRules = new JCheckBox("Rules");
 				GridBagConstraints gbc_chckbxRules = new GridBagConstraints();
 				gbc_chckbxRules.insets = new Insets(0, 0, 5, 5);
 				gbc_chckbxRules.gridx = 3;
-				gbc_chckbxRules.gridy = 4;
+				gbc_chckbxRules.gridy = 2;
 				configPanel.add(chckbxRules, gbc_chckbxRules);
 			}
+			{
+				chckbxBusiness = new JCheckBox("Business");
+				GridBagConstraints gbc_chckbxBusiness = new GridBagConstraints();
+				gbc_chckbxBusiness.insets = new Insets(0, 0, 5, 5);
+				gbc_chckbxBusiness.gridx = 1;
+				gbc_chckbxBusiness.gridy = 3;
+				configPanel.add(chckbxBusiness, gbc_chckbxBusiness);
+			}
+			{
+				chckbxAlias = new JCheckBox("Alias");
+				GridBagConstraints gbc_chckbxAlias = new GridBagConstraints();
+				gbc_chckbxAlias.insets = new Insets(0, 0, 5, 5);
+				gbc_chckbxAlias.gridx = 2;
+				gbc_chckbxAlias.gridy = 3;
+				configPanel.add(chckbxAlias, gbc_chckbxAlias);
+			}
+			{
+				chckbxRoles = new JCheckBox("Roles");
+				GridBagConstraints gbc_chckbxRoles = new GridBagConstraints();
+				gbc_chckbxRoles.insets = new Insets(0, 0, 5, 5);
+				gbc_chckbxRoles.gridx = 3;
+				gbc_chckbxRoles.gridy = 3;
+				configPanel.add(chckbxRoles, gbc_chckbxRoles);
+			}
+			btnGetConfigCurrent = new JButton("Get current configuration");
+			btnGetConfigCurrent.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					R66AdminGuiActions action = new R66AdminGuiActions(
+							R66AdminGuiActions.CONFIGEXPORT);
+					action.execute();
+				}
+			});
 			GridBagConstraints gbc_btnGetBandwidthCurrent = new GridBagConstraints();
 			gbc_btnGetBandwidthCurrent.gridwidth = 2;
 			gbc_btnGetBandwidthCurrent.insets = new Insets(0, 0, 5, 5);
 			gbc_btnGetBandwidthCurrent.gridx = 4;
-			gbc_btnGetBandwidthCurrent.gridy = 4;
+			gbc_btnGetBandwidthCurrent.gridy = 3;
 			configPanel.add(btnGetConfigCurrent, gbc_btnGetBandwidthCurrent);
 		}
 		{
-			btnHostsFile = new JButton("Hosts file");
-			btnHostsFile.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					File result = openFile(textFieldHosts.getText(), "Choose Hosts file", "xml");
-					if (result != null) {
-						textFieldHosts.setText(result.getAbsolutePath());
-					}
-				}
-			});
-			{
-				separator = new JSeparator();
-				separator.setOpaque(true);
-				separator.setForeground(Color.BLACK);
-				separator.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-				separator.setBounds(new Rectangle(0, 0, 2, 2));
-				separator.setBackground(Color.DARK_GRAY);
-				separator.setMinimumSize(new Dimension(800, 2));
-				separator.setRequestFocusEnabled(false);
-				separator.setSize(new Dimension(800, 2));
-				separator.setPreferredSize(new Dimension(800, 2));
-				separator.setFocusTraversalKeysEnabled(false);
-				GridBagConstraints gbc_separator = new GridBagConstraints();
-				gbc_separator.gridwidth = 6;
-				gbc_separator.insets = new Insets(0, 0, 5, 5);
-				gbc_separator.gridx = 0;
-				gbc_separator.gridy = 5;
-				configPanel.add(separator, gbc_separator);
-			}
-			GridBagConstraints gbc_btnHostsFile = new GridBagConstraints();
-			gbc_btnHostsFile.insets = new Insets(0, 0, 5, 5);
-			gbc_btnHostsFile.gridx = 1;
-			gbc_btnHostsFile.gridy = 6;
-			configPanel.add(btnHostsFile, gbc_btnHostsFile);
+			separator = new JSeparator();
+			separator.setOpaque(true);
+			separator.setForeground(Color.BLACK);
+			separator.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			separator.setBounds(new Rectangle(0, 0, 2, 2));
+			separator.setBackground(Color.DARK_GRAY);
+			separator.setMinimumSize(new Dimension(800, 2));
+			separator.setRequestFocusEnabled(false);
+			separator.setSize(new Dimension(800, 2));
+			separator.setPreferredSize(new Dimension(800, 2));
+			separator.setFocusTraversalKeysEnabled(false);
+			GridBagConstraints gbc_separator = new GridBagConstraints();
+			gbc_separator.gridwidth = 6;
+			gbc_separator.insets = new Insets(0, 0, 5, 5);
+			gbc_separator.gridx = 0;
+			gbc_separator.gridy = 4;
+			configPanel.add(separator, gbc_separator);
 		}
+		btnHostsFile = new JButton("Hosts file");
+		btnHostsFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				File result = openFile(textFieldHosts.getText(), "Choose Hosts file", "xml");
+				if (result != null) {
+					textFieldHosts.setText(result.getAbsolutePath());
+				}
+			}
+		});
+		GridBagConstraints gbc_btnHostsFile = new GridBagConstraints();
+		gbc_btnHostsFile.insets = new Insets(0, 0, 5, 5);
+		gbc_btnHostsFile.gridx = 0;
+		gbc_btnHostsFile.gridy = 5;
+		configPanel.add(btnHostsFile, gbc_btnHostsFile);
 		{
 			textFieldHosts = new JTextField();
 			GridBagConstraints gbc_textFieldHosts = new GridBagConstraints();
 			gbc_textFieldHosts.insets = new Insets(0, 0, 5, 5);
 			gbc_textFieldHosts.fill = GridBagConstraints.HORIZONTAL;
-			gbc_textFieldHosts.gridx = 2;
-			gbc_textFieldHosts.gridy = 6;
+			gbc_textFieldHosts.gridx = 1;
+			gbc_textFieldHosts.gridy = 5;
 			configPanel.add(textFieldHosts, gbc_textFieldHosts);
 			textFieldHosts.setColumns(10);
 		}
+		btnRulesFile = new JButton("Rules file");
+		btnRulesFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				File result = openFile(textFieldRules.getText(), "Choose Rules file", "xml");
+				if (result != null) {
+					textFieldRules.setText(result.getAbsolutePath());
+				}
+			}
+		});
+		GridBagConstraints gbc_btnRulesFile = new GridBagConstraints();
+		gbc_btnRulesFile.insets = new Insets(0, 0, 5, 5);
+		gbc_btnRulesFile.gridx = 2;
+		gbc_btnRulesFile.gridy = 5;
+		configPanel.add(btnRulesFile, gbc_btnRulesFile);
 		{
 			textFieldRules = new JTextField();
 			GridBagConstraints gbc_textFieldRules = new GridBagConstraints();
 			gbc_textFieldRules.insets = new Insets(0, 0, 5, 5);
 			gbc_textFieldRules.fill = GridBagConstraints.HORIZONTAL;
 			gbc_textFieldRules.gridx = 3;
-			gbc_textFieldRules.gridy = 6;
+			gbc_textFieldRules.gridy = 5;
 			configPanel.add(textFieldRules, gbc_textFieldRules);
 			textFieldRules.setColumns(10);
 		}
 		{
-			btnRulesFile = new JButton("Rules file");
-			btnRulesFile.addActionListener(new ActionListener() {
+			btnBusinessFile = new JButton("Business file");
+			btnBusinessFile.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					File result = openFile(textFieldRules.getText(), "Choose Rules file", "xml");
+					File result = openFile(textFieldBusiness.getText(), "Choose Business file", "xml");
 					if (result != null) {
-						textFieldRules.setText(result.getAbsolutePath());
+						textFieldBusiness.setText(result.getAbsolutePath());
 					}
 				}
 			});
-			GridBagConstraints gbc_btnRulesFile = new GridBagConstraints();
-			gbc_btnRulesFile.insets = new Insets(0, 0, 5, 5);
-			gbc_btnRulesFile.gridx = 4;
-			gbc_btnRulesFile.gridy = 6;
-			configPanel.add(btnRulesFile, gbc_btnRulesFile);
+			GridBagConstraints gbc_btnBusinessFile = new GridBagConstraints();
+			gbc_btnBusinessFile.insets = new Insets(0, 0, 5, 5);
+			gbc_btnBusinessFile.gridx = 0;
+			gbc_btnBusinessFile.gridy = 6;
+			configPanel.add(btnBusinessFile, gbc_btnBusinessFile);
+		}
+		{
+			{
+				textFieldBusiness = new JTextField();
+				GridBagConstraints gbc_textFieldBusiness = new GridBagConstraints();
+				gbc_textFieldBusiness.insets = new Insets(0, 0, 5, 5);
+				gbc_textFieldBusiness.fill = GridBagConstraints.HORIZONTAL;
+				gbc_textFieldBusiness.gridx = 1;
+				gbc_textFieldBusiness.gridy = 6;
+				configPanel.add(textFieldBusiness, gbc_textFieldBusiness);
+				textFieldBusiness.setColumns(10);
+			}
+		}
+		{
+			btnAliasFile = new JButton("Alias file");
+			btnAliasFile.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					File result = openFile(textFieldAlias.getText(), "Choose Alias file", "xml");
+					if (result != null) {
+						textFieldAlias.setText(result.getAbsolutePath());
+					}
+				}
+			});
+			GridBagConstraints gbc_btnAliasFile = new GridBagConstraints();
+			gbc_btnAliasFile.insets = new Insets(0, 0, 5, 5);
+			gbc_btnAliasFile.gridx = 2;
+			gbc_btnAliasFile.gridy = 6;
+			configPanel.add(btnAliasFile, gbc_btnAliasFile);
+		}
+		{
+			textFieldAlias = new JTextField();
+			GridBagConstraints gbc_textFieldAlias = new GridBagConstraints();
+			gbc_textFieldAlias.insets = new Insets(0, 0, 5, 5);
+			gbc_textFieldAlias.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textFieldAlias.gridx = 3;
+			gbc_textFieldAlias.gridy = 6;
+			configPanel.add(textFieldAlias, gbc_textFieldAlias);
+			textFieldAlias.setColumns(10);
+		}
+		{
+			btnRolesFile = new JButton("Roles file");
+			btnRolesFile.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					File result = openFile(textFieldRoles.getText(), "Choose Roles file", "xml");
+					if (result != null) {
+						textFieldRoles.setText(result.getAbsolutePath());
+					}
+				}
+			});
+			GridBagConstraints gbc_btnRolesFile = new GridBagConstraints();
+			gbc_btnRolesFile.insets = new Insets(0, 0, 5, 5);
+			gbc_btnRolesFile.gridx = 4;
+			gbc_btnRolesFile.gridy = 6;
+			configPanel.add(btnRolesFile, gbc_btnRolesFile);
+		}
+		{
+			textFieldRoles = new JTextField();
+			GridBagConstraints gbc_textFieldRoles = new GridBagConstraints();
+			gbc_textFieldRoles.insets = new Insets(0, 0, 5, 5);
+			gbc_textFieldRoles.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textFieldRoles.gridx = 5;
+			gbc_textFieldRoles.gridy = 6;
+			configPanel.add(textFieldRoles, gbc_textFieldRoles);
+			textFieldRoles.setColumns(10);
 		}
 		{
 			lblRuleToPut = new JLabel("Rule to Put");
@@ -574,21 +712,45 @@ public class AdminR66OperationsGui extends JFrame {
 			gbc_chckbxPurgeRules.gridy = 7;
 			configPanel.add(chckbxPurgeRules, gbc_chckbxPurgeRules);
 		}
-
-		btnSetConfigConfiguration = new JButton("Set configuration");
-		btnSetConfigConfiguration.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				R66AdminGuiActions action = new R66AdminGuiActions(
-						R66AdminGuiActions.CONFIGIMPORT);
-				action.execute();
-			}
-		});
-		GridBagConstraints gbc_btnSetBandwidthConfiguration = new GridBagConstraints();
-		gbc_btnSetBandwidthConfiguration.gridwidth = 2;
-		gbc_btnSetBandwidthConfiguration.insets = new Insets(0, 0, 5, 5);
-		gbc_btnSetBandwidthConfiguration.gridx = 4;
-		gbc_btnSetBandwidthConfiguration.gridy = 7;
-		configPanel.add(btnSetConfigConfiguration, gbc_btnSetBandwidthConfiguration);
+		{
+			chckbxPurgeBusiness = new JCheckBox("Purge Business");
+			GridBagConstraints gbc_chckbxPurgeBusiness = new GridBagConstraints();
+			gbc_chckbxPurgeBusiness.insets = new Insets(0, 0, 5, 5);
+			gbc_chckbxPurgeBusiness.gridx = 1;
+			gbc_chckbxPurgeBusiness.gridy = 8;
+			configPanel.add(chckbxPurgeBusiness, gbc_chckbxPurgeBusiness);
+		}
+		{
+			chckbxPurgeAlias = new JCheckBox("Purge Alias");
+			GridBagConstraints gbc_chckbxPurgeAlias = new GridBagConstraints();
+			gbc_chckbxPurgeAlias.insets = new Insets(0, 0, 5, 5);
+			gbc_chckbxPurgeAlias.gridx = 2;
+			gbc_chckbxPurgeAlias.gridy = 8;
+			configPanel.add(chckbxPurgeAlias, gbc_chckbxPurgeAlias);
+		}
+				{
+					chckbxPurgeRoles = new JCheckBox("Purge Roles");
+					GridBagConstraints gbc_chckbxPurgeRoles = new GridBagConstraints();
+					gbc_chckbxPurgeRoles.insets = new Insets(0, 0, 5, 5);
+					gbc_chckbxPurgeRoles.gridx = 3;
+					gbc_chckbxPurgeRoles.gridy = 8;
+					configPanel.add(chckbxPurgeRoles, gbc_chckbxPurgeRoles);
+				}
+				
+						btnSetConfigConfiguration = new JButton("Set configuration");
+						btnSetConfigConfiguration.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent arg0) {
+								R66AdminGuiActions action = new R66AdminGuiActions(
+										R66AdminGuiActions.CONFIGIMPORT);
+								action.execute();
+							}
+						});
+						GridBagConstraints gbc_btnSetBandwidthConfiguration = new GridBagConstraints();
+						gbc_btnSetBandwidthConfiguration.gridwidth = 2;
+						gbc_btnSetBandwidthConfiguration.insets = new Insets(0, 0, 5, 5);
+						gbc_btnSetBandwidthConfiguration.gridx = 4;
+						gbc_btnSetBandwidthConfiguration.gridy = 8;
+						configPanel.add(btnSetConfigConfiguration, gbc_btnSetBandwidthConfiguration);
 
 	}
 
@@ -599,7 +761,7 @@ public class AdminR66OperationsGui extends JFrame {
 		GridBagLayout gbl_toolsPanel = new GridBagLayout();
 		gbl_toolsPanel.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0 };
 		gbl_toolsPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-		gbl_toolsPanel.columnWeights = new double[] { 0.0, 0.0, 1.0, 1.0 };
+		gbl_toolsPanel.columnWeights = new double[] { 0.0, 0.0, 1.0, 1.0, 1.0, 1.0 };
 		gbl_toolsPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 		logPanel.setLayout(gbl_toolsPanel);
 
@@ -608,16 +770,86 @@ public class AdminR66OperationsGui extends JFrame {
 			GridBagConstraints gbc_chckbxPurge = new GridBagConstraints();
 			gbc_chckbxPurge.insets = new Insets(0, 0, 5, 5);
 			gbc_chckbxPurge.gridx = 1;
-			gbc_chckbxPurge.gridy = 4;
+			gbc_chckbxPurge.gridy = 2;
 			logPanel.add(chckbxPurge, gbc_chckbxPurge);
+		}
+		{
+			chckbxPending = new JCheckBox("Pending");
+			GridBagConstraints gbc_chckbxPending = new GridBagConstraints();
+			gbc_chckbxPending.insets = new Insets(0, 0, 5, 5);
+			gbc_chckbxPending.gridx = 2;
+			gbc_chckbxPending.gridy = 2;
+			logPanel.add(chckbxPending, gbc_chckbxPending);
+		}
+		{
+			chckbxRunning = new JCheckBox("Running");
+			GridBagConstraints gbc_chckbxRunning = new GridBagConstraints();
+			gbc_chckbxRunning.insets = new Insets(0, 0, 5, 5);
+			gbc_chckbxRunning.gridx = 3;
+			gbc_chckbxRunning.gridy = 2;
+			logPanel.add(chckbxRunning, gbc_chckbxRunning);
+		}
+		{
+			chckbxInError = new JCheckBox("In Error");
+			GridBagConstraints gbc_chckbxInError = new GridBagConstraints();
+			gbc_chckbxInError.insets = new Insets(0, 0, 5, 5);
+			gbc_chckbxInError.gridx = 4;
+			gbc_chckbxInError.gridy = 2;
+			logPanel.add(chckbxInError, gbc_chckbxInError);
+		}
+		{
+			chckbxDone = new JCheckBox("Done");
+			GridBagConstraints gbc_chckbxDone = new GridBagConstraints();
+			gbc_chckbxDone.insets = new Insets(0, 0, 5, 5);
+			gbc_chckbxDone.gridx = 5;
+			gbc_chckbxDone.gridy = 2;
+			logPanel.add(chckbxDone, gbc_chckbxDone);
 		}
 		{
 			chckbxClean = new JCheckBox("Clean");
 			GridBagConstraints gbc_chckbxClean = new GridBagConstraints();
 			gbc_chckbxClean.insets = new Insets(0, 0, 5, 5);
-			gbc_chckbxClean.gridx = 2;
-			gbc_chckbxClean.gridy = 4;
+			gbc_chckbxClean.gridx = 1;
+			gbc_chckbxClean.gridy = 3;
 			logPanel.add(chckbxClean, gbc_chckbxClean);
+		}
+		{
+			lblRuleUsedIn = new JLabel("Rule used in exported Logs");
+			GridBagConstraints gbc_lblRuleUsedIn = new GridBagConstraints();
+			gbc_lblRuleUsedIn.insets = new Insets(0, 0, 5, 5);
+			gbc_lblRuleUsedIn.anchor = GridBagConstraints.EAST;
+			gbc_lblRuleUsedIn.gridx = 2;
+			gbc_lblRuleUsedIn.gridy = 3;
+			logPanel.add(lblRuleUsedIn, gbc_lblRuleUsedIn);
+		}
+		{
+			textFieldLogRule = new JTextField();
+			GridBagConstraints gbc_textFieldLogRule = new GridBagConstraints();
+			gbc_textFieldLogRule.insets = new Insets(0, 0, 5, 5);
+			gbc_textFieldLogRule.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textFieldLogRule.gridx = 3;
+			gbc_textFieldLogRule.gridy = 3;
+			logPanel.add(textFieldLogRule, gbc_textFieldLogRule);
+			textFieldLogRule.setColumns(10);
+		}
+		{
+			lblHostUsedIn = new JLabel("Host used in exported Logs");
+			GridBagConstraints gbc_lblHostUsedIn = new GridBagConstraints();
+			gbc_lblHostUsedIn.anchor = GridBagConstraints.EAST;
+			gbc_lblHostUsedIn.insets = new Insets(0, 0, 5, 5);
+			gbc_lblHostUsedIn.gridx = 4;
+			gbc_lblHostUsedIn.gridy = 3;
+			logPanel.add(lblHostUsedIn, gbc_lblHostUsedIn);
+		}
+		{
+			textFieldLogHost = new JTextField();
+			GridBagConstraints gbc_textFieldLogHost = new GridBagConstraints();
+			gbc_textFieldLogHost.insets = new Insets(0, 0, 5, 5);
+			gbc_textFieldLogHost.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textFieldLogHost.gridx = 5;
+			gbc_textFieldLogHost.gridy = 3;
+			logPanel.add(textFieldLogHost, gbc_textFieldLogHost);
+			textFieldLogHost.setColumns(10);
 		}
 		{
 			lblNbIfNo = new JLabel(
@@ -627,9 +859,9 @@ public class AdminR66OperationsGui extends JFrame {
 			lblNbIfNo.setFocusable(false);
 			lblNbIfNo.setAutoscrolls(true);
 			GridBagConstraints gbc_lblNbIfNo = new GridBagConstraints();
-			gbc_lblNbIfNo.gridwidth = 2;
+			gbc_lblNbIfNo.gridwidth = 3;
 			gbc_lblNbIfNo.insets = new Insets(0, 0, 5, 5);
-			gbc_lblNbIfNo.gridx = 3;
+			gbc_lblNbIfNo.gridx = 2;
 			gbc_lblNbIfNo.gridy = 4;
 			logPanel.add(lblNbIfNo, gbc_lblNbIfNo);
 		}
@@ -699,7 +931,7 @@ public class AdminR66OperationsGui extends JFrame {
 			textFieldResult = new JTextField();
 			textFieldResult.setEditable(false);
 			GridBagConstraints gbc_textFieldResult = new GridBagConstraints();
-			gbc_textFieldResult.gridwidth = 2;
+			gbc_textFieldResult.gridwidth = 3;
 			gbc_textFieldResult.insets = new Insets(0, 0, 5, 5);
 			gbc_textFieldResult.fill = GridBagConstraints.HORIZONTAL;
 			gbc_textFieldResult.gridx = 2;
@@ -932,27 +1164,42 @@ public class AdminR66OperationsGui extends JFrame {
 		long delay = time2 - time1;
 		R66Result result = future.getResult();
 		String message = null;
+		boolean useJson = PartnerConfiguration.useJson(host.getHostid());
+		logger.debug("UseJson: "+useJson);
 		if (future.isSuccess()) {
-			ValidPacket packet = (ValidPacket) result.other;
-			if (packet != null) {
-				String[] values = packet.getSheader().split(" ");
-				Long gw = Long.parseLong(values[0]);
-				Long gr = Long.parseLong(values[1]);
-				Long sw = Long.parseLong(values[2]);
-				Long sr = Long.parseLong(values[3]);
-				globWriteLimit.setValue(gw);
-				globReadLimit.setValue(gr);
-				sessionWriteLimit.setValue(sw);
-				sessionReadLimit.setValue(sr);
+			String sresult = null;
+			if (result.other != null) {
+				if (useJson) {
+					JsonCommandPacket packet = (JsonCommandPacket) result.other;
+					sresult = packet.getRequest();
+					ObjectNode node = packet.getNodeRequest();
+					globWriteLimit.setValue(JsonHandler.getValue(node, JsonCommandPacket.BANDWIDTHPACKET.writeglobal, (long) 0));
+					globReadLimit.setValue(JsonHandler.getValue(node, JsonCommandPacket.BANDWIDTHPACKET.readglobal, (long) 0));
+					sessionWriteLimit.setValue(JsonHandler.getValue(node, JsonCommandPacket.BANDWIDTHPACKET.writesession, (long) 0));
+					sessionReadLimit.setValue(JsonHandler.getValue(node, JsonCommandPacket.BANDWIDTHPACKET.readsession, (long) 0));
+					
+				} else {
+					ValidPacket packet = (ValidPacket) result.other;
+					sresult = packet.getSheader();
+					String[] values = sresult.split(" ");
+					Long gw = Long.parseLong(values[0]);
+					Long gr = Long.parseLong(values[1]);
+					Long sw = Long.parseLong(values[2]);
+					Long sr = Long.parseLong(values[3]);
+					globWriteLimit.setValue(gw);
+					globReadLimit.setValue(gr);
+					sessionWriteLimit.setValue(sw);
+					sessionReadLimit.setValue(sr);
+				}
 			}
 			if (result.code == ErrorCode.Warning) {
 				message = "WARNED on bandwidth:\n    " +
-						(result.other != null ? ((ValidPacket) result.other).getSheader() :
+						(result.other != null ? sresult :
 								"no information given")
 						+ "\n    delay: " + delay;
 			} else {
 				message = "SUCCESS on Bandwidth:\n    " +
-						(result.other != null ? ((ValidPacket) result.other).getSheader() :
+						(result.other != null ? sresult :
 								"no information given")
 						+ "\n    delay: " + delay;
 			}
@@ -987,15 +1234,28 @@ public class AdminR66OperationsGui extends JFrame {
 		long delay = time2 - time1;
 		R66Result result = future.getResult();
 		String message = null;
+		boolean useJson = PartnerConfiguration.useJson(host.getHostid());
+		logger.debug("UseJson: "+useJson);
 		if (future.isSuccess()) {
+			String sresult = null;
+			if (result.other != null) {
+				if (useJson) {
+					JsonCommandPacket packet = (JsonCommandPacket) result.other;
+					sresult = packet.getRequest();
+					
+				} else {
+					ValidPacket packet = (ValidPacket) result.other;
+					sresult = packet.getSheader();
+				}
+			}
 			if (result.code == ErrorCode.Warning) {
 				message = "WARNED on bandwidth:\n    " +
-						(result.other != null ? ((ValidPacket) result.other).getSheader() :
+						(result.other != null ? sresult :
 								"no information given")
 						+ "\n    delay: " + delay;
 			} else {
 				message = "SUCCESS on Bandwidth:\n    " +
-						(result.other != null ? ((ValidPacket) result.other).getSheader() :
+						(result.other != null ? sresult :
 								"no information given")
 						+ "\n    delay: " + delay;
 			}
@@ -1019,8 +1279,11 @@ public class AdminR66OperationsGui extends JFrame {
 		R66Future future = new R66Future(true);
 		boolean getHost = chckbxHosts.isSelected();
 		boolean getRule = chckbxRules.isSelected();
+		boolean getBusiness = chckbxBusiness.isSelected();
+		boolean getAlias = chckbxAlias.isSelected();
+		boolean getRoles = chckbxRoles.isSelected();
 		String ruleToGet = (String) textRuleUsedToGet.getSelectedItem();
-		ConfigExport export = new ConfigExport(future, getHost, getRule,
+		ConfigExport export = new ConfigExport(future, getHost, getRule, getBusiness, getAlias, getRoles,
 				AdminGui.environnement.networkTransaction);
 		export.setHost(host);
 		export.run();
@@ -1029,79 +1292,216 @@ public class AdminR66OperationsGui extends JFrame {
 		long delay = time2 - time1;
 		R66Result result = future.getResult();
 		String message = "";
+		boolean useJson = PartnerConfiguration.useJson(host.getHostid());
+		logger.debug("UseJson: "+useJson);
 		if (future.isSuccess()) {
-			ValidPacket packet = (ValidPacket) result.other;
-			if (packet != null) {
-				String[] values = packet.getSheader().split(" ");
-				String shost = values[0];
-				String srule = null;
-				if (values.length > 1) {
-					srule = values[1];
-				}
-				if (ruleToGet == null || ruleToGet.isEmpty()) {
-					message = "No rule passed to download configuration, so cannot get configuration";
-				}
-				if (message.length() > 1) {
-					// error
-					message = "Get Config in FAILURE: " + message;
-				} else {
-					// XXX FIXME should get config files
-					if (getHost && shost != null && shost.length() > 1) {
-						future = new R66Future(true);
-						DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), shost,
-								ruleToGet, "Get Host Configuration from "
-										+ AdminGui.environnement.hostId,
-								AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
-								DbConstant.ILLEGALVALUE,
-								AdminGui.environnement.networkTransaction);
-						transfer.run();
-						if (future.isSuccess()) {
-							R66Result resultHost = future.getResult();
-							shost = resultHost.file.getTrueFile().getAbsolutePath();
-							message += " Host file into: " + shost;
-						} else {
-							shost = "Cannot get Host file: " + shost;
-							message += shost;
+			String resume = "";
+			if (useJson) {
+				JsonCommandPacket packet = (JsonCommandPacket) result.other;
+				if (packet != null) {
+					resume = packet.getRequest();
+					ObjectNode node = packet.getNodeRequest();
+					String shost = JsonHandler.getString(node, JsonCommandPacket.RESPONSECONFEXPORTPACKET.filehost);
+					String srule = JsonHandler.getString(node, JsonCommandPacket.RESPONSECONFEXPORTPACKET.filerule);
+					String sbusiness = JsonHandler.getString(node, JsonCommandPacket.RESPONSECONFEXPORTPACKET.filebusiness);;
+					String salias = JsonHandler.getString(node, JsonCommandPacket.RESPONSECONFEXPORTPACKET.filealias);;
+					String srole = JsonHandler.getString(node, JsonCommandPacket.RESPONSECONFEXPORTPACKET.fileroles);;
+					if (ruleToGet == null || ruleToGet.isEmpty()) {
+						message = " No rule passed to download configuration, so cannot get configuration";
+					}
+					if (message.length() > 1) {
+						// error
+						message = " Get Config in FAILURE: " + message;
+					} else {
+						if (getHost && shost != null && ! shost.isEmpty()) {
+							future = new R66Future(true);
+							DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), shost,
+									ruleToGet, "Get Host Configuration from "
+											+ AdminGui.environnement.hostId,
+									AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+									DbConstant.ILLEGALVALUE,
+									AdminGui.environnement.networkTransaction);
+							transfer.run();
+							if (future.isSuccess()) {
+								R66Result resultHost = future.getResult();
+								shost = resultHost.file.getTrueFile().getAbsolutePath();
+								message += " Host file into: " + shost+"\n";
+							} else {
+								getHost = false;
+								shost = " Cannot get Host file: " + shost;
+								message += shost;
+							}
+						}
+						if (getRule && srule != null && ! srule.isEmpty()) {
+							future = new R66Future(true);
+							DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), srule,
+									ruleToGet, "Get Rule Configuration from "
+											+ AdminGui.environnement.hostId,
+									AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+									DbConstant.ILLEGALVALUE,
+									AdminGui.environnement.networkTransaction);
+							transfer.run();
+							if (future.isSuccess()) {
+								R66Result resultRule = future.getResult();
+								srule = resultRule.file.getTrueFile().getAbsolutePath();
+								message += " Rule file into: " + srule+"\n";
+							} else {
+								getRule = false;
+								srule = " Cannot get Rule file: " + srule;
+								message += srule;
+							}
+						}
+						if (getBusiness && sbusiness != null && ! sbusiness.isEmpty()) {
+							future = new R66Future(true);
+							DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), sbusiness,
+									ruleToGet, "Get Business Configuration from "
+											+ AdminGui.environnement.hostId,
+									AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+									DbConstant.ILLEGALVALUE,
+									AdminGui.environnement.networkTransaction);
+							transfer.run();
+							if (future.isSuccess()) {
+								R66Result resultRule = future.getResult();
+								sbusiness = resultRule.file.getTrueFile().getAbsolutePath();
+								message += " Business file into: " + sbusiness+"\n";
+							} else {
+								getBusiness = false;
+								sbusiness = " Cannot get Business file: " + sbusiness;
+								message += sbusiness;
+							}
+						}
+						if (getAlias && salias != null && ! salias.isEmpty()) {
+							future = new R66Future(true);
+							DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), salias,
+									ruleToGet, "Get Alias Configuration from "
+											+ AdminGui.environnement.hostId,
+									AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+									DbConstant.ILLEGALVALUE,
+									AdminGui.environnement.networkTransaction);
+							transfer.run();
+							if (future.isSuccess()) {
+								R66Result resultRule = future.getResult();
+								salias = resultRule.file.getTrueFile().getAbsolutePath();
+								message += " Alias file into: " + salias+"\n";
+							} else {
+								getAlias = false;
+								salias = " Cannot get Alias file: " + salias;
+								message += salias;
+							}
+						}
+						if (getRoles && srole != null && ! srole.isEmpty()) {
+							future = new R66Future(true);
+							DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), srole,
+									ruleToGet, "Get Role Configuration from "
+											+ AdminGui.environnement.hostId,
+									AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+									DbConstant.ILLEGALVALUE,
+									AdminGui.environnement.networkTransaction);
+							transfer.run();
+							if (future.isSuccess()) {
+								R66Result resultRule = future.getResult();
+								srole = resultRule.file.getTrueFile().getAbsolutePath();
+								message += " Role file into: " + srole;
+							} else {
+								getRoles = false;
+								srole = " Cannot get Role file: " + srole;
+								message += srole;
+							}
+						}
+						if (getHost) {
+							textFieldHosts.setText(shost);
+						}
+						if (getRule) {
+							textFieldRules.setText(srule);
+						}
+						if (getBusiness) {
+							textFieldBusiness.setText(sbusiness);
+						}
+						if (getAlias) {
+							textFieldAlias.setText(salias);
+						}
+						if (getRoles) {
+							textFieldRoles.setText(srole);
 						}
 					}
-					if (getRule && srule != null && srule.length() > 1) {
-						future = new R66Future(true);
-						DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), srule,
-								ruleToGet, "Get Rule Configuration from "
-										+ AdminGui.environnement.hostId,
-								AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
-								DbConstant.ILLEGALVALUE,
-								AdminGui.environnement.networkTransaction);
-						transfer.run();
-						if (future.isSuccess()) {
-							R66Result resultRule = future.getResult();
-							srule = resultRule.file.getTrueFile().getAbsolutePath();
-							message += " Ruke file into: " + srule;
-						} else {
-							srule = "Cannot get Rule file: " + srule;
-							message += srule;
+				}
+			} else {
+				ValidPacket packet = (ValidPacket) result.other;
+				if (packet != null) {
+					resume = packet.getSheader();
+					String[] values = resume.split(" ");
+					String shost = values[0];
+					String srule = null;
+					if (values.length > 1) {
+						srule = values[1];
+					}
+					if (ruleToGet == null || ruleToGet.isEmpty()) {
+						message = "No rule passed to download configuration, so cannot get configuration";
+					}
+					if (message.length() > 1) {
+						// error
+						message = "Get Config in FAILURE: " + message;
+					} else {
+						// get config files
+						if (getHost && shost != null && ! shost.isEmpty()) {
+							future = new R66Future(true);
+							DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), shost,
+									ruleToGet, "Get Host Configuration from "
+											+ AdminGui.environnement.hostId,
+									AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+									DbConstant.ILLEGALVALUE,
+									AdminGui.environnement.networkTransaction);
+							transfer.run();
+							if (future.isSuccess()) {
+								R66Result resultHost = future.getResult();
+								shost = resultHost.file.getTrueFile().getAbsolutePath();
+								message += " Host file into: " + shost+"\n";
+							} else {
+								getHost = false;
+								shost = " Cannot get Host file: " + shost;
+								message += shost;
+							}
 						}
-					}
-					// XXX FIXME then set downloaded file to text fields
-					if (getHost) {
-						textFieldHosts.setText(shost);
-					}
-					if (getRule) {
-						textFieldRules.setText(srule);
+						if (getRule && srule != null && ! srule.isEmpty()) {
+							future = new R66Future(true);
+							DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), srule,
+									ruleToGet, "Get Rule Configuration from "
+											+ AdminGui.environnement.hostId,
+									AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+									DbConstant.ILLEGALVALUE,
+									AdminGui.environnement.networkTransaction);
+							transfer.run();
+							if (future.isSuccess()) {
+								R66Result resultRule = future.getResult();
+								srule = resultRule.file.getTrueFile().getAbsolutePath();
+								message += " Rule file into: " + srule;
+							} else {
+								getRule = false;
+								srule = " Cannot get Rule file: " + srule;
+								message += srule;
+							}
+						}
+						// then set downloaded file to text fields
+						if (getHost) {
+							textFieldHosts.setText(shost);
+						}
+						if (getRule) {
+							textFieldRules.setText(srule);
+						}
 					}
 				}
 			}
 			if (result.code == ErrorCode.Warning) {
 				message = "WARNED on Get Config:\n    "
 						+
-						(result.other != null ? ((ValidPacket) result.other).getSheader() + message
+						(result.other != null ? resume + message
 								:
 								"no information given")
 						+ "\n    delay: " + delay;
 			} else {
 				message = "SUCCESS on Get Config:\n    "
 						+
-						(result.other != null ? ((ValidPacket) result.other).getSheader() + message
+						(result.other != null ? resume + message
 								:
 								"no information given")
 						+ "\n    delay: " + delay;
@@ -1123,18 +1523,30 @@ public class AdminR66OperationsGui extends JFrame {
 			return;
 		}
 		long time1 = System.currentTimeMillis();
-		R66Future future = new R66Future(true);
+		R66Future future = null;
 		String hostfile = textFieldHosts.getText();
 		String rulefile = textFieldRules.getText();
+		String businessfile = textFieldBusiness.getText();
+		String aliasfile = textFieldAlias.getText();
+		String rolefile = textFieldRoles.getText();
+		long hostid = DbConstant.ILLEGALVALUE, ruleid = DbConstant.ILLEGALVALUE, 
+				businessid = DbConstant.ILLEGALVALUE, aliasid = DbConstant.ILLEGALVALUE,
+				roleid = DbConstant.ILLEGALVALUE;
 		boolean erazeHost = chckbxPurgeHosts.isSelected();
 		boolean erazeRule = chckbxPurgeRules.isSelected();
+		boolean erazeBusiness = chckbxPurgeBusiness.isSelected();
+		boolean erazeAlias = chckbxPurgeAlias.isSelected();
+		boolean erazeRole = chckbxPurgeRoles.isSelected();
 		String ruleToPut = (String) textRuleToPut.getSelectedItem();
 		String error = "";
 		String msg = "";
-		// XXX FIXME should send config files first
+		// should send config files first
 		if ((hostfile == null || hostfile.isEmpty()) &&
-			(rulefile == null || rulefile.isEmpty())) {
-			error = "No rule file neither host file passed as argument, so cannot set configuration";
+			(rulefile == null || rulefile.isEmpty()) &&
+			(businessfile == null || businessfile.isEmpty()) &&
+			(aliasfile == null || aliasfile.isEmpty()) &&
+			(rolefile == null || rolefile.isEmpty())) {
+			error = "No rule, host, business, alias, role file passed as argument, so cannot set configuration";
 		}
 		if (ruleToPut == null || ruleToPut.isEmpty()) {
 			error = "No rule passed to upload configuration, so cannot set configuration";
@@ -1159,7 +1571,14 @@ public class AdminR66OperationsGui extends JFrame {
 				error = "Cannot set: " + hostfile;
 			} else {
 				msg += " Host Configuration transmitted";
+				hostid = future.runner.getSpecialId();
 			}
+		}
+		if (error.length() > 1) {
+			// error
+			message = "Set Config in FAILURE: " + error;
+			AdminGui.environnement.GuiResultat = message;
+			return;
 		}
 		if (rulefile != null && rulefile.length() > 1) {
 			future = new R66Future(true);
@@ -1171,20 +1590,93 @@ public class AdminR66OperationsGui extends JFrame {
 					AdminGui.environnement.networkTransaction);
 			transfer.run();
 			if (!future.isSuccess()) {
-				error += "&& Cannot Set: " + rulefile;
+				error += " && Cannot Set: " + rulefile;
 			} else {
 				msg += " Rule Configuration transmitted";
+				ruleid = future.runner.getSpecialId();
 			}
 		}
 		if (error.length() > 1) {
 			// error
-			message = "Get Config in FAILURE: " + error;
+			message = "Set Config in FAILURE: " + error;
 			AdminGui.environnement.GuiResultat = message;
 			return;
 		}
-		ConfigImport importCmd = new ConfigImport(future, erazeHost, erazeRule,
-				hostfile, rulefile,
+		boolean useJson = PartnerConfiguration.useJson(host.getHostid());
+		logger.debug("UseJson: "+useJson);
+		if (useJson) {
+			if (businessfile != null && businessfile.length() > 1) {
+				future = new R66Future(true);
+				DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), businessfile,
+						ruleToPut, "Set Business Configuration from "
+								+ AdminGui.environnement.hostId,
+						AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+						DbConstant.ILLEGALVALUE,
+						AdminGui.environnement.networkTransaction);
+				transfer.run();
+				if (!future.isSuccess()) {
+					error += " && Cannot Set: " + businessfile;
+				} else {
+					msg += " Business Configuration transmitted";
+					businessid = future.runner.getSpecialId();
+				}
+			}
+			if (error.length() > 1) {
+				// error
+				message = "Set Config in FAILURE: " + error;
+				AdminGui.environnement.GuiResultat = message;
+				return;
+			}
+			if (aliasfile != null && aliasfile.length() > 1) {
+				future = new R66Future(true);
+				DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), aliasfile,
+						ruleToPut, "Set Alias Configuration from "
+								+ AdminGui.environnement.hostId,
+						AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+						DbConstant.ILLEGALVALUE,
+						AdminGui.environnement.networkTransaction);
+				transfer.run();
+				if (!future.isSuccess()) {
+					error += " && Cannot Set: " + aliasfile;
+				} else {
+					msg += " Alias Configuration transmitted";
+					aliasid = future.runner.getSpecialId();
+				}
+			}
+			if (error.length() > 1) {
+				// error
+				message = "Set Config in FAILURE: " + error;
+				AdminGui.environnement.GuiResultat = message;
+				return;
+			}
+			if (rolefile != null && rolefile.length() > 1) {
+				future = new R66Future(true);
+				DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), rolefile,
+						ruleToPut, "Set Role Configuration from "
+								+ AdminGui.environnement.hostId,
+						AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+						DbConstant.ILLEGALVALUE,
+						AdminGui.environnement.networkTransaction);
+				transfer.run();
+				if (!future.isSuccess()) {
+					error += " && Cannot Set: " + rolefile;
+				} else {
+					msg += " Role Configuration transmitted";
+					roleid = future.runner.getSpecialId();
+				}
+			}
+			if (error.length() > 1) {
+				// error
+				message = "Set Config in FAILURE: " + error;
+				AdminGui.environnement.GuiResultat = message;
+				return;
+			}
+		}
+		future = new R66Future(true);
+		ConfigImport importCmd = new ConfigImport(future, erazeHost, erazeRule, erazeBusiness, erazeAlias, erazeRole,
+				hostfile, rulefile, businessfile, aliasfile, rolefile,
 				AdminGui.environnement.networkTransaction);
+		importCmd.setSpecialIds(hostid, ruleid, businessid, aliasid, roleid);
 		importCmd.setHost(host);
 		importCmd.run();
 		future.awaitUninterruptibly();
@@ -1192,15 +1684,22 @@ public class AdminR66OperationsGui extends JFrame {
 		long delay = time2 - time1;
 		R66Result result = future.getResult();
 		if (future.isSuccess()) {
+			String resume = msg;
+			if (result.other != null) {
+				if (useJson) {
+					resume = ((JsonCommandPacket) result.other).getRequest();
+				} else {
+					resume = ((ValidPacket) result.other).getSheader();
+				}
+				resume += msg;
+			}
 			if (result.code == ErrorCode.Warning) {
 				message = "WARNED on Set Config:\n    " +
-						(result.other != null ? ((ValidPacket) result.other).getSheader() + msg :
-								msg)
+						resume
 						+ "\n    delay: " + delay;
 			} else {
 				message = "SUCCESS on Set Config:\n    " +
-						(result.other != null ? ((ValidPacket) result.other).getSheader() + msg :
-								msg)
+						resume
 						+ "\n    delay: " + delay;
 			}
 		} else {
@@ -1227,13 +1726,13 @@ public class AdminR66OperationsGui extends JFrame {
 		String sstart = textFieldStart.getText();
 		String sstop = textFieldStop.getText();
 		if (sstart != null) {
-			start = LogExport.fixDate(sstart);
+			start = WaarpStringUtils.fixDate(sstart);
 		}
 		if (sstop != null) {
-			stop = LogExport.fixDate(sstop, start);
+			stop = WaarpStringUtils.fixDate(sstop, start);
 		}
 		if (start == null && stop == null) {
-			stop = LogExport.getTodayMidnight();
+			stop = WaarpStringUtils.getTodayMidnight();
 		}
 		if (start != null) {
 			System.err.println("Start: " + (new Date(start.getTime())).toString());
@@ -1241,25 +1740,51 @@ public class AdminR66OperationsGui extends JFrame {
 		if (stop != null) {
 			System.err.println("Stop: " + (new Date(stop.getTime())).toString());
 		}
-
+		String rulefilter = textFieldLogRule.getText();
+		if (rulefilter != null && rulefilter.isEmpty()) {
+			rulefilter = null;
+		}
+		String hostfilter = textFieldLogHost.getText();
+		if (hostfilter != null && hostfilter.isEmpty()) {
+			hostfilter = null;
+		}
+		
 		R66Future future = new R66Future(true);
-		LogExport export = new LogExport(future, purgeLog, clean, start, stop,
-				AdminGui.environnement.networkTransaction);
-		export.setHost(host);
-		export.run();
+		boolean useJson = PartnerConfiguration.useJson(host.getHostid());
+		logger.debug("UseJson: "+useJson);
+		if (useJson) {
+			LogExtendedExport export = new LogExtendedExport(future, clean, purgeLog, start,
+							stop, null, null, rulefilter, hostfilter,
+							chckbxPending.isSelected(), chckbxRunning.isSelected(), chckbxDone.isSelected(), chckbxInError.isSelected(),
+							AdminGui.environnement.networkTransaction, host);
+			export.run();
+		} else {
+			LogExport export = new LogExport(future, purgeLog, clean, start, stop,
+					AdminGui.environnement.networkTransaction);
+			export.setHost(host);
+			export.run();
+		}
 		future.awaitUninterruptibly();
 		long time2 = System.currentTimeMillis();
 		long delay = time2 - time1;
 		R66Result result = future.getResult();
 		String message = "";
 		if (future.isSuccess()) {
-			ValidPacket packet = (ValidPacket) result.other;
+			AbstractLocalPacket packet = (AbstractLocalPacket) result.other;
+			String value = null;
 			if (packet != null) {
-				String[] values = packet.getSheader().split(" ");
-				String fileExported = values[0];
+				String fileExported = null;
+				if (useJson) {
+					value = ((JsonCommandPacket) packet).getRequest();
+					fileExported = JsonHandler.getValue(((JsonCommandPacket) packet).getNodeRequest(), JsonCommandPacket.RESPONSELOGPACKET.filename, "unknown");
+				} else {
+					value = ((ValidPacket) packet).getSheader();
+					String[] values = value.split(" ");
+					fileExported = values[0];
+				}
 				textFieldResult.setText(fileExported);
-				// XXX FIXME download logs
-				if (fileExported != null && fileExported.length() > 1) {
+				// download logs
+				if (fileExported != null && ! fileExported.isEmpty()) {
 					String ruleToExport = (String) textRuleToExportLog.getSelectedItem();
 					if (ruleToExport == null || ruleToExport.isEmpty()) {
 						message = "Cannot get: " + fileExported + " since no rule to export specified\n";
@@ -1284,12 +1809,12 @@ public class AdminR66OperationsGui extends JFrame {
 			}
 			if (result.code == ErrorCode.Warning) {
 				message += "\nWARNED on Export Logs:\n    " +
-						(result.other != null ? ((ValidPacket) result.other).getSheader() :
+						(result.other != null ? value :
 								"no information given")
 						+ "\n    delay: " + delay+"\n";
 			} else {
 				message += "\nSUCCESS on Export Logs:\n    " +
-						(result.other != null ? ((ValidPacket) result.other).getSheader() :
+						(result.other != null ? value :
 								"no information given")
 						+ "\n    delay: " + delay;
 			}
