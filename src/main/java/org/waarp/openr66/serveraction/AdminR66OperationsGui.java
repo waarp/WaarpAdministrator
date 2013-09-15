@@ -44,7 +44,6 @@ import org.waarp.administrator.AdminGui;
 import org.waarp.common.database.exception.WaarpDatabaseNoConnectionException;
 import org.waarp.common.database.exception.WaarpDatabaseSqlException;
 import org.waarp.common.digest.FilesystemBasedDigest;
-import org.waarp.common.json.JsonHandler;
 import org.waarp.common.logging.WaarpInternalLogger;
 import org.waarp.common.logging.WaarpInternalLoggerFactory;
 import org.waarp.common.utility.WaarpStringUtils;
@@ -63,6 +62,9 @@ import org.waarp.openr66.protocol.localhandler.packet.JsonCommandPacket;
 import org.waarp.openr66.protocol.localhandler.packet.LocalPacketFactory;
 import org.waarp.openr66.protocol.localhandler.packet.ShutdownPacket;
 import org.waarp.openr66.protocol.localhandler.packet.ValidPacket;
+import org.waarp.openr66.protocol.localhandler.packet.json.BandwidthJsonPacket;
+import org.waarp.openr66.protocol.localhandler.packet.json.ConfigExportResponseJsonPacket;
+import org.waarp.openr66.protocol.localhandler.packet.json.LogResponseJsonPacket;
 import org.waarp.openr66.protocol.utils.ChannelUtils;
 import org.waarp.openr66.protocol.utils.R66Future;
 import org.waarp.openr66.r66gui.R66Environment;
@@ -72,7 +74,6 @@ import org.waarp.openr66.server.ConfigImport;
 import org.waarp.openr66.server.LogExport;
 import org.waarp.openr66.server.LogExtendedExport;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -1172,12 +1173,11 @@ public class AdminR66OperationsGui extends JFrame {
 				if (useJson) {
 					JsonCommandPacket packet = (JsonCommandPacket) result.other;
 					sresult = packet.getRequest();
-					ObjectNode node = packet.getNodeRequest();
-					globWriteLimit.setValue(JsonHandler.getValue(node, JsonCommandPacket.BANDWIDTHPACKET.writeglobal, (long) 0));
-					globReadLimit.setValue(JsonHandler.getValue(node, JsonCommandPacket.BANDWIDTHPACKET.readglobal, (long) 0));
-					sessionWriteLimit.setValue(JsonHandler.getValue(node, JsonCommandPacket.BANDWIDTHPACKET.writesession, (long) 0));
-					sessionReadLimit.setValue(JsonHandler.getValue(node, JsonCommandPacket.BANDWIDTHPACKET.readsession, (long) 0));
-					
+					BandwidthJsonPacket node = (BandwidthJsonPacket) packet.getJsonRequest();
+					globWriteLimit.setValue(node.getWriteglobal());
+					globReadLimit.setValue(node.getReadglobal());
+					sessionWriteLimit.setValue(node.getWritesession());
+					sessionReadLimit.setValue(node.getReadsession());
 				} else {
 					ValidPacket packet = (ValidPacket) result.other;
 					sresult = packet.getSheader();
@@ -1300,12 +1300,12 @@ public class AdminR66OperationsGui extends JFrame {
 				JsonCommandPacket packet = (JsonCommandPacket) result.other;
 				if (packet != null) {
 					resume = packet.getRequest();
-					ObjectNode node = packet.getNodeRequest();
-					String shost = JsonHandler.getString(node, JsonCommandPacket.RESPONSECONFEXPORTPACKET.filehost);
-					String srule = JsonHandler.getString(node, JsonCommandPacket.RESPONSECONFEXPORTPACKET.filerule);
-					String sbusiness = JsonHandler.getString(node, JsonCommandPacket.RESPONSECONFEXPORTPACKET.filebusiness);;
-					String salias = JsonHandler.getString(node, JsonCommandPacket.RESPONSECONFEXPORTPACKET.filealias);;
-					String srole = JsonHandler.getString(node, JsonCommandPacket.RESPONSECONFEXPORTPACKET.fileroles);;
+					ConfigExportResponseJsonPacket node = (ConfigExportResponseJsonPacket) packet.getJsonRequest();
+					String shost = node.getFilehost();
+					String srule = node.getFilerule();
+					String sbusiness = node.getFilebusiness();
+					String salias = node.getFilealias();
+					String srole = node.getFileroles();
 					if (ruleToGet == null || ruleToGet.isEmpty()) {
 						message = " No rule passed to download configuration, so cannot get configuration";
 					}
@@ -1776,7 +1776,8 @@ public class AdminR66OperationsGui extends JFrame {
 				String fileExported = null;
 				if (useJson) {
 					value = ((JsonCommandPacket) packet).getRequest();
-					fileExported = JsonHandler.getValue(((JsonCommandPacket) packet).getNodeRequest(), JsonCommandPacket.RESPONSELOGPACKET.filename, "unknown");
+					LogResponseJsonPacket node = (LogResponseJsonPacket) ((JsonCommandPacket) packet).getJsonRequest();
+					fileExported = node.getFilename();
 				} else {
 					value = ((ValidPacket) packet).getSheader();
 					String[] values = value.split(" ");
