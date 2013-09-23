@@ -58,6 +58,7 @@ import org.waarp.openr66.protocol.configuration.PartnerConfiguration;
 import org.waarp.openr66.protocol.exception.OpenR66ProtocolPacketException;
 import org.waarp.openr66.protocol.localhandler.LocalChannelReference;
 import org.waarp.openr66.protocol.localhandler.packet.AbstractLocalPacket;
+import org.waarp.openr66.protocol.localhandler.packet.BlockRequestPacket;
 import org.waarp.openr66.protocol.localhandler.packet.JsonCommandPacket;
 import org.waarp.openr66.protocol.localhandler.packet.LocalPacketFactory;
 import org.waarp.openr66.protocol.localhandler.packet.ShutdownPacket;
@@ -85,6 +86,7 @@ import java.io.PrintStream;
 import java.net.SocketAddress;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.JCheckBox;
@@ -93,6 +95,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
 import java.awt.Rectangle;
 import java.awt.Cursor;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
 
 /**
  * @author "Frederic Bregier"
@@ -303,6 +307,11 @@ public class AdminR66OperationsGui extends JFrame {
 	private JTextField textFieldLogHost;
 	private JLabel lblRuleUsedIn;
 	private JLabel lblHostUsedIn;
+	private JCheckBox chckbxBlockUnblock;
+	private JRadioButton rdbtnShutdown;
+	private JRadioButton rdbtnBlock;
+	private JCheckBox chckbxRestart;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
 
 	private void initBandwidth(JTabbedPane tabbedPane) {
 		JPanel bandwidthPanel = new JPanel();
@@ -987,6 +996,64 @@ public class AdminR66OperationsGui extends JFrame {
 			gbc_btnShutdown.gridx = 3;
 			gbc_btnShutdown.gridy = 4;
 			shutdownPanel.add(btnShutdown, gbc_btnShutdown);
+		}
+		{
+			rdbtnShutdown = new JRadioButton("Shutdown");
+			rdbtnShutdown.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					if (rdbtnShutdown.isSelected()) {
+						chckbxRestart.setEnabled(true);
+						chckbxBlockUnblock.setEnabled(false);
+					} else {
+						chckbxRestart.setEnabled(false);
+						chckbxBlockUnblock.setEnabled(true);
+					}
+				}
+			});
+			buttonGroup.add(rdbtnShutdown);
+			GridBagConstraints gbc_rdbtnShutdown = new GridBagConstraints();
+			gbc_rdbtnShutdown.insets = new Insets(0, 0, 5, 5);
+			gbc_rdbtnShutdown.gridx = 2;
+			gbc_rdbtnShutdown.gridy = 6;
+			shutdownPanel.add(rdbtnShutdown, gbc_rdbtnShutdown);
+			rdbtnShutdown.setSelected(true);
+		}
+		{
+			chckbxRestart = new JCheckBox("Restart");
+			GridBagConstraints gbc_chckbxRestart = new GridBagConstraints();
+			gbc_chckbxRestart.insets = new Insets(0, 0, 5, 5);
+			gbc_chckbxRestart.gridx = 3;
+			gbc_chckbxRestart.gridy = 6;
+			shutdownPanel.add(chckbxRestart, gbc_chckbxRestart);
+		}
+		{
+			rdbtnBlock = new JRadioButton("Block");
+			rdbtnBlock.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					if (rdbtnBlock.isSelected()) {
+						chckbxRestart.setEnabled(false);
+						chckbxBlockUnblock.setEnabled(true);
+					} else {
+						chckbxRestart.setEnabled(true);
+						chckbxBlockUnblock.setEnabled(false);
+					}
+				}
+			});
+			buttonGroup.add(rdbtnBlock);
+			GridBagConstraints gbc_rdbtnBlock = new GridBagConstraints();
+			gbc_rdbtnBlock.insets = new Insets(0, 0, 5, 5);
+			gbc_rdbtnBlock.gridx = 2;
+			gbc_rdbtnBlock.gridy = 7;
+			shutdownPanel.add(rdbtnBlock, gbc_rdbtnBlock);
+		}
+		{
+			chckbxBlockUnblock = new JCheckBox("Block / Unblock");
+			GridBagConstraints gbc_chckbxBlockUnblock = new GridBagConstraints();
+			gbc_chckbxBlockUnblock.insets = new Insets(0, 0, 5, 5);
+			gbc_chckbxBlockUnblock.gridx = 3;
+			gbc_chckbxBlockUnblock.gridy = 7;
+			shutdownPanel.add(chckbxBlockUnblock, gbc_chckbxBlockUnblock);
+			chckbxBlockUnblock.setEnabled(false);
 		}
 
 	}
@@ -1850,43 +1917,60 @@ public class AdminR66OperationsGui extends JFrame {
 		long time1 = System.currentTimeMillis();
 		byte[] key;
 		key = FilesystemBasedDigest.passwdCrypt(skey.getBytes());
-		final ShutdownPacket packet = new ShutdownPacket(
-				key);
+		AbstractLocalPacket packet = null;
+		if (rdbtnShutdown.isSelected()) {
+			if (chckbxRestart.isSelected()) {
+				packet = new ShutdownPacket(key, (byte) 1);
+			} else {
+				packet = new ShutdownPacket(key);
+			}
+		} else {
+			packet = new BlockRequestPacket(chckbxBlockUnblock.isSelected(), key);
+		}
 		final SocketAddress socketServerAddress = host.getSocketAddress();
 		LocalChannelReference localChannelReference = null;
 		localChannelReference = AdminGui.environnement.networkTransaction
 				.createConnectionWithRetry(socketServerAddress, host.isSsl(), null);
 		String message = null;
 		if (localChannelReference == null) {
-			message = "Bandwidth in FAILURE: " + "Cannot connect to " + host.getSocketAddress();
+			message = "Shutdown/Block in FAILURE: " + "Cannot connect to " + host.getSocketAddress();
 			AdminGui.environnement.GuiResultat = message;
 			return;
 		}
-		localChannelReference.sessionNewState(R66FiniteDualStates.SHUTDOWN);
+		if (rdbtnShutdown.isSelected()) {
+			localChannelReference.sessionNewState(R66FiniteDualStates.SHUTDOWN);
+		} else {
+			localChannelReference.sessionNewState(R66FiniteDualStates.BUSINESSR);
+		}
 		try {
 			ChannelUtils.writeAbstractLocalPacket(localChannelReference, packet, false);
 		} catch (OpenR66ProtocolPacketException e) {
-			message = "Bandwidth in FAILURE: " + "Cannot send order to " + host.getSocketAddress()
+			message = "Shutdown/Block in FAILURE: " + "Cannot send order to " + host.getSocketAddress()
 					+ "[" + e.getMessage() + "]";
 			AdminGui.environnement.GuiResultat = message;
 			return;
 		}
-		localChannelReference.getFutureRequest().awaitUninterruptibly();
-		R66Result result = localChannelReference.getFutureRequest()
-				.getResult();
-		if (localChannelReference.getFutureRequest().isSuccess()) {
-			message = "SUCCESS on Shutdown OK";
-		} else {
-			if (result.other instanceof ValidPacket
-					&&
-					((ValidPacket) result.other).getTypeValid() == LocalPacketFactory.SHUTDOWNPACKET) {
-				message = "SUCCESS on Shutdown command OK";
-			} else if (result.code == ErrorCode.Shutdown) {
-				message = "SUCCESS on Shutdown command done";
+		localChannelReference.getFutureRequest().awaitUninterruptibly(180, TimeUnit.SECONDS);
+		if (localChannelReference.getFutureRequest().isDone()) {
+			R66Result result = localChannelReference.getFutureRequest()
+					.getResult();
+			if (localChannelReference.getFutureRequest().isSuccess()) {
+				message = "SUCCESS on Shutdown/Block OK";
 			} else {
-				message = "FAILURE on Shutdown: " + result.toString() + "[" + localChannelReference
-						.getFutureRequest().getCause() + "]";
+				if (result.other instanceof ValidPacket
+						&&
+						((ValidPacket) result.other).getTypeValid() == LocalPacketFactory.SHUTDOWNPACKET) {
+					message = "SUCCESS on Shutdown/Block command OK";
+				} else if (result.code == ErrorCode.Shutdown) {
+					message = "SUCCESS on Shutdown/Block command done";
+				} else {
+					message = "FAILURE on Shutdown/Block: " + result.toString() + "[" + localChannelReference
+							.getFutureRequest().getCause() + "]";
+				}
 			}
+		} else {
+			message = "WARNING on Shutdown/Block command since no answer yet received after 3 minutes";
+			localChannelReference.getLocalChannel().close();
 		}
 		long time2 = System.currentTimeMillis();
 		long delay = time2 - time1;
