@@ -41,6 +41,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.SoftBevelBorder;
 
 import org.waarp.administrator.AdminGui;
+import org.waarp.common.database.DbSession;
 import org.waarp.common.database.exception.WaarpDatabaseNoConnectionException;
 import org.waarp.common.database.exception.WaarpDatabaseSqlException;
 import org.waarp.common.digest.FilesystemBasedDigest;
@@ -199,9 +200,9 @@ public class AdminR66OperationsGui extends JFrame {
 		textPaneLog.setEditable(false);
 
 		System.setOut(new PrintStream(new JTextAreaOutputStream(textPaneLog)));
-
+		DbSession session = DbConstant.admin != null ? DbConstant.admin.session : null;
 		try {
-			comboBoxServer = new JComboBox(DbHostAuth.getAllHosts(null));
+			comboBoxServer = new JComboBox(DbHostAuth.getAllHosts(session));
 		} catch (WaarpDatabaseNoConnectionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1194,7 +1195,8 @@ public class AdminR66OperationsGui extends JFrame {
 		try {
 			int idx = comboBoxServer.getSelectedIndex();
 			comboBoxServer.removeAllItems();
-			for (DbHostAuth auth : DbHostAuth.getAllHosts(null)) {
+			DbSession session = DbConstant.admin != null ? DbConstant.admin.session : null;
+			for (DbHostAuth auth : DbHostAuth.getAllHosts(session)) {
 				//System.err.println("Add: "+auth.toString());
 				comboBoxServer.addItem(auth);
 			}

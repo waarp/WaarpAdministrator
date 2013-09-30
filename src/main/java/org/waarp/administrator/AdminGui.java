@@ -32,6 +32,7 @@ import javax.swing.JButton;
 
 import org.jboss.netty.logging.InternalLoggerFactory;
 import org.waarp.administrator.guipwd.AdminUiPassword;
+import org.waarp.common.database.DbSession;
 import org.waarp.common.database.exception.WaarpDatabaseNoConnectionException;
 import org.waarp.common.database.exception.WaarpDatabaseSqlException;
 import org.waarp.common.logging.WaarpInternalLogger;
@@ -201,7 +202,8 @@ public class AdminGui {
 					packet = new TestPacket("MSG", "Administrator checking from "+myhost
 							, 100);
 					String result = "Checked Hosts:\n";
-					for (DbHostAuth host : DbHostAuth.getAllHosts(null)) {
+					DbSession session = DbConstant.admin != null ? DbConstant.admin.session : null;
+					for (DbHostAuth host : DbHostAuth.getAllHosts(session)) {
 						R66Future future = new R66Future(true);
 						Message mesg = new Message(AdminGui.environnement.networkTransaction, future, host, packet);
 						mesg.run();
