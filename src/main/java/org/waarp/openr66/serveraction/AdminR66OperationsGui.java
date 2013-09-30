@@ -123,7 +123,7 @@ public class AdminR66OperationsGui extends JFrame {
 	 * @throws HeadlessException
 	 */
 	public AdminR66OperationsGui(JFrame adminGui) throws HeadlessException {
-		super("Admin R66 Operations GUI");
+		super("Admin R66 Operations GUI: "+Configuration.configuration.HOST_ID);
 		setMinimumSize(new Dimension(1100, 700));
 		setPreferredSize(new Dimension(1100, 800));
 		this.adminGui = adminGui;

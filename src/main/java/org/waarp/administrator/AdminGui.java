@@ -160,7 +160,7 @@ public class AdminGui {
 	 */
 	private void initialize() {
 		frmWaarpRCentral = new JFrame();
-		frmWaarpRCentral.setTitle("Waarp R66 Central Administrator");
+		frmWaarpRCentral.setTitle("Waarp R66 Central Administrator: "+Configuration.configuration.HOST_ID);
 		frmWaarpRCentral.setBounds(100, 100, 710, 300);
 		frmWaarpRCentral.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
