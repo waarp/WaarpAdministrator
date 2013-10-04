@@ -8,6 +8,7 @@
 		<release version="1.0.4" date="2013-09-15" description="Fix release">
 			<action dev="Frederic Bregier" type="add">Add support for Block/Unblock and Restart after shutdown operations</action>
 			<action dev="Frederic Bregier" type="fix">Fix Database access when using configuration with Database support</action>
+			<action dev="Frederic Bregier" type="add">Internationalization</action>
 		</release>
 	    <release version="1.0.3" date="2013-09-15" description="Fix release">
 			<action dev="Frederic Bregier" type="fix">Fix upgrade</action>

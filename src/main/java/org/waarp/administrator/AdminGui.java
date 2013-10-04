@@ -43,6 +43,7 @@ import org.waarp.openr66.configuration.FileBasedConfiguration;
 import org.waarp.openr66.database.DbConstant;
 import org.waarp.openr66.database.data.DbHostAuth;
 import org.waarp.openr66.protocol.configuration.Configuration;
+import org.waarp.openr66.protocol.configuration.Messages;
 import org.waarp.openr66.protocol.localhandler.packet.TestPacket;
 import org.waarp.openr66.protocol.networkhandler.NetworkTransaction;
 import org.waarp.openr66.protocol.utils.R66Future;
@@ -75,20 +76,20 @@ public class AdminGui {
 	
 	protected static boolean getParams(String[] args) {
 		if (args.length < 1) {
-			logger.error("Need the configuration file as first argument");
+			logger.error(Messages.getString("Configuration.NeedConfig")); //$NON-NLS-1$
 			JFileChooser chooser = new JFileChooser();
 			int returnvval = chooser.showOpenDialog(null);
 			if (returnvval == JFileChooser.APPROVE_OPTION) {
 				File file = chooser.getSelectedFile();
 				args = new String[] {file.getAbsolutePath()};
 			} else {
-				JOptionPane.showMessageDialog(null, "Need the configuration file as first argument");
+				JOptionPane.showMessageDialog(null, Messages.getString("Configuration.NeedConfig")); //$NON-NLS-1$
 				return false;
 			}
 		}
 		if (!FileBasedConfiguration
 				.setClientConfigurationFromXml(Configuration.configuration, args[0])) {
-			logger.error("Need the configuration file as first argument");
+			logger.error(Messages.getString("Configuration.NeedConfig")); //$NON-NLS-1$
 			return false;
 		}
         Configuration.configuration.pipelineInit();
@@ -105,8 +106,8 @@ public class AdminGui {
 			logger = WaarpInternalLoggerFactory.getLogger(AdminGui.class);
 		}
 		if (!getParams(args)) {
-			logger.error("Wrong initialization");
-			JOptionPane.showMessageDialog(null, "Wrong initialization",
+			logger.error(Messages.getString("Configuration.WrongInit")); //$NON-NLS-1$
+			JOptionPane.showMessageDialog(null, Messages.getString("Configuration.WrongInit"), //$NON-NLS-1$
 					"Attention", JOptionPane.WARNING_MESSAGE);
 			if (DbConstant.admin != null && DbConstant.admin.isConnected) {
 				DbConstant.admin.close();
