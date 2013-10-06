@@ -32,6 +32,7 @@ import javax.swing.JButton;
 
 import org.jboss.netty.logging.InternalLoggerFactory;
 import org.waarp.administrator.guipwd.AdminUiPassword;
+import org.waarp.common.database.DbSession;
 import org.waarp.common.database.exception.WaarpDatabaseNoConnectionException;
 import org.waarp.common.database.exception.WaarpDatabaseSqlException;
 import org.waarp.common.logging.WaarpInternalLogger;
@@ -42,6 +43,7 @@ import org.waarp.openr66.configuration.FileBasedConfiguration;
 import org.waarp.openr66.database.DbConstant;
 import org.waarp.openr66.database.data.DbHostAuth;
 import org.waarp.openr66.protocol.configuration.Configuration;
+import org.waarp.openr66.protocol.configuration.Messages;
 import org.waarp.openr66.protocol.localhandler.packet.TestPacket;
 import org.waarp.openr66.protocol.networkhandler.NetworkTransaction;
 import org.waarp.openr66.protocol.utils.R66Future;
@@ -74,20 +76,20 @@ public class AdminGui {
 	
 	protected static boolean getParams(String[] args) {
 		if (args.length < 1) {
-			logger.error("Need the configuration file as first argument");
+			logger.error(Messages.getString("Configuration.NeedConfig")); //$NON-NLS-1$
 			JFileChooser chooser = new JFileChooser();
 			int returnvval = chooser.showOpenDialog(null);
 			if (returnvval == JFileChooser.APPROVE_OPTION) {
 				File file = chooser.getSelectedFile();
 				args = new String[] {file.getAbsolutePath()};
 			} else {
-				JOptionPane.showMessageDialog(null, "Need the configuration file as first argument");
+				JOptionPane.showMessageDialog(null, Messages.getString("Configuration.NeedConfig")); //$NON-NLS-1$
 				return false;
 			}
 		}
 		if (!FileBasedConfiguration
 				.setClientConfigurationFromXml(Configuration.configuration, args[0])) {
-			logger.error("Need the configuration file as first argument");
+			logger.error(Messages.getString("Configuration.NeedConfig")); //$NON-NLS-1$
 			return false;
 		}
         Configuration.configuration.pipelineInit();
@@ -104,8 +106,8 @@ public class AdminGui {
 			logger = WaarpInternalLoggerFactory.getLogger(AdminGui.class);
 		}
 		if (!getParams(args)) {
-			logger.error("Wrong initialization");
-			JOptionPane.showMessageDialog(null, "Wrong initialization",
+			logger.error(Messages.getString("Configuration.WrongInit")); //$NON-NLS-1$
+			JOptionPane.showMessageDialog(null, Messages.getString("Configuration.WrongInit"), //$NON-NLS-1$
 					"Attention", JOptionPane.WARNING_MESSAGE);
 			if (DbConstant.admin != null && DbConstant.admin.isConnected) {
 				DbConstant.admin.close();
@@ -159,7 +161,7 @@ public class AdminGui {
 	 */
 	private void initialize() {
 		frmWaarpRCentral = new JFrame();
-		frmWaarpRCentral.setTitle("Waarp R66 Central Administrator");
+		frmWaarpRCentral.setTitle("Waarp R66 Central Administrator: "+Configuration.configuration.HOST_ID);
 		frmWaarpRCentral.setBounds(100, 100, 710, 300);
 		frmWaarpRCentral.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -201,7 +203,8 @@ public class AdminGui {
 					packet = new TestPacket("MSG", "Administrator checking from "+myhost
 							, 100);
 					String result = "Checked Hosts:\n";
-					for (DbHostAuth host : DbHostAuth.getAllHosts(null)) {
+					DbSession session = DbConstant.admin != null ? DbConstant.admin.session : null;
+					for (DbHostAuth host : DbHostAuth.getAllHosts(session)) {
 						R66Future future = new R66Future(true);
 						Message mesg = new Message(AdminGui.environnement.networkTransaction, future, host, packet);
 						mesg.run();
