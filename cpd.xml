@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
-<duplication lines="34" tokens="245">
-<file line="1314" path="J:\Git\github\waarp-digest\WaarpAdministrator\src\main\java\org\waarp\openr66\serveraction\AdminR66OperationsGui.java"/>
-<file line="1443" path="J:\Git\github\waarp-digest\WaarpAdministrator\src\main\java\org\waarp\openr66\serveraction\AdminR66OperationsGui.java"/>
+<duplication lines="39" tokens="355">
+<file line="1381" path="J:\Git\github\waarp-digest\WaarpAdministrator\src\main\java\org\waarp\openr66\serveraction\AdminR66OperationsGui.java"/>
+<file line="1510" path="J:\Git\github\waarp-digest\WaarpAdministrator\src\main\java\org\waarp\openr66\serveraction\AdminR66OperationsGui.java"/>
 <codefragment>
 <![CDATA[
-						message = " Get Config in FAILURE: " + message;
+					if (ruleToGet == null || ruleToGet.isEmpty()) {
+						message = Messages.getString("AdminR66OperationsGui.92"); //$NON-NLS-1$
+					}
+					if (message.length() > 1) {
+						// error
+						message = Messages.getString("RequestInformation.Failure")+Messages.getString("AdminR66OperationsGui.123") + message; //$NON-NLS-1$
 					} else {
 						if (getHost && shost != null && ! shost.isEmpty()) {
 							future = new R66Future(true);
 							DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), shost,
-									ruleToGet, "Get Host Configuration from "
+									ruleToGet, Messages.getString("AdminR66OperationsGui.Hosts")+Messages.getString("AdminR66OperationsGui.GetConfig") //$NON-NLS-1$
 											+ AdminGui.environnement.hostId,
 									AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
 									DbConstant.ILLEGALVALUE,
@@ -19,17 +24,17 @@
 							if (future.isSuccess()) {
 								R66Result resultHost = future.getResult();
 								shost = resultHost.file.getTrueFile().getAbsolutePath();
-								message += " Host file into: " + shost+"\n";
+								message += Messages.getString("AdminR66OperationsGui.Hosts")+Messages.getString("AdminR66OperationsGui.FileInto") + shost+"\n"; //$NON-NLS-1$
 							} else {
 								getHost = false;
-								shost = " Cannot get Host file: " + shost;
+								shost = Messages.getString("AdminR66OperationsGui.CantGetFile")+Messages.getString("AdminR66OperationsGui.Hosts")+": " + shost; //$NON-NLS-1$
 								message += shost;
 							}
 						}
 						if (getRule && srule != null && ! srule.isEmpty()) {
 							future = new R66Future(true);
 							DirectTransfer transfer = new DirectTransfer(future, host.getHostid(), srule,
-									ruleToGet, "Get Rule Configuration from "
+									ruleToGet, Messages.getString("AdminR66OperationsGui.Rules")+Messages.getString("AdminR66OperationsGui.GetConfig") //$NON-NLS-1$
 											+ AdminGui.environnement.hostId,
 									AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
 									DbConstant.ILLEGALVALUE,
@@ -38,13 +43,46 @@
 							if (future.isSuccess()) {
 								R66Result resultRule = future.getResult();
 								srule = resultRule.file.getTrueFile().getAbsolutePath();
-								message += " Rule file into: " + srule+"\n";
+								message += Messages.getString("AdminR66OperationsGui.Rules")+Messages.getString("AdminR66OperationsGui.FileInto") + srule+"\n"; //$NON-NLS-1$
+]]>
+</codefragment>
+</duplication>
+<duplication lines="25" tokens="171">
+<file line="1264" path="J:\Git\github\waarp-digest\WaarpAdministrator\src\main\java\org\waarp\openr66\serveraction\AdminR66OperationsGui.java"/>
+<file line="1320" path="J:\Git\github\waarp-digest\WaarpAdministrator\src\main\java\org\waarp\openr66\serveraction\AdminR66OperationsGui.java"/>
+<codefragment>
+<![CDATA[
+					sessionReadLimit.setValue(sr);
+				}
+			}
+			if (result.code == ErrorCode.Warning) {
+				message = Messages.getString("RequestInformation.Warned")+Messages.getString("AdminR66OperationsGui.70") + //$NON-NLS-1$
+						(result.other != null ? sresult :
+								Messages.getString("AdminR66OperationsGui.71")) //$NON-NLS-1$
+						+ Messages.getString("AdminR66OperationsGui.72") + delay; //$NON-NLS-1$
+			} else {
+				message = Messages.getString("RequestInformation.Success")+Messages.getString("AdminR66OperationsGui.70") + //$NON-NLS-1$
+						(result.other != null ? sresult :
+								Messages.getString("AdminR66OperationsGui.71")) //$NON-NLS-1$
+						+ Messages.getString("AdminR66OperationsGui.72") + delay; //$NON-NLS-1$
+			}
+		} else {
+			if (result.code == ErrorCode.Warning) {
+				message = Messages.getString("RequestInformation.Warned")+Messages.getString("AdminR66OperationsGui.70") + future.getCause(); //$NON-NLS-1$
+			} else {
+				message = Messages.getString("RequestInformation.Failure")+Messages.getString("AdminR66OperationsGui.70") + future.getCause(); //$NON-NLS-1$
+			}
+		}
+		AdminGui.environnement.GuiResultat = message;
+	}
+
+	public void setBandwidth() {
 ]]>
 </codefragment>
 </duplication>
 <duplication lines="17" tokens="113">
-<file line="1159" path="J:\Git\github\waarp-digest\WaarpAdministrator\src\main\java\org\waarp\openr66\serveraction\AdminR66OperationsGui.java"/>
-<file line="1228" path="J:\Git\github\waarp-digest\WaarpAdministrator\src\main\java\org\waarp\openr66\serveraction\AdminR66OperationsGui.java"/>
+<file line="1231" path="J:\Git\github\waarp-digest\WaarpAdministrator\src\main\java\org\waarp\openr66\serveraction\AdminR66OperationsGui.java"/>
+<file line="1300" path="J:\Git\github\waarp-digest\WaarpAdministrator\src\main\java\org\waarp\openr66\serveraction\AdminR66OperationsGui.java"/>
 <codefragment>
 <![CDATA[
 				new ChangeBandwidthLimits(future, -1, -1, -1, -1,
@@ -64,39 +102,6 @@
 				if (useJson) {
 					JsonCommandPacket packet = (JsonCommandPacket) result.other;
 					sresult = packet.getRequest();
-]]>
-</codefragment>
-</duplication>
-<duplication lines="25" tokens="103">
-<file line="1192" path="J:\Git\github\waarp-digest\WaarpAdministrator\src\main\java\org\waarp\openr66\serveraction\AdminR66OperationsGui.java"/>
-<file line="1248" path="J:\Git\github\waarp-digest\WaarpAdministrator\src\main\java\org\waarp\openr66\serveraction\AdminR66OperationsGui.java"/>
-<codefragment>
-<![CDATA[
-					sessionReadLimit.setValue(sr);
-				}
-			}
-			if (result.code == ErrorCode.Warning) {
-				message = "WARNED on bandwidth:\n    " +
-						(result.other != null ? sresult :
-								"no information given")
-						+ "\n    delay: " + delay;
-			} else {
-				message = "SUCCESS on Bandwidth:\n    " +
-						(result.other != null ? sresult :
-								"no information given")
-						+ "\n    delay: " + delay;
-			}
-		} else {
-			if (result.code == ErrorCode.Warning) {
-				message = "Bandwidth is WARNED: " + future.getCause();
-			} else {
-				message = "Bandwidth in FAILURE: " + future.getCause();
-			}
-		}
-		AdminGui.environnement.GuiResultat = message;
-	}
-
-	public void setBandwidth() {
 ]]>
 </codefragment>
 </duplication>
