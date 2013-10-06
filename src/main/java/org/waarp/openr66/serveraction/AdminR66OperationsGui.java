@@ -1265,21 +1265,21 @@ public class AdminR66OperationsGui extends JFrame {
 				}
 			}
 			if (result.code == ErrorCode.Warning) {
-				message = Messages.getString("AdminR66OperationsGui.70") + //$NON-NLS-1$
+				message = Messages.getString("RequestInformation.Warned")+Messages.getString("AdminR66OperationsGui.70") + //$NON-NLS-1$
 						(result.other != null ? sresult :
 								Messages.getString("AdminR66OperationsGui.71")) //$NON-NLS-1$
 						+ Messages.getString("AdminR66OperationsGui.72") + delay; //$NON-NLS-1$
 			} else {
-				message = Messages.getString("AdminR66OperationsGui.73") + //$NON-NLS-1$
+				message = Messages.getString("RequestInformation.Success")+Messages.getString("AdminR66OperationsGui.70") + //$NON-NLS-1$
 						(result.other != null ? sresult :
 								Messages.getString("AdminR66OperationsGui.71")) //$NON-NLS-1$
 						+ Messages.getString("AdminR66OperationsGui.72") + delay; //$NON-NLS-1$
 			}
 		} else {
 			if (result.code == ErrorCode.Warning) {
-				message = Messages.getString("AdminR66OperationsGui.70") + future.getCause(); //$NON-NLS-1$
+				message = Messages.getString("RequestInformation.Warned")+Messages.getString("AdminR66OperationsGui.70") + future.getCause(); //$NON-NLS-1$
 			} else {
-				message = Messages.getString("AdminR66OperationsGui.77") + future.getCause(); //$NON-NLS-1$
+				message = Messages.getString("RequestInformation.Failure")+Messages.getString("AdminR66OperationsGui.70") + future.getCause(); //$NON-NLS-1$
 			}
 		}
 		AdminGui.environnement.GuiResultat = message;
@@ -1321,21 +1321,21 @@ public class AdminR66OperationsGui extends JFrame {
 				}
 			}
 			if (result.code == ErrorCode.Warning) {
-				message = Messages.getString("AdminR66OperationsGui.70") + //$NON-NLS-1$
+				message = Messages.getString("RequestInformation.Warned")+Messages.getString("AdminR66OperationsGui.70") + //$NON-NLS-1$
 						(result.other != null ? sresult :
 								Messages.getString("AdminR66OperationsGui.71")) //$NON-NLS-1$
 						+ Messages.getString("AdminR66OperationsGui.72") + delay; //$NON-NLS-1$
 			} else {
-				message = Messages.getString("AdminR66OperationsGui.73") + //$NON-NLS-1$
+				message = Messages.getString("RequestInformation.Success")+Messages.getString("AdminR66OperationsGui.70") + //$NON-NLS-1$
 						(result.other != null ? sresult :
 								Messages.getString("AdminR66OperationsGui.71")) //$NON-NLS-1$
 						+ Messages.getString("AdminR66OperationsGui.72") + delay; //$NON-NLS-1$
 			}
 		} else {
 			if (result.code == ErrorCode.Warning) {
-				message = Messages.getString("AdminR66OperationsGui.70") + future.getCause(); //$NON-NLS-1$
+				message = Messages.getString("RequestInformation.Warned")+Messages.getString("AdminR66OperationsGui.70") + future.getCause(); //$NON-NLS-1$
 			} else {
-				message = Messages.getString("AdminR66OperationsGui.77") + future.getCause(); //$NON-NLS-1$
+				message = Messages.getString("RequestInformation.Failure")+Messages.getString("AdminR66OperationsGui.70") + future.getCause(); //$NON-NLS-1$
 			}
 		}
 		AdminGui.environnement.GuiResultat = message;
@@ -1383,7 +1383,7 @@ public class AdminR66OperationsGui extends JFrame {
 					}
 					if (message.length() > 1) {
 						// error
-						message = Messages.getString("AdminR66OperationsGui.93") + message; //$NON-NLS-1$
+						message = Messages.getString("RequestInformation.Failure")+Messages.getString("AdminR66OperationsGui.123") + message; //$NON-NLS-1$
 					} else {
 						if (getHost && shost != null && ! shost.isEmpty()) {
 							future = new R66Future(true);
@@ -1512,7 +1512,7 @@ public class AdminR66OperationsGui extends JFrame {
 					}
 					if (message.length() > 1) {
 						// error
-						message = Messages.getString("AdminR66OperationsGui.93") + message; //$NON-NLS-1$
+						message = Messages.getString("RequestInformation.Failure")+Messages.getString("AdminR66OperationsGui.123") + message; //$NON-NLS-1$
 					} else {
 						// get config files
 						if (getHost && shost != null && ! shost.isEmpty()) {
@@ -1564,14 +1564,14 @@ public class AdminR66OperationsGui extends JFrame {
 				}
 			}
 			if (result.code == ErrorCode.Warning) {
-				message = Messages.getString("AdminR66OperationsGui.123") //$NON-NLS-1$
+				message = Messages.getString("RequestInformation.Warned")+Messages.getString("AdminR66OperationsGui.123") //$NON-NLS-1$
 						+
 						(result.other != null ? resume + message
 								:
 								Messages.getString("AdminR66OperationsGui.71")) //$NON-NLS-1$
 						+ Messages.getString("AdminR66OperationsGui.72") + delay; //$NON-NLS-1$
 			} else {
-				message = Messages.getString("AdminR66OperationsGui.126") //$NON-NLS-1$
+				message = Messages.getString("RequestInformation.Success")+Messages.getString("AdminR66OperationsGui.123") //$NON-NLS-1$
 						+
 						(result.other != null ? resume + message
 								:
@@ -1580,9 +1580,9 @@ public class AdminR66OperationsGui extends JFrame {
 			}
 		} else {
 			if (result.code == ErrorCode.Warning) {
-				message = Messages.getString("AdminR66OperationsGui.123") + future.getCause(); //$NON-NLS-1$
+				message = Messages.getString("RequestInformation.Warned")+Messages.getString("AdminR66OperationsGui.123") + future.getCause(); //$NON-NLS-1$
 			} else {
-				message = Messages.getString("AdminR66OperationsGui.93") + future.getCause(); //$NON-NLS-1$
+				message = Messages.getString("RequestInformation.Failure")+Messages.getString("AdminR66OperationsGui.123") + future.getCause(); //$NON-NLS-1$
 			}
 		}
 		AdminGui.environnement.GuiResultat = message;
@@ -1626,7 +1626,7 @@ public class AdminR66OperationsGui extends JFrame {
 		String message = null;
 		if (error.length() > 1) {
 			// error
-			message = Messages.getString("AdminR66OperationsGui.93") + error; //$NON-NLS-1$
+			message = Messages.getString("RequestInformation.Failure")+Messages.getString("AdminR66OperationsGui.123") + error; //$NON-NLS-1$
 			AdminGui.environnement.GuiResultat = message;
 			return;
 		}
@@ -1648,7 +1648,7 @@ public class AdminR66OperationsGui extends JFrame {
 		}
 		if (error.length() > 1) {
 			// error
-			message = Messages.getString("AdminR66OperationsGui.140") + error; //$NON-NLS-1$
+			message = Messages.getString("RequestInformation.Failure")+Messages.getString("AdminR66OperationsGui.158") + error; //$NON-NLS-1$
 			AdminGui.environnement.GuiResultat = message;
 			return;
 		}
@@ -1670,7 +1670,7 @@ public class AdminR66OperationsGui extends JFrame {
 		}
 		if (error.length() > 1) {
 			// error
-			message = Messages.getString("AdminR66OperationsGui.140") + error; //$NON-NLS-1$
+			message = Messages.getString("RequestInformation.Failure")+Messages.getString("AdminR66OperationsGui.158") + error; //$NON-NLS-1$
 			AdminGui.environnement.GuiResultat = message;
 			return;
 		}
@@ -1695,7 +1695,7 @@ public class AdminR66OperationsGui extends JFrame {
 			}
 			if (error.length() > 1) {
 				// error
-				message = Messages.getString("AdminR66OperationsGui.140") + error; //$NON-NLS-1$
+				message = Messages.getString("RequestInformation.Failure")+Messages.getString("AdminR66OperationsGui.158") + error; //$NON-NLS-1$
 				AdminGui.environnement.GuiResultat = message;
 				return;
 			}
@@ -1717,7 +1717,7 @@ public class AdminR66OperationsGui extends JFrame {
 			}
 			if (error.length() > 1) {
 				// error
-				message = Messages.getString("AdminR66OperationsGui.140") + error; //$NON-NLS-1$
+				message = Messages.getString("RequestInformation.Failure")+Messages.getString("AdminR66OperationsGui.158") + error; //$NON-NLS-1$
 				AdminGui.environnement.GuiResultat = message;
 				return;
 			}
@@ -1739,7 +1739,7 @@ public class AdminR66OperationsGui extends JFrame {
 			}
 			if (error.length() > 1) {
 				// error
-				message = Messages.getString("AdminR66OperationsGui.140") + error; //$NON-NLS-1$
+				message = Messages.getString("RequestInformation.Failure")+Messages.getString("AdminR66OperationsGui.158") + error; //$NON-NLS-1$
 				AdminGui.environnement.GuiResultat = message;
 				return;
 			}
@@ -1766,19 +1766,19 @@ public class AdminR66OperationsGui extends JFrame {
 				resume += msg;
 			}
 			if (result.code == ErrorCode.Warning) {
-				message = Messages.getString("AdminR66OperationsGui.158") + //$NON-NLS-1$
+				message = Messages.getString("RequestInformation.Warned")+Messages.getString("AdminR66OperationsGui.158") + //$NON-NLS-1$
 						resume
 						+ Messages.getString("AdminR66OperationsGui.72") + delay; //$NON-NLS-1$
 			} else {
-				message = Messages.getString("AdminR66OperationsGui.160") + //$NON-NLS-1$
+				message = Messages.getString("RequestInformation.Success")+Messages.getString("AdminR66OperationsGui.158") + //$NON-NLS-1$
 						resume
 						+ Messages.getString("AdminR66OperationsGui.72") + delay; //$NON-NLS-1$
 			}
 		} else {
 			if (result.code == ErrorCode.Warning) {
-				message = Messages.getString("AdminR66OperationsGui.158") + future.getCause() + msg; //$NON-NLS-1$
+				message = Messages.getString("RequestInformation.Warned")+Messages.getString("AdminR66OperationsGui.158") + future.getCause() + msg; //$NON-NLS-1$
 			} else {
-				message = Messages.getString("AdminR66OperationsGui.140") + future.getCause(); //$NON-NLS-1$
+				message = Messages.getString("RequestInformation.Failure")+Messages.getString("AdminR66OperationsGui.158") + future.getCause(); //$NON-NLS-1$
 			}
 		}
 		AdminGui.environnement.GuiResultat = message;
