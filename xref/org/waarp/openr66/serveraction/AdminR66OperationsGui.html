@@ -1891,21 +1891,21 @@
 <a class="jxr_linenumber" name="1881" href="#1881">1881</a> 				}
 <a class="jxr_linenumber" name="1882" href="#1882">1882</a> 			}
 <a class="jxr_linenumber" name="1883" href="#1883">1883</a> 			<strong class="jxr_keyword">if</strong> (result.code == ErrorCode.Warning) {
-<a class="jxr_linenumber" name="1884" href="#1884">1884</a> 				message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.175"</span>) + <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1884" href="#1884">1884</a> 				message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.175"</span>, Messages.getString(<span class="jxr_string">"RequestInformation.Warned"</span>)) + <em class="jxr_comment">//$NON-NLS-1$</em>
 <a class="jxr_linenumber" name="1885" href="#1885">1885</a> 						(result.other != <strong class="jxr_keyword">null</strong> ? value :
 <a class="jxr_linenumber" name="1886" href="#1886">1886</a> 								Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.71"</span>)) <em class="jxr_comment">//$NON-NLS-1$</em>
 <a class="jxr_linenumber" name="1887" href="#1887">1887</a> 						+ Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.72"</span>) + delay+<span class="jxr_string">"\n"</span>; <em class="jxr_comment">//$NON-NLS-1$</em>
 <a class="jxr_linenumber" name="1888" href="#1888">1888</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1889" href="#1889">1889</a> 				message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.179"</span>) + <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1889" href="#1889">1889</a> 				message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.175"</span>, Messages.getString(<span class="jxr_string">"RequestInformation.Success"</span>)) + <em class="jxr_comment">//$NON-NLS-1$</em>
 <a class="jxr_linenumber" name="1890" href="#1890">1890</a> 						(result.other != <strong class="jxr_keyword">null</strong> ? value :
 <a class="jxr_linenumber" name="1891" href="#1891">1891</a> 								Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.71"</span>)) <em class="jxr_comment">//$NON-NLS-1$</em>
 <a class="jxr_linenumber" name="1892" href="#1892">1892</a> 						+ Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.72"</span>) + delay; <em class="jxr_comment">//$NON-NLS-1$</em>
 <a class="jxr_linenumber" name="1893" href="#1893">1893</a> 			}
 <a class="jxr_linenumber" name="1894" href="#1894">1894</a> 		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="1895" href="#1895">1895</a> 			<strong class="jxr_keyword">if</strong> (result.code == ErrorCode.Warning) {
-<a class="jxr_linenumber" name="1896" href="#1896">1896</a> 				message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.175"</span>) + future.getCause(); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1896" href="#1896">1896</a> 				message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.175"</span>, Messages.getString(<span class="jxr_string">"RequestInformation.Warned"</span>)) + future.getCause(); <em class="jxr_comment">//$NON-NLS-1$</em>
 <a class="jxr_linenumber" name="1897" href="#1897">1897</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1898" href="#1898">1898</a> 				message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.183"</span>) + future.getCause(); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1898" href="#1898">1898</a> 				message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.175"</span>, Messages.getString(<span class="jxr_string">"RequestInformation.Failure"</span>)) + future.getCause(); <em class="jxr_comment">//$NON-NLS-1$</em>
 <a class="jxr_linenumber" name="1899" href="#1899">1899</a> 			}
 <a class="jxr_linenumber" name="1900" href="#1900">1900</a> 		}
 <a class="jxr_linenumber" name="1901" href="#1901">1901</a> 		AdminGui.environnement.GuiResultat = message;
