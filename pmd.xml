@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.3" timestamp="2013-10-13T11:51:43.368">
+<pmd version="4.3" timestamp="2013-11-08T23:29:05.510">
 <file name="J:\Git\github\waarp-digest\WaarpAdministrator\src\main\java\org\waarp\administrator\AdminGui.java">
-<violation beginline="73" endline="73" begincolumn="35" endcolumn="41" rule="ImmutableField" ruleset="Design Rules" package="org.waarp.administrator" class="AdminGui" variable="xamples" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ImmutableField" priority="3">
+<violation beginline="76" endline="76" begincolumn="35" endcolumn="41" rule="ImmutableField" ruleset="Design Rules" package="org.waarp.administrator" class="AdminGui" variable="xamples" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ImmutableField" priority="3">
 Private field 'xamples' could be made final; it is only initialized in the declaration or constructor.
 </violation>
-<violation beginline="74" endline="74" begincolumn="39" endcolumn="47" rule="ImmutableField" ruleset="Design Rules" package="org.waarp.administrator" class="AdminGui" variable="passwords" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ImmutableField" priority="3">
+<violation beginline="77" endline="77" begincolumn="39" endcolumn="47" rule="ImmutableField" ruleset="Design Rules" package="org.waarp.administrator" class="AdminGui" variable="passwords" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ImmutableField" priority="3">
 Private field 'passwords' could be made final; it is only initialized in the declaration or constructor.
 </violation>
-<violation beginline="77" endline="77" begincolumn="53" endcolumn="56" rule="AvoidReassigningParameters" ruleset="Design Rules" package="org.waarp.administrator" class="AdminGui" method="getParams" variable="args" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#AvoidReassigningParameters" priority="2">
+<violation beginline="88" endline="88" begincolumn="53" endcolumn="56" rule="AvoidReassigningParameters" ruleset="Design Rules" package="org.waarp.administrator" class="AdminGui" method="getParams" variable="args" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#AvoidReassigningParameters" priority="2">
 Avoid reassigning parameters such as 'args'
 </violation>
-<violation beginline="105" endline="107" begincolumn="17" endcolumn="17" rule="NonThreadSafeSingleton" ruleset="Design Rules" package="org.waarp.administrator" class="AdminGui" method="main" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#NonThreadSafeSingleton" priority="3">
+<violation beginline="116" endline="118" begincolumn="17" endcolumn="17" rule="NonThreadSafeSingleton" ruleset="Design Rules" package="org.waarp.administrator" class="AdminGui" method="main" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#NonThreadSafeSingleton" priority="3">
 Singleton is not thread safe
 </violation>
-<violation beginline="206" endline="206" begincolumn="61" endcolumn="118" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.administrator" class="AdminGui" method="actionPerformed" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
+<violation beginline="228" endline="228" begincolumn="61" endcolumn="118" rule="ConfusingTernary" ruleset="Design Rules" package="org.waarp.administrator" class="AdminGui" method="actionPerformed" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#ConfusingTernary" priority="3">
 Avoid if (x != y) ..; else ..;
 </violation>
 </file>
