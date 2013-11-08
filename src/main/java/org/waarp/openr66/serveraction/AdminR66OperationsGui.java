@@ -1932,13 +1932,20 @@ public class AdminR66OperationsGui extends JFrame {
 		} else {
 			packet = new BlockRequestPacket(chckbxBlockUnblock.isSelected(), key);
 		}
-		final SocketAddress socketServerAddress = host.getSocketAddress();
+		String message = null;
+		final SocketAddress socketServerAddress;
+		try {
+			socketServerAddress = host.getSocketAddress();
+		} catch (IllegalArgumentException e) {
+			message = Messages.getString("AdminR66OperationsGui.187") + Messages.getString("AdminR66OperationsGui.188") + host.getHostid(); //$NON-NLS-1$ //$NON-NLS-2$
+			AdminGui.environnement.GuiResultat = message;
+			return;
+		}
 		LocalChannelReference localChannelReference = null;
 		localChannelReference = AdminGui.environnement.networkTransaction
 				.createConnectionWithRetry(socketServerAddress, host.isSsl(), null);
-		String message = null;
 		if (localChannelReference == null) {
-			message = Messages.getString("AdminR66OperationsGui.187") + Messages.getString("AdminR66OperationsGui.188") + host.getSocketAddress(); //$NON-NLS-1$ //$NON-NLS-2$
+			message = Messages.getString("AdminR66OperationsGui.187") + Messages.getString("AdminR66OperationsGui.188") + host.getHostid(); //$NON-NLS-1$ //$NON-NLS-2$
 			AdminGui.environnement.GuiResultat = message;
 			return;
 		}
@@ -1950,7 +1957,7 @@ public class AdminR66OperationsGui extends JFrame {
 		try {
 			ChannelUtils.writeAbstractLocalPacket(localChannelReference, packet, false);
 		} catch (OpenR66ProtocolPacketException e) {
-			message = Messages.getString("AdminR66OperationsGui.187") + Messages.getString("AdminR66OperationsGui.190") + host.getSocketAddress() //$NON-NLS-1$ //$NON-NLS-2$
+			message = Messages.getString("AdminR66OperationsGui.187") + Messages.getString("AdminR66OperationsGui.190") + host.getHostid() //$NON-NLS-1$ //$NON-NLS-2$
 					+ "[" + e.getMessage() + "]";
 			AdminGui.environnement.GuiResultat = message;
 			return;
