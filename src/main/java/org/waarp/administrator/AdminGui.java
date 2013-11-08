@@ -62,6 +62,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.awt.Insets;
+import javax.swing.ImageIcon;
 
 public class AdminGui {
 	/**
@@ -73,6 +76,14 @@ public class AdminGui {
 	private List<AdminXample> xamples = new ArrayList<AdminXample>();
 	private List<AdminUiPassword> passwords = new ArrayList<AdminUiPassword>();
 	public static R66Environment environnement = new R66Environment();
+	
+	JButton btnEditXml;
+	JButton btnCheckPartners;
+	JButton btnEditPassword;
+	JButton btnManageConfiguration;
+	JButton btnQuit;
+	JButton btnManageLogs;
+	JButton btnFileTransfer;
 	
 	protected static boolean getParams(String[] args) {
 		if (args.length < 1) {
@@ -156,38 +167,49 @@ public class AdminGui {
 		initialize();
 	}
 
+	private void langReinit() {
+		frmWaarpRCentral.setTitle(Messages.getString("AdminGui.title")+Configuration.configuration.HOST_ID);
+		btnEditXml.setText(Messages.getString("AdminGui.EditXml"));
+		btnCheckPartners.setText(Messages.getString("AdminGui.CheckPartners"));
+		btnEditPassword.setText(Messages.getString("AdminGui.EditPassword"));
+		btnManageConfiguration.setText(Messages.getString("AdminGui.ManageConfig"));
+		btnQuit.setText(Messages.getString("AdminGui.Quit"));
+		btnManageLogs.setText(Messages.getString("AdminGui.Hypervision"));
+		btnFileTransfer.setText(Messages.getString("AdminGui.FileTransfer"));
+	}
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
 		frmWaarpRCentral = new JFrame();
 		frmWaarpRCentral.setTitle("Waarp R66 Central Administrator: "+Configuration.configuration.HOST_ID);
-		frmWaarpRCentral.setBounds(100, 100, 710, 300);
+		frmWaarpRCentral.setBounds(100, 100, 850, 300);
 		frmWaarpRCentral.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JMenuBar menuBar = new JMenuBar();
 		frmWaarpRCentral.setJMenuBar(menuBar);
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{0, 0};
+		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		frmWaarpRCentral.getContentPane().setLayout(gridBagLayout);
 		
 		JToolBar toolBar = new JToolBar();
 		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.insets = new Insets(0, 0, 0, 5);
 		constraints.gridy = 0;
 		constraints.gridx = 0;
 		frmWaarpRCentral.getContentPane().add(toolBar, constraints);
 		
-		JButton btnEditXml = new JButton("Edit XML");
+		btnEditXml = new JButton("Edit XML");
 		btnEditXml.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				AdminXample.start(xamples);
 			}
 		});
 		
-		JButton btnCheckPartners = new JButton("Check Partners");
+		btnCheckPartners = new JButton("Check Partners");
 		btnCheckPartners.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Check all Known Partners
@@ -198,11 +220,11 @@ public class AdminGui {
 						myhost = (AdminGui.environnement.hostId == null ? 
 								InetAddress.getLocalHost().getHostName() : AdminGui.environnement.hostId);
 					} catch (UnknownHostException e) {
-						myhost = "NameUnknown";
+						myhost = Messages.getString("AdminGui.NameUnknown");
 					}
 					packet = new TestPacket("MSG", "Administrator checking from "+myhost
 							, 100);
-					String result = "Checked Hosts:\n";
+					String result = Messages.getString("AdminGui.CheckedHosts");
 					DbSession session = DbConstant.admin != null ? DbConstant.admin.session : null;
 					for (DbHostAuth host : DbHostAuth.getAllHosts(session)) {
 						R66Future future = new R66Future(true);
@@ -228,7 +250,7 @@ public class AdminGui {
 		toolBar.add(btnCheckPartners);
 		toolBar.add(btnEditXml);
 		
-		JButton btnEditPassword = new JButton("Edit Password");
+		btnEditPassword = new JButton("Edit Password");
 		btnEditPassword.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				SwingUtilities.invokeLater(new Runnable() {
@@ -256,14 +278,14 @@ public class AdminGui {
 		});
 		frmWaarpRCentral.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
-		JButton btnQuit = new JButton("QUIT");
+		btnQuit = new JButton("QUIT");
 		btnQuit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				quit();
 			}
 		});
 		
-		JButton btnManageConfiguration = new JButton("Manage Configuration");
+		btnManageConfiguration = new JButton("Manage Configuration");
 		btnManageConfiguration.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				EventQueue.invokeLater(new Runnable() {
@@ -284,11 +306,11 @@ public class AdminGui {
 		});
 		toolBar.add(btnManageConfiguration);
 		
-		JButton btnManageLogs = new JButton("Hypervision");
+		btnManageLogs = new JButton("Hypervision");
 		btnManageLogs.setEnabled(false);
 		toolBar.add(btnManageLogs);
 		
-		JButton btnFileTransfer = new JButton("File Transfer");
+		btnFileTransfer = new JButton("File Transfer");
 		btnFileTransfer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				EventQueue.invokeLater(new Runnable() {
@@ -309,6 +331,37 @@ public class AdminGui {
 		});
 		toolBar.add(btnFileTransfer);
 		toolBar.add(btnQuit);
+		
+		JButton btnFr = new JButton("");
+		btnFr.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Messages.init(new Locale("fr"));
+				langReinit();
+			}
+		});
+		btnFr.setMargin(new Insets(2, 2, 2, 2));
+		btnFr.setIcon(new ImageIcon(AdminGui.class.getResource("/org/waarp/administrator/fr.png")));
+		btnFr.setToolTipText("FR");
+		GridBagConstraints gbc_btnFr = new GridBagConstraints();
+		gbc_btnFr.insets = new Insets(0, 0, 0, 5);
+		gbc_btnFr.gridx = 1;
+		gbc_btnFr.gridy = 0;
+		frmWaarpRCentral.getContentPane().add(btnFr, gbc_btnFr);
+		
+		JButton btnEn = new JButton("");
+		btnEn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Messages.init(new Locale("en"));
+				langReinit();
+			}
+		});
+		btnEn.setToolTipText("EN");
+		btnEn.setIcon(new ImageIcon(AdminGui.class.getResource("/org/waarp/administrator/en.png")));
+		btnEn.setMargin(new Insets(2, 2, 2, 2));
+		GridBagConstraints gbc_btnEn = new GridBagConstraints();
+		gbc_btnEn.gridx = 2;
+		gbc_btnEn.gridy = 0;
+		frmWaarpRCentral.getContentPane().add(btnEn, gbc_btnEn);
 	}
 
 	/**
