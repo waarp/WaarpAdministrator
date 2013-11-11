@@ -1127,10 +1127,8 @@ public class AdminR66OperationsGui extends JFrame {
 		JFileChooser chooser = null;
 		if (currentValue != null) {
 			String file = currentValue;
-			if (file != null) {
-				File ffile = new File(file).getParentFile();
-				chooser = new JFileChooser(ffile);
-			}
+			File ffile = new File(file).getParentFile();
+			chooser = new JFileChooser(ffile);
 		}
 		if (chooser == null) {
 			chooser = new JFileChooser(System.getProperty("user.dir"));
@@ -1921,7 +1919,7 @@ public class AdminR66OperationsGui extends JFrame {
 		}
 		long time1 = System.currentTimeMillis();
 		byte[] key;
-		key = FilesystemBasedDigest.passwdCrypt(skey.getBytes());
+		key = FilesystemBasedDigest.passwdCrypt(skey.getBytes(WaarpStringUtils.UTF8));
 		AbstractLocalPacket packet = null;
 		if (rdbtnShutdown.isSelected()) {
 			if (chckbxRestart.isSelected()) {
