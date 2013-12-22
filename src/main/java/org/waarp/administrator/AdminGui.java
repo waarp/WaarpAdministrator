@@ -59,6 +59,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.net.InetAddress;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
@@ -340,7 +341,12 @@ public class AdminGui {
 			}
 		});
 		btnFr.setMargin(new Insets(2, 2, 2, 2));
-		btnFr.setIcon(new ImageIcon(AdminGui.class.getResource("/org/waarp/administrator/fr.png")));
+		URL fr = AdminGui.class.getResource("/fr.png");
+		if (fr != null) {
+			btnFr.setIcon(new ImageIcon(fr));
+		} else {
+			btnFr.setText("FR");
+		}
 		btnFr.setToolTipText("FR");
 		GridBagConstraints gbc_btnFr = new GridBagConstraints();
 		gbc_btnFr.insets = new Insets(0, 0, 0, 5);
@@ -356,7 +362,12 @@ public class AdminGui {
 			}
 		});
 		btnEn.setToolTipText("EN");
-		btnEn.setIcon(new ImageIcon(AdminGui.class.getResource("/org/waarp/administrator/en.png")));
+		URL en = AdminGui.class.getResource("/en.png");
+		if (en != null) {
+			btnEn.setIcon(new ImageIcon(en));
+		} else {
+			btnEn.setText("EN");
+		}
 		btnEn.setMargin(new Insets(2, 2, 2, 2));
 		GridBagConstraints gbc_btnEn = new GridBagConstraints();
 		gbc_btnEn.gridx = 2;
