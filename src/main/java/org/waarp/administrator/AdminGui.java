@@ -154,7 +154,7 @@ public class AdminGui {
 				try {
 					AdminGui window = new AdminGui();
 					window.frmWaarpRCentral.setVisible(true);
-				} catch (Exception e) {
+				} catch (Throwable e) {
 					e.printStackTrace();
 				}
 			}
