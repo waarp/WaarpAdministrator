@@ -1381,643 +1381,644 @@
 <a class="jxr_linenumber" name="1371" href="#1371">1371</a> 				<strong class="jxr_keyword">if</strong> (packet != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="1372" href="#1372">1372</a> 					resume = packet.getRequest();
 <a class="jxr_linenumber" name="1373" href="#1373">1373</a> 					ConfigExportResponseJsonPacket node = (ConfigExportResponseJsonPacket) packet.getJsonRequest();
-<a class="jxr_linenumber" name="1374" href="#1374">1374</a> 					String shost = node.getFilehost();
-<a class="jxr_linenumber" name="1375" href="#1375">1375</a> 					String srule = node.getFilerule();
-<a class="jxr_linenumber" name="1376" href="#1376">1376</a> 					String sbusiness = node.getFilebusiness();
-<a class="jxr_linenumber" name="1377" href="#1377">1377</a> 					String salias = node.getFilealias();
-<a class="jxr_linenumber" name="1378" href="#1378">1378</a> 					String srole = node.getFileroles();
-<a class="jxr_linenumber" name="1379" href="#1379">1379</a> 					<strong class="jxr_keyword">if</strong> (ruleToGet == <strong class="jxr_keyword">null</strong> || ruleToGet.isEmpty()) {
-<a class="jxr_linenumber" name="1380" href="#1380">1380</a> 						message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.92"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1381" href="#1381">1381</a> 					}
-<a class="jxr_linenumber" name="1382" href="#1382">1382</a> 					<strong class="jxr_keyword">if</strong> (message.length() &gt; 1) {
-<a class="jxr_linenumber" name="1383" href="#1383">1383</a> 						<em class="jxr_comment">// error</em>
-<a class="jxr_linenumber" name="1384" href="#1384">1384</a> 						message = Messages.getString(<span class="jxr_string">"RequestInformation.Failure"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.123"</span>) + message; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1385" href="#1385">1385</a> 					} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1386" href="#1386">1386</a> 						<strong class="jxr_keyword">if</strong> (getHost &amp;&amp; shost != <strong class="jxr_keyword">null</strong> &amp;&amp; ! shost.isEmpty()) {
-<a class="jxr_linenumber" name="1387" href="#1387">1387</a> 							future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="1388" href="#1388">1388</a> 							DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), shost,
-<a class="jxr_linenumber" name="1389" href="#1389">1389</a> 									ruleToGet, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Hosts"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.GetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1390" href="#1390">1390</a> 											+ AdminGui.environnement.hostId,
-<a class="jxr_linenumber" name="1391" href="#1391">1391</a> 									AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
-<a class="jxr_linenumber" name="1392" href="#1392">1392</a> 									DbConstant.ILLEGALVALUE,
-<a class="jxr_linenumber" name="1393" href="#1393">1393</a> 									AdminGui.environnement.networkTransaction);
-<a class="jxr_linenumber" name="1394" href="#1394">1394</a> 							transfer.run();
-<a class="jxr_linenumber" name="1395" href="#1395">1395</a> 							<strong class="jxr_keyword">if</strong> (future.isSuccess()) {
-<a class="jxr_linenumber" name="1396" href="#1396">1396</a> 								R66Result resultHost = future.getResult();
-<a class="jxr_linenumber" name="1397" href="#1397">1397</a> 								shost = resultHost.file.getTrueFile().getAbsolutePath();
-<a class="jxr_linenumber" name="1398" href="#1398">1398</a> 								message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Hosts"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.FileInto"</span>) + shost+<span class="jxr_string">"\n"</span>; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1399" href="#1399">1399</a> 							} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1400" href="#1400">1400</a> 								getHost = false;
-<a class="jxr_linenumber" name="1401" href="#1401">1401</a> 								shost = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.CantGetFile"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Hosts"</span>)+<span class="jxr_string">": "</span> + shost; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1402" href="#1402">1402</a> 								message += shost;
-<a class="jxr_linenumber" name="1403" href="#1403">1403</a> 							}
-<a class="jxr_linenumber" name="1404" href="#1404">1404</a> 						}
-<a class="jxr_linenumber" name="1405" href="#1405">1405</a> 						<strong class="jxr_keyword">if</strong> (getRule &amp;&amp; srule != <strong class="jxr_keyword">null</strong> &amp;&amp; ! srule.isEmpty()) {
-<a class="jxr_linenumber" name="1406" href="#1406">1406</a> 							future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="1407" href="#1407">1407</a> 							DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), srule,
-<a class="jxr_linenumber" name="1408" href="#1408">1408</a> 									ruleToGet, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Rules"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.GetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1409" href="#1409">1409</a> 											+ AdminGui.environnement.hostId,
-<a class="jxr_linenumber" name="1410" href="#1410">1410</a> 									AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
-<a class="jxr_linenumber" name="1411" href="#1411">1411</a> 									DbConstant.ILLEGALVALUE,
-<a class="jxr_linenumber" name="1412" href="#1412">1412</a> 									AdminGui.environnement.networkTransaction);
-<a class="jxr_linenumber" name="1413" href="#1413">1413</a> 							transfer.run();
-<a class="jxr_linenumber" name="1414" href="#1414">1414</a> 							<strong class="jxr_keyword">if</strong> (future.isSuccess()) {
-<a class="jxr_linenumber" name="1415" href="#1415">1415</a> 								R66Result resultRule = future.getResult();
-<a class="jxr_linenumber" name="1416" href="#1416">1416</a> 								srule = resultRule.file.getTrueFile().getAbsolutePath();
-<a class="jxr_linenumber" name="1417" href="#1417">1417</a> 								message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Rules"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.FileInto"</span>) + srule+<span class="jxr_string">"\n"</span>; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1418" href="#1418">1418</a> 							} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1419" href="#1419">1419</a> 								getRule = false;
-<a class="jxr_linenumber" name="1420" href="#1420">1420</a> 								srule = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.CantGetFile"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Rules"</span>)+<span class="jxr_string">": "</span> + srule; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1421" href="#1421">1421</a> 								message += srule;
-<a class="jxr_linenumber" name="1422" href="#1422">1422</a> 							}
-<a class="jxr_linenumber" name="1423" href="#1423">1423</a> 						}
-<a class="jxr_linenumber" name="1424" href="#1424">1424</a> 						<strong class="jxr_keyword">if</strong> (getBusiness &amp;&amp; sbusiness != <strong class="jxr_keyword">null</strong> &amp;&amp; ! sbusiness.isEmpty()) {
-<a class="jxr_linenumber" name="1425" href="#1425">1425</a> 							future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="1426" href="#1426">1426</a> 							DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), sbusiness,
-<a class="jxr_linenumber" name="1427" href="#1427">1427</a> 									ruleToGet, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Business"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.GetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1428" href="#1428">1428</a> 											+ AdminGui.environnement.hostId,
-<a class="jxr_linenumber" name="1429" href="#1429">1429</a> 									AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
-<a class="jxr_linenumber" name="1430" href="#1430">1430</a> 									DbConstant.ILLEGALVALUE,
-<a class="jxr_linenumber" name="1431" href="#1431">1431</a> 									AdminGui.environnement.networkTransaction);
-<a class="jxr_linenumber" name="1432" href="#1432">1432</a> 							transfer.run();
-<a class="jxr_linenumber" name="1433" href="#1433">1433</a> 							<strong class="jxr_keyword">if</strong> (future.isSuccess()) {
-<a class="jxr_linenumber" name="1434" href="#1434">1434</a> 								R66Result resultRule = future.getResult();
-<a class="jxr_linenumber" name="1435" href="#1435">1435</a> 								sbusiness = resultRule.file.getTrueFile().getAbsolutePath();
-<a class="jxr_linenumber" name="1436" href="#1436">1436</a> 								message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Business"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.FileInto"</span>) + sbusiness+<span class="jxr_string">"\n"</span>; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1437" href="#1437">1437</a> 							} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1438" href="#1438">1438</a> 								getBusiness = false;
-<a class="jxr_linenumber" name="1439" href="#1439">1439</a> 								sbusiness = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.CantGetFile"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Business"</span>)+<span class="jxr_string">": "</span> + sbusiness; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1440" href="#1440">1440</a> 								message += sbusiness;
-<a class="jxr_linenumber" name="1441" href="#1441">1441</a> 							}
-<a class="jxr_linenumber" name="1442" href="#1442">1442</a> 						}
-<a class="jxr_linenumber" name="1443" href="#1443">1443</a> 						<strong class="jxr_keyword">if</strong> (getAlias &amp;&amp; salias != <strong class="jxr_keyword">null</strong> &amp;&amp; ! salias.isEmpty()) {
-<a class="jxr_linenumber" name="1444" href="#1444">1444</a> 							future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="1445" href="#1445">1445</a> 							DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), salias,
-<a class="jxr_linenumber" name="1446" href="#1446">1446</a> 									ruleToGet, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Alias"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.GetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1447" href="#1447">1447</a> 											+ AdminGui.environnement.hostId,
-<a class="jxr_linenumber" name="1448" href="#1448">1448</a> 									AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
-<a class="jxr_linenumber" name="1449" href="#1449">1449</a> 									DbConstant.ILLEGALVALUE,
-<a class="jxr_linenumber" name="1450" href="#1450">1450</a> 									AdminGui.environnement.networkTransaction);
-<a class="jxr_linenumber" name="1451" href="#1451">1451</a> 							transfer.run();
-<a class="jxr_linenumber" name="1452" href="#1452">1452</a> 							<strong class="jxr_keyword">if</strong> (future.isSuccess()) {
-<a class="jxr_linenumber" name="1453" href="#1453">1453</a> 								R66Result resultRule = future.getResult();
-<a class="jxr_linenumber" name="1454" href="#1454">1454</a> 								salias = resultRule.file.getTrueFile().getAbsolutePath();
-<a class="jxr_linenumber" name="1455" href="#1455">1455</a> 								message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Alias"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.FileInto"</span>) + salias+<span class="jxr_string">"\n"</span>; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1456" href="#1456">1456</a> 							} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1457" href="#1457">1457</a> 								getAlias = false;
-<a class="jxr_linenumber" name="1458" href="#1458">1458</a> 								salias = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.CantGetFile"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Alias"</span>)+<span class="jxr_string">": "</span> + salias; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1459" href="#1459">1459</a> 								message += salias;
-<a class="jxr_linenumber" name="1460" href="#1460">1460</a> 							}
-<a class="jxr_linenumber" name="1461" href="#1461">1461</a> 						}
-<a class="jxr_linenumber" name="1462" href="#1462">1462</a> 						<strong class="jxr_keyword">if</strong> (getRoles &amp;&amp; srole != <strong class="jxr_keyword">null</strong> &amp;&amp; ! srole.isEmpty()) {
-<a class="jxr_linenumber" name="1463" href="#1463">1463</a> 							future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="1464" href="#1464">1464</a> 							DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), srole,
-<a class="jxr_linenumber" name="1465" href="#1465">1465</a> 									ruleToGet, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Roles"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.GetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1466" href="#1466">1466</a> 											+ AdminGui.environnement.hostId,
-<a class="jxr_linenumber" name="1467" href="#1467">1467</a> 									AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
-<a class="jxr_linenumber" name="1468" href="#1468">1468</a> 									DbConstant.ILLEGALVALUE,
-<a class="jxr_linenumber" name="1469" href="#1469">1469</a> 									AdminGui.environnement.networkTransaction);
-<a class="jxr_linenumber" name="1470" href="#1470">1470</a> 							transfer.run();
-<a class="jxr_linenumber" name="1471" href="#1471">1471</a> 							<strong class="jxr_keyword">if</strong> (future.isSuccess()) {
-<a class="jxr_linenumber" name="1472" href="#1472">1472</a> 								R66Result resultRule = future.getResult();
-<a class="jxr_linenumber" name="1473" href="#1473">1473</a> 								srole = resultRule.file.getTrueFile().getAbsolutePath();
-<a class="jxr_linenumber" name="1474" href="#1474">1474</a> 								message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Roles"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.FileInto"</span>) + srole; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1475" href="#1475">1475</a> 							} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1476" href="#1476">1476</a> 								getRoles = false;
-<a class="jxr_linenumber" name="1477" href="#1477">1477</a> 								srole = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.CantGetFile"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Roles"</span>)+<span class="jxr_string">": "</span> + srole; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1478" href="#1478">1478</a> 								message += srole;
-<a class="jxr_linenumber" name="1479" href="#1479">1479</a> 							}
-<a class="jxr_linenumber" name="1480" href="#1480">1480</a> 						}
-<a class="jxr_linenumber" name="1481" href="#1481">1481</a> 						<strong class="jxr_keyword">if</strong> (getHost) {
-<a class="jxr_linenumber" name="1482" href="#1482">1482</a> 							textFieldHosts.setText(shost);
-<a class="jxr_linenumber" name="1483" href="#1483">1483</a> 						}
-<a class="jxr_linenumber" name="1484" href="#1484">1484</a> 						<strong class="jxr_keyword">if</strong> (getRule) {
-<a class="jxr_linenumber" name="1485" href="#1485">1485</a> 							textFieldRules.setText(srule);
-<a class="jxr_linenumber" name="1486" href="#1486">1486</a> 						}
-<a class="jxr_linenumber" name="1487" href="#1487">1487</a> 						<strong class="jxr_keyword">if</strong> (getBusiness) {
-<a class="jxr_linenumber" name="1488" href="#1488">1488</a> 							textFieldBusiness.setText(sbusiness);
-<a class="jxr_linenumber" name="1489" href="#1489">1489</a> 						}
-<a class="jxr_linenumber" name="1490" href="#1490">1490</a> 						<strong class="jxr_keyword">if</strong> (getAlias) {
-<a class="jxr_linenumber" name="1491" href="#1491">1491</a> 							textFieldAlias.setText(salias);
-<a class="jxr_linenumber" name="1492" href="#1492">1492</a> 						}
-<a class="jxr_linenumber" name="1493" href="#1493">1493</a> 						<strong class="jxr_keyword">if</strong> (getRoles) {
-<a class="jxr_linenumber" name="1494" href="#1494">1494</a> 							textFieldRoles.setText(srole);
-<a class="jxr_linenumber" name="1495" href="#1495">1495</a> 						}
-<a class="jxr_linenumber" name="1496" href="#1496">1496</a> 					}
-<a class="jxr_linenumber" name="1497" href="#1497">1497</a> 				}
-<a class="jxr_linenumber" name="1498" href="#1498">1498</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1499" href="#1499">1499</a> 				ValidPacket packet = (ValidPacket) result.other;
-<a class="jxr_linenumber" name="1500" href="#1500">1500</a> 				<strong class="jxr_keyword">if</strong> (packet != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1501" href="#1501">1501</a> 					resume = packet.getSheader();
-<a class="jxr_linenumber" name="1502" href="#1502">1502</a> 					String[] values = resume.split(<span class="jxr_string">" "</span>);
-<a class="jxr_linenumber" name="1503" href="#1503">1503</a> 					String shost = values[0];
-<a class="jxr_linenumber" name="1504" href="#1504">1504</a> 					String srule = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="1505" href="#1505">1505</a> 					<strong class="jxr_keyword">if</strong> (values.length &gt; 1) {
-<a class="jxr_linenumber" name="1506" href="#1506">1506</a> 						srule = values[1];
-<a class="jxr_linenumber" name="1507" href="#1507">1507</a> 					}
-<a class="jxr_linenumber" name="1508" href="#1508">1508</a> 					<strong class="jxr_keyword">if</strong> (ruleToGet == <strong class="jxr_keyword">null</strong> || ruleToGet.isEmpty()) {
-<a class="jxr_linenumber" name="1509" href="#1509">1509</a> 						message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.92"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1510" href="#1510">1510</a> 					}
-<a class="jxr_linenumber" name="1511" href="#1511">1511</a> 					<strong class="jxr_keyword">if</strong> (message.length() &gt; 1) {
-<a class="jxr_linenumber" name="1512" href="#1512">1512</a> 						<em class="jxr_comment">// error</em>
-<a class="jxr_linenumber" name="1513" href="#1513">1513</a> 						message = Messages.getString(<span class="jxr_string">"RequestInformation.Failure"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.123"</span>) + message; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1514" href="#1514">1514</a> 					} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1515" href="#1515">1515</a> 						<em class="jxr_comment">// get config files</em>
-<a class="jxr_linenumber" name="1516" href="#1516">1516</a> 						<strong class="jxr_keyword">if</strong> (getHost &amp;&amp; shost != <strong class="jxr_keyword">null</strong> &amp;&amp; ! shost.isEmpty()) {
-<a class="jxr_linenumber" name="1517" href="#1517">1517</a> 							future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="1518" href="#1518">1518</a> 							DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), shost,
-<a class="jxr_linenumber" name="1519" href="#1519">1519</a> 									ruleToGet, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Hosts"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.GetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1520" href="#1520">1520</a> 											+ AdminGui.environnement.hostId,
-<a class="jxr_linenumber" name="1521" href="#1521">1521</a> 									AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
-<a class="jxr_linenumber" name="1522" href="#1522">1522</a> 									DbConstant.ILLEGALVALUE,
-<a class="jxr_linenumber" name="1523" href="#1523">1523</a> 									AdminGui.environnement.networkTransaction);
-<a class="jxr_linenumber" name="1524" href="#1524">1524</a> 							transfer.run();
-<a class="jxr_linenumber" name="1525" href="#1525">1525</a> 							<strong class="jxr_keyword">if</strong> (future.isSuccess()) {
-<a class="jxr_linenumber" name="1526" href="#1526">1526</a> 								R66Result resultHost = future.getResult();
-<a class="jxr_linenumber" name="1527" href="#1527">1527</a> 								shost = resultHost.file.getTrueFile().getAbsolutePath();
-<a class="jxr_linenumber" name="1528" href="#1528">1528</a> 								message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Hosts"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.FileInto"</span>) + shost+<span class="jxr_string">"\n"</span>; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1529" href="#1529">1529</a> 							} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1530" href="#1530">1530</a> 								getHost = false;
-<a class="jxr_linenumber" name="1531" href="#1531">1531</a> 								shost = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.CantGetFile"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Hosts"</span>)+<span class="jxr_string">": "</span> + shost; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1532" href="#1532">1532</a> 								message += shost;
-<a class="jxr_linenumber" name="1533" href="#1533">1533</a> 							}
-<a class="jxr_linenumber" name="1534" href="#1534">1534</a> 						}
-<a class="jxr_linenumber" name="1535" href="#1535">1535</a> 						<strong class="jxr_keyword">if</strong> (getRule &amp;&amp; srule != <strong class="jxr_keyword">null</strong> &amp;&amp; ! srule.isEmpty()) {
-<a class="jxr_linenumber" name="1536" href="#1536">1536</a> 							future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="1537" href="#1537">1537</a> 							DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), srule,
-<a class="jxr_linenumber" name="1538" href="#1538">1538</a> 									ruleToGet, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Rules"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.GetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1539" href="#1539">1539</a> 											+ AdminGui.environnement.hostId,
-<a class="jxr_linenumber" name="1540" href="#1540">1540</a> 									AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
-<a class="jxr_linenumber" name="1541" href="#1541">1541</a> 									DbConstant.ILLEGALVALUE,
-<a class="jxr_linenumber" name="1542" href="#1542">1542</a> 									AdminGui.environnement.networkTransaction);
-<a class="jxr_linenumber" name="1543" href="#1543">1543</a> 							transfer.run();
-<a class="jxr_linenumber" name="1544" href="#1544">1544</a> 							<strong class="jxr_keyword">if</strong> (future.isSuccess()) {
-<a class="jxr_linenumber" name="1545" href="#1545">1545</a> 								R66Result resultRule = future.getResult();
-<a class="jxr_linenumber" name="1546" href="#1546">1546</a> 								srule = resultRule.file.getTrueFile().getAbsolutePath();
-<a class="jxr_linenumber" name="1547" href="#1547">1547</a> 								message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Rules"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.FileInto"</span>) + srule; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1548" href="#1548">1548</a> 							} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1549" href="#1549">1549</a> 								getRule = false;
-<a class="jxr_linenumber" name="1550" href="#1550">1550</a> 								srule = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.CantGetFile"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Rules"</span>)+<span class="jxr_string">": "</span> + srule; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1551" href="#1551">1551</a> 								message += srule;
-<a class="jxr_linenumber" name="1552" href="#1552">1552</a> 							}
-<a class="jxr_linenumber" name="1553" href="#1553">1553</a> 						}
-<a class="jxr_linenumber" name="1554" href="#1554">1554</a> 						<em class="jxr_comment">// then set downloaded file to text fields</em>
-<a class="jxr_linenumber" name="1555" href="#1555">1555</a> 						<strong class="jxr_keyword">if</strong> (getHost) {
-<a class="jxr_linenumber" name="1556" href="#1556">1556</a> 							textFieldHosts.setText(shost);
-<a class="jxr_linenumber" name="1557" href="#1557">1557</a> 						}
-<a class="jxr_linenumber" name="1558" href="#1558">1558</a> 						<strong class="jxr_keyword">if</strong> (getRule) {
-<a class="jxr_linenumber" name="1559" href="#1559">1559</a> 							textFieldRules.setText(srule);
-<a class="jxr_linenumber" name="1560" href="#1560">1560</a> 						}
-<a class="jxr_linenumber" name="1561" href="#1561">1561</a> 					}
-<a class="jxr_linenumber" name="1562" href="#1562">1562</a> 				}
-<a class="jxr_linenumber" name="1563" href="#1563">1563</a> 			}
-<a class="jxr_linenumber" name="1564" href="#1564">1564</a> 			<strong class="jxr_keyword">if</strong> (result.code == ErrorCode.Warning) {
-<a class="jxr_linenumber" name="1565" href="#1565">1565</a> 				message = Messages.getString(<span class="jxr_string">"RequestInformation.Warned"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.123"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1566" href="#1566">1566</a> 						+
-<a class="jxr_linenumber" name="1567" href="#1567">1567</a> 						(result.other != <strong class="jxr_keyword">null</strong> ? resume + message
-<a class="jxr_linenumber" name="1568" href="#1568">1568</a> 								:
-<a class="jxr_linenumber" name="1569" href="#1569">1569</a> 								Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.71"</span>)) <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1570" href="#1570">1570</a> 						+ Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.72"</span>) + delay; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1571" href="#1571">1571</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1572" href="#1572">1572</a> 				message = Messages.getString(<span class="jxr_string">"RequestInformation.Success"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.123"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1573" href="#1573">1573</a> 						+
-<a class="jxr_linenumber" name="1574" href="#1574">1574</a> 						(result.other != <strong class="jxr_keyword">null</strong> ? resume + message
-<a class="jxr_linenumber" name="1575" href="#1575">1575</a> 								:
-<a class="jxr_linenumber" name="1576" href="#1576">1576</a> 								Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.71"</span>)) <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1577" href="#1577">1577</a> 						+ Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.72"</span>) + delay; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1578" href="#1578">1578</a> 			}
-<a class="jxr_linenumber" name="1579" href="#1579">1579</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1580" href="#1580">1580</a> 			<strong class="jxr_keyword">if</strong> (result.code == ErrorCode.Warning) {
-<a class="jxr_linenumber" name="1581" href="#1581">1581</a> 				message = Messages.getString(<span class="jxr_string">"RequestInformation.Warned"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.123"</span>) + future.getCause(); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1582" href="#1582">1582</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1583" href="#1583">1583</a> 				message = Messages.getString(<span class="jxr_string">"RequestInformation.Failure"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.123"</span>) + future.getCause(); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1584" href="#1584">1584</a> 			}
-<a class="jxr_linenumber" name="1585" href="#1585">1585</a> 		}
-<a class="jxr_linenumber" name="1586" href="#1586">1586</a> 		AdminGui.environnement.GuiResultat = message;
-<a class="jxr_linenumber" name="1587" href="#1587">1587</a> 	}
-<a class="jxr_linenumber" name="1588" href="#1588">1588</a> 
-<a class="jxr_linenumber" name="1589" href="#1589">1589</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setConfig() {
-<a class="jxr_linenumber" name="1590" href="#1590">1590</a> 		DbHostAuth host = (DbHostAuth) comboBoxServer.getSelectedItem();
-<a class="jxr_linenumber" name="1591" href="#1591">1591</a> 		<strong class="jxr_keyword">if</strong> (host == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1592" href="#1592">1592</a> 			AdminGui.environnement.GuiResultat = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.164"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1593" href="#1593">1593</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="1594" href="#1594">1594</a> 		}
-<a class="jxr_linenumber" name="1595" href="#1595">1595</a> 		<strong class="jxr_keyword">long</strong> time1 = System.currentTimeMillis();
-<a class="jxr_linenumber" name="1596" href="#1596">1596</a> 		R66Future future = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="1597" href="#1597">1597</a> 		String hostfile = textFieldHosts.getText();
-<a class="jxr_linenumber" name="1598" href="#1598">1598</a> 		String rulefile = textFieldRules.getText();
-<a class="jxr_linenumber" name="1599" href="#1599">1599</a> 		String businessfile = textFieldBusiness.getText();
-<a class="jxr_linenumber" name="1600" href="#1600">1600</a> 		String aliasfile = textFieldAlias.getText();
-<a class="jxr_linenumber" name="1601" href="#1601">1601</a> 		String rolefile = textFieldRoles.getText();
-<a class="jxr_linenumber" name="1602" href="#1602">1602</a> 		<strong class="jxr_keyword">long</strong> hostid = DbConstant.ILLEGALVALUE, ruleid = DbConstant.ILLEGALVALUE, 
-<a class="jxr_linenumber" name="1603" href="#1603">1603</a> 				businessid = DbConstant.ILLEGALVALUE, aliasid = DbConstant.ILLEGALVALUE,
-<a class="jxr_linenumber" name="1604" href="#1604">1604</a> 				roleid = DbConstant.ILLEGALVALUE;
-<a class="jxr_linenumber" name="1605" href="#1605">1605</a> 		<strong class="jxr_keyword">boolean</strong> erazeHost = chckbxPurgeHosts.isSelected();
-<a class="jxr_linenumber" name="1606" href="#1606">1606</a> 		<strong class="jxr_keyword">boolean</strong> erazeRule = chckbxPurgeRules.isSelected();
-<a class="jxr_linenumber" name="1607" href="#1607">1607</a> 		<strong class="jxr_keyword">boolean</strong> erazeBusiness = chckbxPurgeBusiness.isSelected();
-<a class="jxr_linenumber" name="1608" href="#1608">1608</a> 		<strong class="jxr_keyword">boolean</strong> erazeAlias = chckbxPurgeAlias.isSelected();
-<a class="jxr_linenumber" name="1609" href="#1609">1609</a> 		<strong class="jxr_keyword">boolean</strong> erazeRole = chckbxPurgeRoles.isSelected();
-<a class="jxr_linenumber" name="1610" href="#1610">1610</a> 		String ruleToPut = (String) textRuleToPut.getSelectedItem();
-<a class="jxr_linenumber" name="1611" href="#1611">1611</a> 		String error = <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="1612" href="#1612">1612</a> 		String msg = <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="1613" href="#1613">1613</a> 		<em class="jxr_comment">// should send config files first</em>
-<a class="jxr_linenumber" name="1614" href="#1614">1614</a> 		<strong class="jxr_keyword">if</strong> ((hostfile == <strong class="jxr_keyword">null</strong> || hostfile.isEmpty()) &amp;&amp;
-<a class="jxr_linenumber" name="1615" href="#1615">1615</a> 			(rulefile == <strong class="jxr_keyword">null</strong> || rulefile.isEmpty()) &amp;&amp;
-<a class="jxr_linenumber" name="1616" href="#1616">1616</a> 			(businessfile == <strong class="jxr_keyword">null</strong> || businessfile.isEmpty()) &amp;&amp;
-<a class="jxr_linenumber" name="1617" href="#1617">1617</a> 			(aliasfile == <strong class="jxr_keyword">null</strong> || aliasfile.isEmpty()) &amp;&amp;
-<a class="jxr_linenumber" name="1618" href="#1618">1618</a> 			(rolefile == <strong class="jxr_keyword">null</strong> || rolefile.isEmpty())) {
-<a class="jxr_linenumber" name="1619" href="#1619">1619</a> 			error = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.134"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1620" href="#1620">1620</a> 		}
-<a class="jxr_linenumber" name="1621" href="#1621">1621</a> 		<strong class="jxr_keyword">if</strong> (ruleToPut == <strong class="jxr_keyword">null</strong> || ruleToPut.isEmpty()) {
-<a class="jxr_linenumber" name="1622" href="#1622">1622</a> 			error = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.135"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1623" href="#1623">1623</a> 		}
-<a class="jxr_linenumber" name="1624" href="#1624">1624</a> 		String message = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="1625" href="#1625">1625</a> 		<strong class="jxr_keyword">if</strong> (error.length() &gt; 1) {
-<a class="jxr_linenumber" name="1626" href="#1626">1626</a> 			<em class="jxr_comment">// error</em>
-<a class="jxr_linenumber" name="1627" href="#1627">1627</a> 			message = Messages.getString(<span class="jxr_string">"RequestInformation.Failure"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.123"</span>) + error; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1628" href="#1628">1628</a> 			AdminGui.environnement.GuiResultat = message;
-<a class="jxr_linenumber" name="1629" href="#1629">1629</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="1630" href="#1630">1630</a> 		}
-<a class="jxr_linenumber" name="1631" href="#1631">1631</a> 		<strong class="jxr_keyword">if</strong> (hostfile != <strong class="jxr_keyword">null</strong> &amp;&amp; hostfile.length() &gt; 1) {
-<a class="jxr_linenumber" name="1632" href="#1632">1632</a> 			future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="1633" href="#1633">1633</a> 			DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), hostfile,
-<a class="jxr_linenumber" name="1634" href="#1634">1634</a> 					ruleToPut, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Hosts"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.SetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1635" href="#1635">1635</a> 							+ AdminGui.environnement.hostId,
-<a class="jxr_linenumber" name="1636" href="#1636">1636</a> 					AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
-<a class="jxr_linenumber" name="1637" href="#1637">1637</a> 					DbConstant.ILLEGALVALUE,
-<a class="jxr_linenumber" name="1638" href="#1638">1638</a> 					AdminGui.environnement.networkTransaction);
-<a class="jxr_linenumber" name="1639" href="#1639">1639</a> 			transfer.run();
-<a class="jxr_linenumber" name="1640" href="#1640">1640</a> 			<strong class="jxr_keyword">if</strong> (!future.isSuccess()) {
-<a class="jxr_linenumber" name="1641" href="#1641">1641</a> 				error = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.138"</span>) + hostfile; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1642" href="#1642">1642</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1643" href="#1643">1643</a> 				msg += <span class="jxr_string">" "</span>+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Hosts"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.ConfigTransmitted"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1644" href="#1644">1644</a> 				hostid = future.runner.getSpecialId();
-<a class="jxr_linenumber" name="1645" href="#1645">1645</a> 			}
-<a class="jxr_linenumber" name="1646" href="#1646">1646</a> 		}
-<a class="jxr_linenumber" name="1647" href="#1647">1647</a> 		<strong class="jxr_keyword">if</strong> (error.length() &gt; 1) {
-<a class="jxr_linenumber" name="1648" href="#1648">1648</a> 			<em class="jxr_comment">// error</em>
-<a class="jxr_linenumber" name="1649" href="#1649">1649</a> 			message = Messages.getString(<span class="jxr_string">"RequestInformation.Failure"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.158"</span>) + error; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1650" href="#1650">1650</a> 			AdminGui.environnement.GuiResultat = message;
-<a class="jxr_linenumber" name="1651" href="#1651">1651</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="1652" href="#1652">1652</a> 		}
-<a class="jxr_linenumber" name="1653" href="#1653">1653</a> 		<strong class="jxr_keyword">if</strong> (rulefile != <strong class="jxr_keyword">null</strong> &amp;&amp; rulefile.length() &gt; 1) {
-<a class="jxr_linenumber" name="1654" href="#1654">1654</a> 			future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="1655" href="#1655">1655</a> 			DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), rulefile,
-<a class="jxr_linenumber" name="1656" href="#1656">1656</a> 					ruleToPut, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Rules"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.SetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1657" href="#1657">1657</a> 							+ AdminGui.environnement.hostId,
-<a class="jxr_linenumber" name="1658" href="#1658">1658</a> 					AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
-<a class="jxr_linenumber" name="1659" href="#1659">1659</a> 					DbConstant.ILLEGALVALUE,
-<a class="jxr_linenumber" name="1660" href="#1660">1660</a> 					AdminGui.environnement.networkTransaction);
-<a class="jxr_linenumber" name="1661" href="#1661">1661</a> 			transfer.run();
-<a class="jxr_linenumber" name="1662" href="#1662">1662</a> 			<strong class="jxr_keyword">if</strong> (!future.isSuccess()) {
-<a class="jxr_linenumber" name="1663" href="#1663">1663</a> 				error += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.142"</span>) + rulefile; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1664" href="#1664">1664</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1665" href="#1665">1665</a> 				msg += <span class="jxr_string">" "</span>+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Rules"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.ConfigTransmitted"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1666" href="#1666">1666</a> 				ruleid = future.runner.getSpecialId();
-<a class="jxr_linenumber" name="1667" href="#1667">1667</a> 			}
-<a class="jxr_linenumber" name="1668" href="#1668">1668</a> 		}
-<a class="jxr_linenumber" name="1669" href="#1669">1669</a> 		<strong class="jxr_keyword">if</strong> (error.length() &gt; 1) {
-<a class="jxr_linenumber" name="1670" href="#1670">1670</a> 			<em class="jxr_comment">// error</em>
-<a class="jxr_linenumber" name="1671" href="#1671">1671</a> 			message = Messages.getString(<span class="jxr_string">"RequestInformation.Failure"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.158"</span>) + error; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1672" href="#1672">1672</a> 			AdminGui.environnement.GuiResultat = message;
-<a class="jxr_linenumber" name="1673" href="#1673">1673</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="1674" href="#1674">1674</a> 		}
-<a class="jxr_linenumber" name="1675" href="#1675">1675</a> 		<strong class="jxr_keyword">boolean</strong> useJson = PartnerConfiguration.useJson(host.getHostid());
-<a class="jxr_linenumber" name="1676" href="#1676">1676</a> 		logger.debug(<span class="jxr_string">"UseJson: "</span>+useJson); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1677" href="#1677">1677</a> 		<strong class="jxr_keyword">if</strong> (useJson) {
-<a class="jxr_linenumber" name="1678" href="#1678">1678</a> 			<strong class="jxr_keyword">if</strong> (businessfile != <strong class="jxr_keyword">null</strong> &amp;&amp; businessfile.length() &gt; 1) {
-<a class="jxr_linenumber" name="1679" href="#1679">1679</a> 				future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="1680" href="#1680">1680</a> 				DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), businessfile,
-<a class="jxr_linenumber" name="1681" href="#1681">1681</a> 						ruleToPut, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Business"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.SetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1682" href="#1682">1682</a> 								+ AdminGui.environnement.hostId,
-<a class="jxr_linenumber" name="1683" href="#1683">1683</a> 						AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
-<a class="jxr_linenumber" name="1684" href="#1684">1684</a> 						DbConstant.ILLEGALVALUE,
-<a class="jxr_linenumber" name="1685" href="#1685">1685</a> 						AdminGui.environnement.networkTransaction);
-<a class="jxr_linenumber" name="1686" href="#1686">1686</a> 				transfer.run();
-<a class="jxr_linenumber" name="1687" href="#1687">1687</a> 				<strong class="jxr_keyword">if</strong> (!future.isSuccess()) {
-<a class="jxr_linenumber" name="1688" href="#1688">1688</a> 					error += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.142"</span>) + businessfile; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1689" href="#1689">1689</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1690" href="#1690">1690</a> 					msg += <span class="jxr_string">" "</span>+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Business"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.ConfigTransmitted"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1691" href="#1691">1691</a> 					businessid = future.runner.getSpecialId();
-<a class="jxr_linenumber" name="1692" href="#1692">1692</a> 				}
-<a class="jxr_linenumber" name="1693" href="#1693">1693</a> 			}
-<a class="jxr_linenumber" name="1694" href="#1694">1694</a> 			<strong class="jxr_keyword">if</strong> (error.length() &gt; 1) {
-<a class="jxr_linenumber" name="1695" href="#1695">1695</a> 				<em class="jxr_comment">// error</em>
-<a class="jxr_linenumber" name="1696" href="#1696">1696</a> 				message = Messages.getString(<span class="jxr_string">"RequestInformation.Failure"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.158"</span>) + error; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1697" href="#1697">1697</a> 				AdminGui.environnement.GuiResultat = message;
-<a class="jxr_linenumber" name="1698" href="#1698">1698</a> 				<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="1699" href="#1699">1699</a> 			}
-<a class="jxr_linenumber" name="1700" href="#1700">1700</a> 			<strong class="jxr_keyword">if</strong> (aliasfile != <strong class="jxr_keyword">null</strong> &amp;&amp; aliasfile.length() &gt; 1) {
-<a class="jxr_linenumber" name="1701" href="#1701">1701</a> 				future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="1702" href="#1702">1702</a> 				DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), aliasfile,
-<a class="jxr_linenumber" name="1703" href="#1703">1703</a> 						ruleToPut, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Alias"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.SetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1704" href="#1704">1704</a> 								+ AdminGui.environnement.hostId,
-<a class="jxr_linenumber" name="1705" href="#1705">1705</a> 						AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
-<a class="jxr_linenumber" name="1706" href="#1706">1706</a> 						DbConstant.ILLEGALVALUE,
-<a class="jxr_linenumber" name="1707" href="#1707">1707</a> 						AdminGui.environnement.networkTransaction);
-<a class="jxr_linenumber" name="1708" href="#1708">1708</a> 				transfer.run();
-<a class="jxr_linenumber" name="1709" href="#1709">1709</a> 				<strong class="jxr_keyword">if</strong> (!future.isSuccess()) {
-<a class="jxr_linenumber" name="1710" href="#1710">1710</a> 					error += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.142"</span>) + aliasfile; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1711" href="#1711">1711</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1712" href="#1712">1712</a> 					msg += <span class="jxr_string">" "</span>+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Alias"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.ConfigTransmitted"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1713" href="#1713">1713</a> 					aliasid = future.runner.getSpecialId();
-<a class="jxr_linenumber" name="1714" href="#1714">1714</a> 				}
-<a class="jxr_linenumber" name="1715" href="#1715">1715</a> 			}
-<a class="jxr_linenumber" name="1716" href="#1716">1716</a> 			<strong class="jxr_keyword">if</strong> (error.length() &gt; 1) {
-<a class="jxr_linenumber" name="1717" href="#1717">1717</a> 				<em class="jxr_comment">// error</em>
-<a class="jxr_linenumber" name="1718" href="#1718">1718</a> 				message = Messages.getString(<span class="jxr_string">"RequestInformation.Failure"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.158"</span>) + error; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1719" href="#1719">1719</a> 				AdminGui.environnement.GuiResultat = message;
-<a class="jxr_linenumber" name="1720" href="#1720">1720</a> 				<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="1721" href="#1721">1721</a> 			}
-<a class="jxr_linenumber" name="1722" href="#1722">1722</a> 			<strong class="jxr_keyword">if</strong> (rolefile != <strong class="jxr_keyword">null</strong> &amp;&amp; rolefile.length() &gt; 1) {
-<a class="jxr_linenumber" name="1723" href="#1723">1723</a> 				future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="1724" href="#1724">1724</a> 				DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), rolefile,
-<a class="jxr_linenumber" name="1725" href="#1725">1725</a> 						ruleToPut, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Roles"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.SetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1726" href="#1726">1726</a> 								+ AdminGui.environnement.hostId,
-<a class="jxr_linenumber" name="1727" href="#1727">1727</a> 						AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
-<a class="jxr_linenumber" name="1728" href="#1728">1728</a> 						DbConstant.ILLEGALVALUE,
-<a class="jxr_linenumber" name="1729" href="#1729">1729</a> 						AdminGui.environnement.networkTransaction);
-<a class="jxr_linenumber" name="1730" href="#1730">1730</a> 				transfer.run();
-<a class="jxr_linenumber" name="1731" href="#1731">1731</a> 				<strong class="jxr_keyword">if</strong> (!future.isSuccess()) {
-<a class="jxr_linenumber" name="1732" href="#1732">1732</a> 					error += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.142"</span>) + rolefile; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1733" href="#1733">1733</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1734" href="#1734">1734</a> 					msg += <span class="jxr_string">" "</span>+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Roles"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.ConfigTransmitted"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1735" href="#1735">1735</a> 					roleid = future.runner.getSpecialId();
-<a class="jxr_linenumber" name="1736" href="#1736">1736</a> 				}
-<a class="jxr_linenumber" name="1737" href="#1737">1737</a> 			}
-<a class="jxr_linenumber" name="1738" href="#1738">1738</a> 			<strong class="jxr_keyword">if</strong> (error.length() &gt; 1) {
-<a class="jxr_linenumber" name="1739" href="#1739">1739</a> 				<em class="jxr_comment">// error</em>
-<a class="jxr_linenumber" name="1740" href="#1740">1740</a> 				message = Messages.getString(<span class="jxr_string">"RequestInformation.Failure"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.158"</span>) + error; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1741" href="#1741">1741</a> 				AdminGui.environnement.GuiResultat = message;
-<a class="jxr_linenumber" name="1742" href="#1742">1742</a> 				<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="1743" href="#1743">1743</a> 			}
-<a class="jxr_linenumber" name="1744" href="#1744">1744</a> 		}
-<a class="jxr_linenumber" name="1745" href="#1745">1745</a> 		future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="1746" href="#1746">1746</a> 		ConfigImport importCmd = <strong class="jxr_keyword">new</strong> ConfigImport(future, erazeHost, erazeRule, erazeBusiness, erazeAlias, erazeRole,
-<a class="jxr_linenumber" name="1747" href="#1747">1747</a> 				hostfile, rulefile, businessfile, aliasfile, rolefile,
-<a class="jxr_linenumber" name="1748" href="#1748">1748</a> 				AdminGui.environnement.networkTransaction);
-<a class="jxr_linenumber" name="1749" href="#1749">1749</a> 		importCmd.setSpecialIds(hostid, ruleid, businessid, aliasid, roleid);
-<a class="jxr_linenumber" name="1750" href="#1750">1750</a> 		importCmd.setHost(host);
-<a class="jxr_linenumber" name="1751" href="#1751">1751</a> 		importCmd.run();
-<a class="jxr_linenumber" name="1752" href="#1752">1752</a> 		future.awaitUninterruptibly();
-<a class="jxr_linenumber" name="1753" href="#1753">1753</a> 		<strong class="jxr_keyword">long</strong> time2 = System.currentTimeMillis();
-<a class="jxr_linenumber" name="1754" href="#1754">1754</a> 		<strong class="jxr_keyword">long</strong> delay = time2 - time1;
-<a class="jxr_linenumber" name="1755" href="#1755">1755</a> 		R66Result result = future.getResult();
-<a class="jxr_linenumber" name="1756" href="#1756">1756</a> 		<strong class="jxr_keyword">if</strong> (future.isSuccess()) {
-<a class="jxr_linenumber" name="1757" href="#1757">1757</a> 			String resume = msg;
-<a class="jxr_linenumber" name="1758" href="#1758">1758</a> 			<strong class="jxr_keyword">if</strong> (result.other != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1759" href="#1759">1759</a> 				<strong class="jxr_keyword">if</strong> (useJson) {
-<a class="jxr_linenumber" name="1760" href="#1760">1760</a> 					resume = ((JsonCommandPacket) result.other).getRequest();
-<a class="jxr_linenumber" name="1761" href="#1761">1761</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1762" href="#1762">1762</a> 					resume = ((ValidPacket) result.other).getSheader();
-<a class="jxr_linenumber" name="1763" href="#1763">1763</a> 				}
-<a class="jxr_linenumber" name="1764" href="#1764">1764</a> 				resume += msg;
-<a class="jxr_linenumber" name="1765" href="#1765">1765</a> 			}
-<a class="jxr_linenumber" name="1766" href="#1766">1766</a> 			<strong class="jxr_keyword">if</strong> (result.code == ErrorCode.Warning) {
-<a class="jxr_linenumber" name="1767" href="#1767">1767</a> 				message = Messages.getString(<span class="jxr_string">"RequestInformation.Warned"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.158"</span>) + <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1768" href="#1768">1768</a> 						resume
-<a class="jxr_linenumber" name="1769" href="#1769">1769</a> 						+ Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.72"</span>) + delay; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1770" href="#1770">1770</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1771" href="#1771">1771</a> 				message = Messages.getString(<span class="jxr_string">"RequestInformation.Success"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.158"</span>) + <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1772" href="#1772">1772</a> 						resume
-<a class="jxr_linenumber" name="1773" href="#1773">1773</a> 						+ Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.72"</span>) + delay; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1774" href="#1774">1774</a> 			}
-<a class="jxr_linenumber" name="1775" href="#1775">1775</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1776" href="#1776">1776</a> 			<strong class="jxr_keyword">if</strong> (result.code == ErrorCode.Warning) {
-<a class="jxr_linenumber" name="1777" href="#1777">1777</a> 				message = Messages.getString(<span class="jxr_string">"RequestInformation.Warned"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.158"</span>) + future.getCause() + msg; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1778" href="#1778">1778</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1779" href="#1779">1779</a> 				message = Messages.getString(<span class="jxr_string">"RequestInformation.Failure"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.158"</span>) + future.getCause(); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1780" href="#1780">1780</a> 			}
-<a class="jxr_linenumber" name="1781" href="#1781">1781</a> 		}
-<a class="jxr_linenumber" name="1782" href="#1782">1782</a> 		AdminGui.environnement.GuiResultat = message;
-<a class="jxr_linenumber" name="1783" href="#1783">1783</a> 	}
-<a class="jxr_linenumber" name="1784" href="#1784">1784</a> 
-<a class="jxr_linenumber" name="1785" href="#1785">1785</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> exportLog() {
-<a class="jxr_linenumber" name="1786" href="#1786">1786</a> 		DbHostAuth host = (DbHostAuth) comboBoxServer.getSelectedItem();
-<a class="jxr_linenumber" name="1787" href="#1787">1787</a> 		<strong class="jxr_keyword">if</strong> (host == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1788" href="#1788">1788</a> 			AdminGui.environnement.GuiResultat = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.164"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1789" href="#1789">1789</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="1790" href="#1790">1790</a> 		}
-<a class="jxr_linenumber" name="1791" href="#1791">1791</a> 		<strong class="jxr_keyword">long</strong> time1 = System.currentTimeMillis();
-<a class="jxr_linenumber" name="1792" href="#1792">1792</a> 		<strong class="jxr_keyword">boolean</strong> purgeLog = chckbxPurge.isSelected();
-<a class="jxr_linenumber" name="1793" href="#1793">1793</a> 		<strong class="jxr_keyword">boolean</strong> clean = chckbxClean.isSelected();
-<a class="jxr_linenumber" name="1794" href="#1794">1794</a> 		Timestamp start = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="1795" href="#1795">1795</a> 		Timestamp stop = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="1796" href="#1796">1796</a> 		String sstart = textFieldStart.getText();
-<a class="jxr_linenumber" name="1797" href="#1797">1797</a> 		String sstop = textFieldStop.getText();
-<a class="jxr_linenumber" name="1798" href="#1798">1798</a> 		<strong class="jxr_keyword">if</strong> (sstart != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1799" href="#1799">1799</a> 			start = WaarpStringUtils.fixDate(sstart);
-<a class="jxr_linenumber" name="1800" href="#1800">1800</a> 		}
-<a class="jxr_linenumber" name="1801" href="#1801">1801</a> 		<strong class="jxr_keyword">if</strong> (sstop != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1802" href="#1802">1802</a> 			stop = WaarpStringUtils.fixDate(sstop, start);
-<a class="jxr_linenumber" name="1803" href="#1803">1803</a> 		}
-<a class="jxr_linenumber" name="1804" href="#1804">1804</a> 		<strong class="jxr_keyword">if</strong> (start == <strong class="jxr_keyword">null</strong> &amp;&amp; stop == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1805" href="#1805">1805</a> 			stop = WaarpStringUtils.getTodayMidnight();
-<a class="jxr_linenumber" name="1806" href="#1806">1806</a> 		}
-<a class="jxr_linenumber" name="1807" href="#1807">1807</a> 		<strong class="jxr_keyword">if</strong> (start != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1808" href="#1808">1808</a> 			System.err.println(Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Start"</span>) + (<strong class="jxr_keyword">new</strong> Date(start.getTime())).toString()); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1809" href="#1809">1809</a> 		}
-<a class="jxr_linenumber" name="1810" href="#1810">1810</a> 		<strong class="jxr_keyword">if</strong> (stop != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1811" href="#1811">1811</a> 			System.err.println(Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Stop"</span>) + (<strong class="jxr_keyword">new</strong> Date(stop.getTime())).toString()); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1812" href="#1812">1812</a> 		}
-<a class="jxr_linenumber" name="1813" href="#1813">1813</a> 		String rulefilter = textFieldLogRule.getText();
-<a class="jxr_linenumber" name="1814" href="#1814">1814</a> 		<strong class="jxr_keyword">if</strong> (rulefilter != <strong class="jxr_keyword">null</strong> &amp;&amp; rulefilter.isEmpty()) {
-<a class="jxr_linenumber" name="1815" href="#1815">1815</a> 			rulefilter = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="1816" href="#1816">1816</a> 		}
-<a class="jxr_linenumber" name="1817" href="#1817">1817</a> 		String hostfilter = textFieldLogHost.getText();
-<a class="jxr_linenumber" name="1818" href="#1818">1818</a> 		<strong class="jxr_keyword">if</strong> (hostfilter != <strong class="jxr_keyword">null</strong> &amp;&amp; hostfilter.isEmpty()) {
-<a class="jxr_linenumber" name="1819" href="#1819">1819</a> 			hostfilter = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="1820" href="#1820">1820</a> 		}
-<a class="jxr_linenumber" name="1821" href="#1821">1821</a> 		
-<a class="jxr_linenumber" name="1822" href="#1822">1822</a> 		R66Future future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="1823" href="#1823">1823</a> 		<strong class="jxr_keyword">boolean</strong> useJson = PartnerConfiguration.useJson(host.getHostid());
-<a class="jxr_linenumber" name="1824" href="#1824">1824</a> 		logger.debug(<span class="jxr_string">"UseJson: "</span>+useJson); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1825" href="#1825">1825</a> 		<strong class="jxr_keyword">if</strong> (useJson) {
-<a class="jxr_linenumber" name="1826" href="#1826">1826</a> 			LogExtendedExport export = <strong class="jxr_keyword">new</strong> LogExtendedExport(future, clean, purgeLog, start,
-<a class="jxr_linenumber" name="1827" href="#1827">1827</a> 							stop, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, rulefilter, hostfilter,
-<a class="jxr_linenumber" name="1828" href="#1828">1828</a> 							chckbxPending.isSelected(), chckbxRunning.isSelected(), chckbxDone.isSelected(), chckbxInError.isSelected(),
-<a class="jxr_linenumber" name="1829" href="#1829">1829</a> 							AdminGui.environnement.networkTransaction, host);
-<a class="jxr_linenumber" name="1830" href="#1830">1830</a> 			export.run();
-<a class="jxr_linenumber" name="1831" href="#1831">1831</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1832" href="#1832">1832</a> 			LogExport export = <strong class="jxr_keyword">new</strong> LogExport(future, purgeLog, clean, start, stop,
-<a class="jxr_linenumber" name="1833" href="#1833">1833</a> 					AdminGui.environnement.networkTransaction);
-<a class="jxr_linenumber" name="1834" href="#1834">1834</a> 			export.setHost(host);
-<a class="jxr_linenumber" name="1835" href="#1835">1835</a> 			export.run();
-<a class="jxr_linenumber" name="1836" href="#1836">1836</a> 		}
-<a class="jxr_linenumber" name="1837" href="#1837">1837</a> 		future.awaitUninterruptibly();
-<a class="jxr_linenumber" name="1838" href="#1838">1838</a> 		<strong class="jxr_keyword">long</strong> time2 = System.currentTimeMillis();
-<a class="jxr_linenumber" name="1839" href="#1839">1839</a> 		<strong class="jxr_keyword">long</strong> delay = time2 - time1;
-<a class="jxr_linenumber" name="1840" href="#1840">1840</a> 		R66Result result = future.getResult();
-<a class="jxr_linenumber" name="1841" href="#1841">1841</a> 		String message = <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="1842" href="#1842">1842</a> 		<strong class="jxr_keyword">if</strong> (future.isSuccess()) {
-<a class="jxr_linenumber" name="1843" href="#1843">1843</a> 			AbstractLocalPacket packet = (AbstractLocalPacket) result.other;
-<a class="jxr_linenumber" name="1844" href="#1844">1844</a> 			String value = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="1845" href="#1845">1845</a> 			<strong class="jxr_keyword">if</strong> (packet != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1846" href="#1846">1846</a> 				String fileExported = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="1847" href="#1847">1847</a> 				<strong class="jxr_keyword">if</strong> (useJson) {
-<a class="jxr_linenumber" name="1848" href="#1848">1848</a> 					value = ((JsonCommandPacket) packet).getRequest();
-<a class="jxr_linenumber" name="1849" href="#1849">1849</a> 					LogResponseJsonPacket node = (LogResponseJsonPacket) ((JsonCommandPacket) packet).getJsonRequest();
-<a class="jxr_linenumber" name="1850" href="#1850">1850</a> 					fileExported = node.getFilename();
-<a class="jxr_linenumber" name="1851" href="#1851">1851</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1852" href="#1852">1852</a> 					value = ((ValidPacket) packet).getSheader();
-<a class="jxr_linenumber" name="1853" href="#1853">1853</a> 					String[] values = value.split(<span class="jxr_string">" "</span>);
-<a class="jxr_linenumber" name="1854" href="#1854">1854</a> 					fileExported = values[0];
-<a class="jxr_linenumber" name="1855" href="#1855">1855</a> 				}
-<a class="jxr_linenumber" name="1856" href="#1856">1856</a> 				textFieldResult.setText(fileExported);
-<a class="jxr_linenumber" name="1857" href="#1857">1857</a> 				<em class="jxr_comment">// download logs</em>
-<a class="jxr_linenumber" name="1858" href="#1858">1858</a> 				<strong class="jxr_keyword">if</strong> (fileExported != <strong class="jxr_keyword">null</strong> &amp;&amp; ! fileExported.isEmpty()) {
-<a class="jxr_linenumber" name="1859" href="#1859">1859</a> 					String ruleToExport = (String) textRuleToExportLog.getSelectedItem();
-<a class="jxr_linenumber" name="1860" href="#1860">1860</a> 					<strong class="jxr_keyword">if</strong> (ruleToExport == <strong class="jxr_keyword">null</strong> || ruleToExport.isEmpty()) {
-<a class="jxr_linenumber" name="1861" href="#1861">1861</a> 						message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.170"</span>) + fileExported + Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.171"</span>); <em class="jxr_comment">//$NON-NLS-1$ //$NON-NLS-2$</em>
-<a class="jxr_linenumber" name="1862" href="#1862">1862</a> 					} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1863" href="#1863">1863</a> 						future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="1864" href="#1864">1864</a> 						DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(),
-<a class="jxr_linenumber" name="1865" href="#1865">1865</a> 								fileExported,
-<a class="jxr_linenumber" name="1866" href="#1866">1866</a> 								ruleToExport, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.172"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1867" href="#1867">1867</a> 										+ AdminGui.environnement.hostId,
-<a class="jxr_linenumber" name="1868" href="#1868">1868</a> 								AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
-<a class="jxr_linenumber" name="1869" href="#1869">1869</a> 								DbConstant.ILLEGALVALUE,
-<a class="jxr_linenumber" name="1870" href="#1870">1870</a> 								AdminGui.environnement.networkTransaction);
-<a class="jxr_linenumber" name="1871" href="#1871">1871</a> 						transfer.run();
-<a class="jxr_linenumber" name="1872" href="#1872">1872</a> 						<strong class="jxr_keyword">if</strong> (!future.isSuccess()) {
-<a class="jxr_linenumber" name="1873" href="#1873">1873</a> 							message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.170"</span>) + fileExported + <span class="jxr_string">"\n"</span>; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1874" href="#1874">1874</a> 						} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1875" href="#1875">1875</a> 							textFieldResult.setText(future.getResult().file.getTrueFile()
-<a class="jxr_linenumber" name="1876" href="#1876">1876</a> 									.getAbsolutePath());
-<a class="jxr_linenumber" name="1877" href="#1877">1877</a> 						}
-<a class="jxr_linenumber" name="1878" href="#1878">1878</a> 					}
-<a class="jxr_linenumber" name="1879" href="#1879">1879</a> 				}
-<a class="jxr_linenumber" name="1880" href="#1880">1880</a> 			}
-<a class="jxr_linenumber" name="1881" href="#1881">1881</a> 			<strong class="jxr_keyword">if</strong> (result.code == ErrorCode.Warning) {
-<a class="jxr_linenumber" name="1882" href="#1882">1882</a> 				message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.175"</span>, Messages.getString(<span class="jxr_string">"RequestInformation.Warned"</span>)) + <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1883" href="#1883">1883</a> 						(result.other != <strong class="jxr_keyword">null</strong> ? value :
-<a class="jxr_linenumber" name="1884" href="#1884">1884</a> 								Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.71"</span>)) <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1885" href="#1885">1885</a> 						+ Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.72"</span>) + delay+<span class="jxr_string">"\n"</span>; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1886" href="#1886">1886</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1887" href="#1887">1887</a> 				message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.175"</span>, Messages.getString(<span class="jxr_string">"RequestInformation.Success"</span>)) + <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1888" href="#1888">1888</a> 						(result.other != <strong class="jxr_keyword">null</strong> ? value :
-<a class="jxr_linenumber" name="1889" href="#1889">1889</a> 								Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.71"</span>)) <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1890" href="#1890">1890</a> 						+ Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.72"</span>) + delay; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1891" href="#1891">1891</a> 			}
-<a class="jxr_linenumber" name="1892" href="#1892">1892</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1893" href="#1893">1893</a> 			<strong class="jxr_keyword">if</strong> (result.code == ErrorCode.Warning) {
-<a class="jxr_linenumber" name="1894" href="#1894">1894</a> 				message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.175"</span>, Messages.getString(<span class="jxr_string">"RequestInformation.Warned"</span>)) + future.getCause(); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1895" href="#1895">1895</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1896" href="#1896">1896</a> 				message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.175"</span>, Messages.getString(<span class="jxr_string">"RequestInformation.Failure"</span>)) + future.getCause(); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1897" href="#1897">1897</a> 			}
-<a class="jxr_linenumber" name="1898" href="#1898">1898</a> 		}
-<a class="jxr_linenumber" name="1899" href="#1899">1899</a> 		AdminGui.environnement.GuiResultat = message;
-<a class="jxr_linenumber" name="1900" href="#1900">1900</a> 	}
-<a class="jxr_linenumber" name="1901" href="#1901">1901</a> 
-<a class="jxr_linenumber" name="1902" href="#1902">1902</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> shutdown() {
-<a class="jxr_linenumber" name="1903" href="#1903">1903</a> 		DbHostAuth host = (DbHostAuth) comboBoxServer.getSelectedItem();
-<a class="jxr_linenumber" name="1904" href="#1904">1904</a> 		<strong class="jxr_keyword">if</strong> (host == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1905" href="#1905">1905</a> 			AdminGui.environnement.GuiResultat = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.164"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1906" href="#1906">1906</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="1907" href="#1907">1907</a> 		}
-<a class="jxr_linenumber" name="1908" href="#1908">1908</a> 		String skey = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="1909" href="#1909">1909</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="1910" href="#1910">1910</a> 			<strong class="jxr_keyword">char</strong>[] pwd = passwordField.getPassword();
-<a class="jxr_linenumber" name="1911" href="#1911">1911</a> 			<strong class="jxr_keyword">if</strong> (pwd == <strong class="jxr_keyword">null</strong> || pwd.length == 0) {
-<a class="jxr_linenumber" name="1912" href="#1912">1912</a> 				AdminGui.environnement.GuiResultat = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.186"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1913" href="#1913">1913</a> 				<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="1914" href="#1914">1914</a> 			}
-<a class="jxr_linenumber" name="1915" href="#1915">1915</a> 			skey = <strong class="jxr_keyword">new</strong> String(pwd);
-<a class="jxr_linenumber" name="1916" href="#1916">1916</a> 		} <strong class="jxr_keyword">catch</strong> (NullPointerException e) {
-<a class="jxr_linenumber" name="1917" href="#1917">1917</a> 			AdminGui.environnement.GuiResultat = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.186"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1918" href="#1918">1918</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="1919" href="#1919">1919</a> 		}
-<a class="jxr_linenumber" name="1920" href="#1920">1920</a> 		<strong class="jxr_keyword">long</strong> time1 = System.currentTimeMillis();
-<a class="jxr_linenumber" name="1921" href="#1921">1921</a> 		byte[] key;
-<a class="jxr_linenumber" name="1922" href="#1922">1922</a> 		key = FilesystemBasedDigest.passwdCrypt(skey.getBytes(WaarpStringUtils.UTF8));
-<a class="jxr_linenumber" name="1923" href="#1923">1923</a> 		AbstractLocalPacket packet = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="1924" href="#1924">1924</a> 		<strong class="jxr_keyword">if</strong> (rdbtnShutdown.isSelected()) {
-<a class="jxr_linenumber" name="1925" href="#1925">1925</a> 			<strong class="jxr_keyword">if</strong> (chckbxRestart.isSelected()) {
-<a class="jxr_linenumber" name="1926" href="#1926">1926</a> 				packet = <strong class="jxr_keyword">new</strong> ShutdownPacket(key, (byte) 1);
-<a class="jxr_linenumber" name="1927" href="#1927">1927</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1928" href="#1928">1928</a> 				packet = <strong class="jxr_keyword">new</strong> ShutdownPacket(key);
-<a class="jxr_linenumber" name="1929" href="#1929">1929</a> 			}
-<a class="jxr_linenumber" name="1930" href="#1930">1930</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1931" href="#1931">1931</a> 			packet = <strong class="jxr_keyword">new</strong> BlockRequestPacket(chckbxBlockUnblock.isSelected(), key);
-<a class="jxr_linenumber" name="1932" href="#1932">1932</a> 		}
-<a class="jxr_linenumber" name="1933" href="#1933">1933</a> 		String message = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="1934" href="#1934">1934</a> 		<strong class="jxr_keyword">final</strong> SocketAddress socketServerAddress;
-<a class="jxr_linenumber" name="1935" href="#1935">1935</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="1936" href="#1936">1936</a> 			socketServerAddress = host.getSocketAddress();
-<a class="jxr_linenumber" name="1937" href="#1937">1937</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
-<a class="jxr_linenumber" name="1938" href="#1938">1938</a> 			message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.187"</span>) + Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.188"</span>) + host.getHostid(); <em class="jxr_comment">//$NON-NLS-1$ //$NON-NLS-2$</em>
-<a class="jxr_linenumber" name="1939" href="#1939">1939</a> 			AdminGui.environnement.GuiResultat = message;
-<a class="jxr_linenumber" name="1940" href="#1940">1940</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="1941" href="#1941">1941</a> 		}
-<a class="jxr_linenumber" name="1942" href="#1942">1942</a> 		LocalChannelReference localChannelReference = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="1943" href="#1943">1943</a> 		localChannelReference = AdminGui.environnement.networkTransaction
-<a class="jxr_linenumber" name="1944" href="#1944">1944</a> 				.createConnectionWithRetry(socketServerAddress, host.isSsl(), <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="1945" href="#1945">1945</a> 		<strong class="jxr_keyword">if</strong> (localChannelReference == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1946" href="#1946">1946</a> 			message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.187"</span>) + Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.188"</span>) + host.getHostid(); <em class="jxr_comment">//$NON-NLS-1$ //$NON-NLS-2$</em>
-<a class="jxr_linenumber" name="1947" href="#1947">1947</a> 			AdminGui.environnement.GuiResultat = message;
-<a class="jxr_linenumber" name="1948" href="#1948">1948</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="1949" href="#1949">1949</a> 		}
-<a class="jxr_linenumber" name="1950" href="#1950">1950</a> 		<strong class="jxr_keyword">if</strong> (rdbtnShutdown.isSelected()) {
-<a class="jxr_linenumber" name="1951" href="#1951">1951</a> 			localChannelReference.sessionNewState(R66FiniteDualStates.SHUTDOWN);
-<a class="jxr_linenumber" name="1952" href="#1952">1952</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1953" href="#1953">1953</a> 			localChannelReference.sessionNewState(R66FiniteDualStates.BUSINESSR);
-<a class="jxr_linenumber" name="1954" href="#1954">1954</a> 		}
-<a class="jxr_linenumber" name="1955" href="#1955">1955</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="1956" href="#1956">1956</a> 			ChannelUtils.writeAbstractLocalPacket(localChannelReference, packet, false);
-<a class="jxr_linenumber" name="1957" href="#1957">1957</a> 		} <strong class="jxr_keyword">catch</strong> (OpenR66ProtocolPacketException e) {
-<a class="jxr_linenumber" name="1958" href="#1958">1958</a> 			message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.187"</span>) + Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.190"</span>) + host.getHostid() <em class="jxr_comment">//$NON-NLS-1$ //$NON-NLS-2$</em>
-<a class="jxr_linenumber" name="1959" href="#1959">1959</a> 					+ <span class="jxr_string">"["</span> + e.getMessage() + <span class="jxr_string">"]"</span>;
-<a class="jxr_linenumber" name="1960" href="#1960">1960</a> 			AdminGui.environnement.GuiResultat = message;
-<a class="jxr_linenumber" name="1961" href="#1961">1961</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="1962" href="#1962">1962</a> 		}
-<a class="jxr_linenumber" name="1963" href="#1963">1963</a> 		localChannelReference.getFutureRequest().awaitUninterruptibly(180, TimeUnit.SECONDS);
-<a class="jxr_linenumber" name="1964" href="#1964">1964</a> 		<strong class="jxr_keyword">if</strong> (localChannelReference.getFutureRequest().isDone()) {
-<a class="jxr_linenumber" name="1965" href="#1965">1965</a> 			R66Result result = localChannelReference.getFutureRequest()
-<a class="jxr_linenumber" name="1966" href="#1966">1966</a> 					.getResult();
-<a class="jxr_linenumber" name="1967" href="#1967">1967</a> 			<strong class="jxr_keyword">if</strong> (localChannelReference.getFutureRequest().isSuccess()) {
-<a class="jxr_linenumber" name="1968" href="#1968">1968</a> 				message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.193"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1969" href="#1969">1969</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1970" href="#1970">1970</a> 				<strong class="jxr_keyword">if</strong> (result.other instanceof ValidPacket
-<a class="jxr_linenumber" name="1971" href="#1971">1971</a> 						&amp;&amp;
-<a class="jxr_linenumber" name="1972" href="#1972">1972</a> 						((ValidPacket) result.other).getTypeValid() == LocalPacketFactory.SHUTDOWNPACKET) {
-<a class="jxr_linenumber" name="1973" href="#1973">1973</a> 					message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.194"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1974" href="#1974">1974</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (result.code == ErrorCode.Shutdown) {
-<a class="jxr_linenumber" name="1975" href="#1975">1975</a> 					message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.195"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1976" href="#1976">1976</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1977" href="#1977">1977</a> 					message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.196"</span>) + result.toString() + <span class="jxr_string">"["</span> + localChannelReference <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1978" href="#1978">1978</a> 							.getFutureRequest().getCause() + <span class="jxr_string">"]"</span>;
-<a class="jxr_linenumber" name="1979" href="#1979">1979</a> 				}
-<a class="jxr_linenumber" name="1980" href="#1980">1980</a> 			}
-<a class="jxr_linenumber" name="1981" href="#1981">1981</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1982" href="#1982">1982</a> 			message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.199"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1983" href="#1983">1983</a> 			localChannelReference.getLocalChannel().close();
-<a class="jxr_linenumber" name="1984" href="#1984">1984</a> 		}
-<a class="jxr_linenumber" name="1985" href="#1985">1985</a> 		<strong class="jxr_keyword">long</strong> time2 = System.currentTimeMillis();
-<a class="jxr_linenumber" name="1986" href="#1986">1986</a> 		<strong class="jxr_keyword">long</strong> delay = time2 - time1;
-<a class="jxr_linenumber" name="1987" href="#1987">1987</a> 		message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.72"</span>) + delay; <em class="jxr_comment">//$NON-NLS-1$</em>
-<a class="jxr_linenumber" name="1988" href="#1988">1988</a> 		AdminGui.environnement.GuiResultat = message;
-<a class="jxr_linenumber" name="1989" href="#1989">1989</a> 	}
-<a class="jxr_linenumber" name="1990" href="#1990">1990</a> 
-<a class="jxr_linenumber" name="1991" href="#1991">1991</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../org/waarp/openr66/serveraction/AdminR66OperationsGui.html">JTextAreaOutputStream</a> <strong class="jxr_keyword">extends</strong> OutputStream {
-<a class="jxr_linenumber" name="1992" href="#1992">1992</a> 		JTextArea ta;
-<a class="jxr_linenumber" name="1993" href="#1993">1993</a> 
-<a class="jxr_linenumber" name="1994" href="#1994">1994</a> 		<strong class="jxr_keyword">public</strong> <a href="../../../../org/waarp/openr66/serveraction/AdminR66OperationsGui.html">JTextAreaOutputStream</a>(JTextArea t) {
-<a class="jxr_linenumber" name="1995" href="#1995">1995</a> 			<strong class="jxr_keyword">super</strong>();
-<a class="jxr_linenumber" name="1996" href="#1996">1996</a> 			ta = t;
-<a class="jxr_linenumber" name="1997" href="#1997">1997</a> 		}
-<a class="jxr_linenumber" name="1998" href="#1998">1998</a> 
-<a class="jxr_linenumber" name="1999" href="#1999">1999</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> write(<strong class="jxr_keyword">int</strong> i) {
-<a class="jxr_linenumber" name="2000" href="#2000">2000</a> 			ta.append(Character.toString((<strong class="jxr_keyword">char</strong>) i));
-<a class="jxr_linenumber" name="2001" href="#2001">2001</a> 		}
-<a class="jxr_linenumber" name="2002" href="#2002">2002</a> 
-<a class="jxr_linenumber" name="2003" href="#2003">2003</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> write(<strong class="jxr_keyword">char</strong>[] buf, <strong class="jxr_keyword">int</strong> off, <strong class="jxr_keyword">int</strong> len) {
-<a class="jxr_linenumber" name="2004" href="#2004">2004</a> 			String s = <strong class="jxr_keyword">new</strong> String(buf, off, len);
-<a class="jxr_linenumber" name="2005" href="#2005">2005</a> 			ta.append(s);
-<a class="jxr_linenumber" name="2006" href="#2006">2006</a> 		}
-<a class="jxr_linenumber" name="2007" href="#2007">2007</a> 
-<a class="jxr_linenumber" name="2008" href="#2008">2008</a> 	}
-<a class="jxr_linenumber" name="2009" href="#2009">2009</a> 
-<a class="jxr_linenumber" name="2010" href="#2010">2010</a> }
+<a class="jxr_linenumber" name="1374" href="#1374">1374</a> 					logger.debug(node.toString());
+<a class="jxr_linenumber" name="1375" href="#1375">1375</a> 					String shost = node.getFilehost();
+<a class="jxr_linenumber" name="1376" href="#1376">1376</a> 					String srule = node.getFilerule();
+<a class="jxr_linenumber" name="1377" href="#1377">1377</a> 					String sbusiness = node.getFilebusiness();
+<a class="jxr_linenumber" name="1378" href="#1378">1378</a> 					String salias = node.getFilealias();
+<a class="jxr_linenumber" name="1379" href="#1379">1379</a> 					String srole = node.getFileroles();
+<a class="jxr_linenumber" name="1380" href="#1380">1380</a> 					<strong class="jxr_keyword">if</strong> (ruleToGet == <strong class="jxr_keyword">null</strong> || ruleToGet.isEmpty()) {
+<a class="jxr_linenumber" name="1381" href="#1381">1381</a> 						message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.92"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1382" href="#1382">1382</a> 					}
+<a class="jxr_linenumber" name="1383" href="#1383">1383</a> 					<strong class="jxr_keyword">if</strong> (message.length() &gt; 1) {
+<a class="jxr_linenumber" name="1384" href="#1384">1384</a> 						<em class="jxr_comment">// error</em>
+<a class="jxr_linenumber" name="1385" href="#1385">1385</a> 						message = Messages.getString(<span class="jxr_string">"RequestInformation.Failure"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.123"</span>) + message; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1386" href="#1386">1386</a> 					} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1387" href="#1387">1387</a> 						<strong class="jxr_keyword">if</strong> (getHost &amp;&amp; shost != <strong class="jxr_keyword">null</strong> &amp;&amp; ! shost.isEmpty()) {
+<a class="jxr_linenumber" name="1388" href="#1388">1388</a> 							future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="1389" href="#1389">1389</a> 							DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), shost,
+<a class="jxr_linenumber" name="1390" href="#1390">1390</a> 									ruleToGet, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Hosts"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.GetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1391" href="#1391">1391</a> 											+ AdminGui.environnement.hostId,
+<a class="jxr_linenumber" name="1392" href="#1392">1392</a> 									AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+<a class="jxr_linenumber" name="1393" href="#1393">1393</a> 									DbConstant.ILLEGALVALUE,
+<a class="jxr_linenumber" name="1394" href="#1394">1394</a> 									AdminGui.environnement.networkTransaction);
+<a class="jxr_linenumber" name="1395" href="#1395">1395</a> 							transfer.run();
+<a class="jxr_linenumber" name="1396" href="#1396">1396</a> 							<strong class="jxr_keyword">if</strong> (future.isSuccess()) {
+<a class="jxr_linenumber" name="1397" href="#1397">1397</a> 								R66Result resultHost = future.getResult();
+<a class="jxr_linenumber" name="1398" href="#1398">1398</a> 								shost = resultHost.file.getTrueFile().getAbsolutePath();
+<a class="jxr_linenumber" name="1399" href="#1399">1399</a> 								message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Hosts"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.FileInto"</span>) + shost+<span class="jxr_string">"\n"</span>; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1400" href="#1400">1400</a> 							} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1401" href="#1401">1401</a> 								getHost = false;
+<a class="jxr_linenumber" name="1402" href="#1402">1402</a> 								shost = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.CantGetFile"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Hosts"</span>)+<span class="jxr_string">": "</span> + shost; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1403" href="#1403">1403</a> 								message += shost;
+<a class="jxr_linenumber" name="1404" href="#1404">1404</a> 							}
+<a class="jxr_linenumber" name="1405" href="#1405">1405</a> 						}
+<a class="jxr_linenumber" name="1406" href="#1406">1406</a> 						<strong class="jxr_keyword">if</strong> (getRule &amp;&amp; srule != <strong class="jxr_keyword">null</strong> &amp;&amp; ! srule.isEmpty()) {
+<a class="jxr_linenumber" name="1407" href="#1407">1407</a> 							future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="1408" href="#1408">1408</a> 							DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), srule,
+<a class="jxr_linenumber" name="1409" href="#1409">1409</a> 									ruleToGet, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Rules"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.GetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1410" href="#1410">1410</a> 											+ AdminGui.environnement.hostId,
+<a class="jxr_linenumber" name="1411" href="#1411">1411</a> 									AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+<a class="jxr_linenumber" name="1412" href="#1412">1412</a> 									DbConstant.ILLEGALVALUE,
+<a class="jxr_linenumber" name="1413" href="#1413">1413</a> 									AdminGui.environnement.networkTransaction);
+<a class="jxr_linenumber" name="1414" href="#1414">1414</a> 							transfer.run();
+<a class="jxr_linenumber" name="1415" href="#1415">1415</a> 							<strong class="jxr_keyword">if</strong> (future.isSuccess()) {
+<a class="jxr_linenumber" name="1416" href="#1416">1416</a> 								R66Result resultRule = future.getResult();
+<a class="jxr_linenumber" name="1417" href="#1417">1417</a> 								srule = resultRule.file.getTrueFile().getAbsolutePath();
+<a class="jxr_linenumber" name="1418" href="#1418">1418</a> 								message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Rules"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.FileInto"</span>) + srule+<span class="jxr_string">"\n"</span>; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1419" href="#1419">1419</a> 							} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1420" href="#1420">1420</a> 								getRule = false;
+<a class="jxr_linenumber" name="1421" href="#1421">1421</a> 								srule = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.CantGetFile"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Rules"</span>)+<span class="jxr_string">": "</span> + srule; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1422" href="#1422">1422</a> 								message += srule;
+<a class="jxr_linenumber" name="1423" href="#1423">1423</a> 							}
+<a class="jxr_linenumber" name="1424" href="#1424">1424</a> 						}
+<a class="jxr_linenumber" name="1425" href="#1425">1425</a> 						<strong class="jxr_keyword">if</strong> (getBusiness &amp;&amp; sbusiness != <strong class="jxr_keyword">null</strong> &amp;&amp; ! sbusiness.isEmpty()) {
+<a class="jxr_linenumber" name="1426" href="#1426">1426</a> 							future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="1427" href="#1427">1427</a> 							DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), sbusiness,
+<a class="jxr_linenumber" name="1428" href="#1428">1428</a> 									ruleToGet, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Business"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.GetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1429" href="#1429">1429</a> 											+ AdminGui.environnement.hostId,
+<a class="jxr_linenumber" name="1430" href="#1430">1430</a> 									AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+<a class="jxr_linenumber" name="1431" href="#1431">1431</a> 									DbConstant.ILLEGALVALUE,
+<a class="jxr_linenumber" name="1432" href="#1432">1432</a> 									AdminGui.environnement.networkTransaction);
+<a class="jxr_linenumber" name="1433" href="#1433">1433</a> 							transfer.run();
+<a class="jxr_linenumber" name="1434" href="#1434">1434</a> 							<strong class="jxr_keyword">if</strong> (future.isSuccess()) {
+<a class="jxr_linenumber" name="1435" href="#1435">1435</a> 								R66Result resultRule = future.getResult();
+<a class="jxr_linenumber" name="1436" href="#1436">1436</a> 								sbusiness = resultRule.file.getTrueFile().getAbsolutePath();
+<a class="jxr_linenumber" name="1437" href="#1437">1437</a> 								message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Business"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.FileInto"</span>) + sbusiness+<span class="jxr_string">"\n"</span>; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1438" href="#1438">1438</a> 							} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1439" href="#1439">1439</a> 								getBusiness = false;
+<a class="jxr_linenumber" name="1440" href="#1440">1440</a> 								sbusiness = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.CantGetFile"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Business"</span>)+<span class="jxr_string">": "</span> + sbusiness; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1441" href="#1441">1441</a> 								message += sbusiness;
+<a class="jxr_linenumber" name="1442" href="#1442">1442</a> 							}
+<a class="jxr_linenumber" name="1443" href="#1443">1443</a> 						}
+<a class="jxr_linenumber" name="1444" href="#1444">1444</a> 						<strong class="jxr_keyword">if</strong> (getAlias &amp;&amp; salias != <strong class="jxr_keyword">null</strong> &amp;&amp; ! salias.isEmpty()) {
+<a class="jxr_linenumber" name="1445" href="#1445">1445</a> 							future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="1446" href="#1446">1446</a> 							DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), salias,
+<a class="jxr_linenumber" name="1447" href="#1447">1447</a> 									ruleToGet, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Alias"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.GetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1448" href="#1448">1448</a> 											+ AdminGui.environnement.hostId,
+<a class="jxr_linenumber" name="1449" href="#1449">1449</a> 									AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+<a class="jxr_linenumber" name="1450" href="#1450">1450</a> 									DbConstant.ILLEGALVALUE,
+<a class="jxr_linenumber" name="1451" href="#1451">1451</a> 									AdminGui.environnement.networkTransaction);
+<a class="jxr_linenumber" name="1452" href="#1452">1452</a> 							transfer.run();
+<a class="jxr_linenumber" name="1453" href="#1453">1453</a> 							<strong class="jxr_keyword">if</strong> (future.isSuccess()) {
+<a class="jxr_linenumber" name="1454" href="#1454">1454</a> 								R66Result resultRule = future.getResult();
+<a class="jxr_linenumber" name="1455" href="#1455">1455</a> 								salias = resultRule.file.getTrueFile().getAbsolutePath();
+<a class="jxr_linenumber" name="1456" href="#1456">1456</a> 								message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Alias"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.FileInto"</span>) + salias+<span class="jxr_string">"\n"</span>; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1457" href="#1457">1457</a> 							} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1458" href="#1458">1458</a> 								getAlias = false;
+<a class="jxr_linenumber" name="1459" href="#1459">1459</a> 								salias = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.CantGetFile"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Alias"</span>)+<span class="jxr_string">": "</span> + salias; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1460" href="#1460">1460</a> 								message += salias;
+<a class="jxr_linenumber" name="1461" href="#1461">1461</a> 							}
+<a class="jxr_linenumber" name="1462" href="#1462">1462</a> 						}
+<a class="jxr_linenumber" name="1463" href="#1463">1463</a> 						<strong class="jxr_keyword">if</strong> (getRoles &amp;&amp; srole != <strong class="jxr_keyword">null</strong> &amp;&amp; ! srole.isEmpty()) {
+<a class="jxr_linenumber" name="1464" href="#1464">1464</a> 							future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="1465" href="#1465">1465</a> 							DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), srole,
+<a class="jxr_linenumber" name="1466" href="#1466">1466</a> 									ruleToGet, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Roles"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.GetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1467" href="#1467">1467</a> 											+ AdminGui.environnement.hostId,
+<a class="jxr_linenumber" name="1468" href="#1468">1468</a> 									AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+<a class="jxr_linenumber" name="1469" href="#1469">1469</a> 									DbConstant.ILLEGALVALUE,
+<a class="jxr_linenumber" name="1470" href="#1470">1470</a> 									AdminGui.environnement.networkTransaction);
+<a class="jxr_linenumber" name="1471" href="#1471">1471</a> 							transfer.run();
+<a class="jxr_linenumber" name="1472" href="#1472">1472</a> 							<strong class="jxr_keyword">if</strong> (future.isSuccess()) {
+<a class="jxr_linenumber" name="1473" href="#1473">1473</a> 								R66Result resultRule = future.getResult();
+<a class="jxr_linenumber" name="1474" href="#1474">1474</a> 								srole = resultRule.file.getTrueFile().getAbsolutePath();
+<a class="jxr_linenumber" name="1475" href="#1475">1475</a> 								message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Roles"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.FileInto"</span>) + srole; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1476" href="#1476">1476</a> 							} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1477" href="#1477">1477</a> 								getRoles = false;
+<a class="jxr_linenumber" name="1478" href="#1478">1478</a> 								srole = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.CantGetFile"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Roles"</span>)+<span class="jxr_string">": "</span> + srole; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1479" href="#1479">1479</a> 								message += srole;
+<a class="jxr_linenumber" name="1480" href="#1480">1480</a> 							}
+<a class="jxr_linenumber" name="1481" href="#1481">1481</a> 						}
+<a class="jxr_linenumber" name="1482" href="#1482">1482</a> 						<strong class="jxr_keyword">if</strong> (getHost) {
+<a class="jxr_linenumber" name="1483" href="#1483">1483</a> 							textFieldHosts.setText(shost);
+<a class="jxr_linenumber" name="1484" href="#1484">1484</a> 						}
+<a class="jxr_linenumber" name="1485" href="#1485">1485</a> 						<strong class="jxr_keyword">if</strong> (getRule) {
+<a class="jxr_linenumber" name="1486" href="#1486">1486</a> 							textFieldRules.setText(srule);
+<a class="jxr_linenumber" name="1487" href="#1487">1487</a> 						}
+<a class="jxr_linenumber" name="1488" href="#1488">1488</a> 						<strong class="jxr_keyword">if</strong> (getBusiness) {
+<a class="jxr_linenumber" name="1489" href="#1489">1489</a> 							textFieldBusiness.setText(sbusiness);
+<a class="jxr_linenumber" name="1490" href="#1490">1490</a> 						}
+<a class="jxr_linenumber" name="1491" href="#1491">1491</a> 						<strong class="jxr_keyword">if</strong> (getAlias) {
+<a class="jxr_linenumber" name="1492" href="#1492">1492</a> 							textFieldAlias.setText(salias);
+<a class="jxr_linenumber" name="1493" href="#1493">1493</a> 						}
+<a class="jxr_linenumber" name="1494" href="#1494">1494</a> 						<strong class="jxr_keyword">if</strong> (getRoles) {
+<a class="jxr_linenumber" name="1495" href="#1495">1495</a> 							textFieldRoles.setText(srole);
+<a class="jxr_linenumber" name="1496" href="#1496">1496</a> 						}
+<a class="jxr_linenumber" name="1497" href="#1497">1497</a> 					}
+<a class="jxr_linenumber" name="1498" href="#1498">1498</a> 				}
+<a class="jxr_linenumber" name="1499" href="#1499">1499</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1500" href="#1500">1500</a> 				ValidPacket packet = (ValidPacket) result.other;
+<a class="jxr_linenumber" name="1501" href="#1501">1501</a> 				<strong class="jxr_keyword">if</strong> (packet != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1502" href="#1502">1502</a> 					resume = packet.getSheader();
+<a class="jxr_linenumber" name="1503" href="#1503">1503</a> 					String[] values = resume.split(<span class="jxr_string">" "</span>);
+<a class="jxr_linenumber" name="1504" href="#1504">1504</a> 					String shost = values[0];
+<a class="jxr_linenumber" name="1505" href="#1505">1505</a> 					String srule = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="1506" href="#1506">1506</a> 					<strong class="jxr_keyword">if</strong> (values.length &gt; 1) {
+<a class="jxr_linenumber" name="1507" href="#1507">1507</a> 						srule = values[1];
+<a class="jxr_linenumber" name="1508" href="#1508">1508</a> 					}
+<a class="jxr_linenumber" name="1509" href="#1509">1509</a> 					<strong class="jxr_keyword">if</strong> (ruleToGet == <strong class="jxr_keyword">null</strong> || ruleToGet.isEmpty()) {
+<a class="jxr_linenumber" name="1510" href="#1510">1510</a> 						message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.92"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1511" href="#1511">1511</a> 					}
+<a class="jxr_linenumber" name="1512" href="#1512">1512</a> 					<strong class="jxr_keyword">if</strong> (message.length() &gt; 1) {
+<a class="jxr_linenumber" name="1513" href="#1513">1513</a> 						<em class="jxr_comment">// error</em>
+<a class="jxr_linenumber" name="1514" href="#1514">1514</a> 						message = Messages.getString(<span class="jxr_string">"RequestInformation.Failure"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.123"</span>) + message; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1515" href="#1515">1515</a> 					} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1516" href="#1516">1516</a> 						<em class="jxr_comment">// get config files</em>
+<a class="jxr_linenumber" name="1517" href="#1517">1517</a> 						<strong class="jxr_keyword">if</strong> (getHost &amp;&amp; shost != <strong class="jxr_keyword">null</strong> &amp;&amp; ! shost.isEmpty()) {
+<a class="jxr_linenumber" name="1518" href="#1518">1518</a> 							future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="1519" href="#1519">1519</a> 							DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), shost,
+<a class="jxr_linenumber" name="1520" href="#1520">1520</a> 									ruleToGet, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Hosts"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.GetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1521" href="#1521">1521</a> 											+ AdminGui.environnement.hostId,
+<a class="jxr_linenumber" name="1522" href="#1522">1522</a> 									AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+<a class="jxr_linenumber" name="1523" href="#1523">1523</a> 									DbConstant.ILLEGALVALUE,
+<a class="jxr_linenumber" name="1524" href="#1524">1524</a> 									AdminGui.environnement.networkTransaction);
+<a class="jxr_linenumber" name="1525" href="#1525">1525</a> 							transfer.run();
+<a class="jxr_linenumber" name="1526" href="#1526">1526</a> 							<strong class="jxr_keyword">if</strong> (future.isSuccess()) {
+<a class="jxr_linenumber" name="1527" href="#1527">1527</a> 								R66Result resultHost = future.getResult();
+<a class="jxr_linenumber" name="1528" href="#1528">1528</a> 								shost = resultHost.file.getTrueFile().getAbsolutePath();
+<a class="jxr_linenumber" name="1529" href="#1529">1529</a> 								message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Hosts"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.FileInto"</span>) + shost+<span class="jxr_string">"\n"</span>; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1530" href="#1530">1530</a> 							} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1531" href="#1531">1531</a> 								getHost = false;
+<a class="jxr_linenumber" name="1532" href="#1532">1532</a> 								shost = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.CantGetFile"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Hosts"</span>)+<span class="jxr_string">": "</span> + shost; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1533" href="#1533">1533</a> 								message += shost;
+<a class="jxr_linenumber" name="1534" href="#1534">1534</a> 							}
+<a class="jxr_linenumber" name="1535" href="#1535">1535</a> 						}
+<a class="jxr_linenumber" name="1536" href="#1536">1536</a> 						<strong class="jxr_keyword">if</strong> (getRule &amp;&amp; srule != <strong class="jxr_keyword">null</strong> &amp;&amp; ! srule.isEmpty()) {
+<a class="jxr_linenumber" name="1537" href="#1537">1537</a> 							future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="1538" href="#1538">1538</a> 							DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), srule,
+<a class="jxr_linenumber" name="1539" href="#1539">1539</a> 									ruleToGet, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Rules"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.GetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1540" href="#1540">1540</a> 											+ AdminGui.environnement.hostId,
+<a class="jxr_linenumber" name="1541" href="#1541">1541</a> 									AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+<a class="jxr_linenumber" name="1542" href="#1542">1542</a> 									DbConstant.ILLEGALVALUE,
+<a class="jxr_linenumber" name="1543" href="#1543">1543</a> 									AdminGui.environnement.networkTransaction);
+<a class="jxr_linenumber" name="1544" href="#1544">1544</a> 							transfer.run();
+<a class="jxr_linenumber" name="1545" href="#1545">1545</a> 							<strong class="jxr_keyword">if</strong> (future.isSuccess()) {
+<a class="jxr_linenumber" name="1546" href="#1546">1546</a> 								R66Result resultRule = future.getResult();
+<a class="jxr_linenumber" name="1547" href="#1547">1547</a> 								srule = resultRule.file.getTrueFile().getAbsolutePath();
+<a class="jxr_linenumber" name="1548" href="#1548">1548</a> 								message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Rules"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.FileInto"</span>) + srule; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1549" href="#1549">1549</a> 							} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1550" href="#1550">1550</a> 								getRule = false;
+<a class="jxr_linenumber" name="1551" href="#1551">1551</a> 								srule = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.CantGetFile"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Rules"</span>)+<span class="jxr_string">": "</span> + srule; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1552" href="#1552">1552</a> 								message += srule;
+<a class="jxr_linenumber" name="1553" href="#1553">1553</a> 							}
+<a class="jxr_linenumber" name="1554" href="#1554">1554</a> 						}
+<a class="jxr_linenumber" name="1555" href="#1555">1555</a> 						<em class="jxr_comment">// then set downloaded file to text fields</em>
+<a class="jxr_linenumber" name="1556" href="#1556">1556</a> 						<strong class="jxr_keyword">if</strong> (getHost) {
+<a class="jxr_linenumber" name="1557" href="#1557">1557</a> 							textFieldHosts.setText(shost);
+<a class="jxr_linenumber" name="1558" href="#1558">1558</a> 						}
+<a class="jxr_linenumber" name="1559" href="#1559">1559</a> 						<strong class="jxr_keyword">if</strong> (getRule) {
+<a class="jxr_linenumber" name="1560" href="#1560">1560</a> 							textFieldRules.setText(srule);
+<a class="jxr_linenumber" name="1561" href="#1561">1561</a> 						}
+<a class="jxr_linenumber" name="1562" href="#1562">1562</a> 					}
+<a class="jxr_linenumber" name="1563" href="#1563">1563</a> 				}
+<a class="jxr_linenumber" name="1564" href="#1564">1564</a> 			}
+<a class="jxr_linenumber" name="1565" href="#1565">1565</a> 			<strong class="jxr_keyword">if</strong> (result.code == ErrorCode.Warning) {
+<a class="jxr_linenumber" name="1566" href="#1566">1566</a> 				message = Messages.getString(<span class="jxr_string">"RequestInformation.Warned"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.123"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1567" href="#1567">1567</a> 						+
+<a class="jxr_linenumber" name="1568" href="#1568">1568</a> 						(result.other != <strong class="jxr_keyword">null</strong> ? resume + message
+<a class="jxr_linenumber" name="1569" href="#1569">1569</a> 								:
+<a class="jxr_linenumber" name="1570" href="#1570">1570</a> 								Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.71"</span>)) <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1571" href="#1571">1571</a> 						+ Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.72"</span>) + delay; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1572" href="#1572">1572</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1573" href="#1573">1573</a> 				message = Messages.getString(<span class="jxr_string">"RequestInformation.Success"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.123"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1574" href="#1574">1574</a> 						+
+<a class="jxr_linenumber" name="1575" href="#1575">1575</a> 						(result.other != <strong class="jxr_keyword">null</strong> ? resume + message
+<a class="jxr_linenumber" name="1576" href="#1576">1576</a> 								:
+<a class="jxr_linenumber" name="1577" href="#1577">1577</a> 								Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.71"</span>)) <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1578" href="#1578">1578</a> 						+ Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.72"</span>) + delay; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1579" href="#1579">1579</a> 			}
+<a class="jxr_linenumber" name="1580" href="#1580">1580</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1581" href="#1581">1581</a> 			<strong class="jxr_keyword">if</strong> (result.code == ErrorCode.Warning) {
+<a class="jxr_linenumber" name="1582" href="#1582">1582</a> 				message = Messages.getString(<span class="jxr_string">"RequestInformation.Warned"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.123"</span>) + future.getCause(); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1583" href="#1583">1583</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1584" href="#1584">1584</a> 				message = Messages.getString(<span class="jxr_string">"RequestInformation.Failure"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.123"</span>) + future.getCause(); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1585" href="#1585">1585</a> 			}
+<a class="jxr_linenumber" name="1586" href="#1586">1586</a> 		}
+<a class="jxr_linenumber" name="1587" href="#1587">1587</a> 		AdminGui.environnement.GuiResultat = message;
+<a class="jxr_linenumber" name="1588" href="#1588">1588</a> 	}
+<a class="jxr_linenumber" name="1589" href="#1589">1589</a> 
+<a class="jxr_linenumber" name="1590" href="#1590">1590</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setConfig() {
+<a class="jxr_linenumber" name="1591" href="#1591">1591</a> 		DbHostAuth host = (DbHostAuth) comboBoxServer.getSelectedItem();
+<a class="jxr_linenumber" name="1592" href="#1592">1592</a> 		<strong class="jxr_keyword">if</strong> (host == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1593" href="#1593">1593</a> 			AdminGui.environnement.GuiResultat = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.164"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1594" href="#1594">1594</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="1595" href="#1595">1595</a> 		}
+<a class="jxr_linenumber" name="1596" href="#1596">1596</a> 		<strong class="jxr_keyword">long</strong> time1 = System.currentTimeMillis();
+<a class="jxr_linenumber" name="1597" href="#1597">1597</a> 		R66Future future = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="1598" href="#1598">1598</a> 		String hostfile = textFieldHosts.getText();
+<a class="jxr_linenumber" name="1599" href="#1599">1599</a> 		String rulefile = textFieldRules.getText();
+<a class="jxr_linenumber" name="1600" href="#1600">1600</a> 		String businessfile = textFieldBusiness.getText();
+<a class="jxr_linenumber" name="1601" href="#1601">1601</a> 		String aliasfile = textFieldAlias.getText();
+<a class="jxr_linenumber" name="1602" href="#1602">1602</a> 		String rolefile = textFieldRoles.getText();
+<a class="jxr_linenumber" name="1603" href="#1603">1603</a> 		<strong class="jxr_keyword">long</strong> hostid = DbConstant.ILLEGALVALUE, ruleid = DbConstant.ILLEGALVALUE, 
+<a class="jxr_linenumber" name="1604" href="#1604">1604</a> 				businessid = DbConstant.ILLEGALVALUE, aliasid = DbConstant.ILLEGALVALUE,
+<a class="jxr_linenumber" name="1605" href="#1605">1605</a> 				roleid = DbConstant.ILLEGALVALUE;
+<a class="jxr_linenumber" name="1606" href="#1606">1606</a> 		<strong class="jxr_keyword">boolean</strong> erazeHost = chckbxPurgeHosts.isSelected();
+<a class="jxr_linenumber" name="1607" href="#1607">1607</a> 		<strong class="jxr_keyword">boolean</strong> erazeRule = chckbxPurgeRules.isSelected();
+<a class="jxr_linenumber" name="1608" href="#1608">1608</a> 		<strong class="jxr_keyword">boolean</strong> erazeBusiness = chckbxPurgeBusiness.isSelected();
+<a class="jxr_linenumber" name="1609" href="#1609">1609</a> 		<strong class="jxr_keyword">boolean</strong> erazeAlias = chckbxPurgeAlias.isSelected();
+<a class="jxr_linenumber" name="1610" href="#1610">1610</a> 		<strong class="jxr_keyword">boolean</strong> erazeRole = chckbxPurgeRoles.isSelected();
+<a class="jxr_linenumber" name="1611" href="#1611">1611</a> 		String ruleToPut = (String) textRuleToPut.getSelectedItem();
+<a class="jxr_linenumber" name="1612" href="#1612">1612</a> 		String error = <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="1613" href="#1613">1613</a> 		String msg = <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="1614" href="#1614">1614</a> 		<em class="jxr_comment">// should send config files first</em>
+<a class="jxr_linenumber" name="1615" href="#1615">1615</a> 		<strong class="jxr_keyword">if</strong> ((hostfile == <strong class="jxr_keyword">null</strong> || hostfile.isEmpty()) &amp;&amp;
+<a class="jxr_linenumber" name="1616" href="#1616">1616</a> 			(rulefile == <strong class="jxr_keyword">null</strong> || rulefile.isEmpty()) &amp;&amp;
+<a class="jxr_linenumber" name="1617" href="#1617">1617</a> 			(businessfile == <strong class="jxr_keyword">null</strong> || businessfile.isEmpty()) &amp;&amp;
+<a class="jxr_linenumber" name="1618" href="#1618">1618</a> 			(aliasfile == <strong class="jxr_keyword">null</strong> || aliasfile.isEmpty()) &amp;&amp;
+<a class="jxr_linenumber" name="1619" href="#1619">1619</a> 			(rolefile == <strong class="jxr_keyword">null</strong> || rolefile.isEmpty())) {
+<a class="jxr_linenumber" name="1620" href="#1620">1620</a> 			error = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.134"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1621" href="#1621">1621</a> 		}
+<a class="jxr_linenumber" name="1622" href="#1622">1622</a> 		<strong class="jxr_keyword">if</strong> (ruleToPut == <strong class="jxr_keyword">null</strong> || ruleToPut.isEmpty()) {
+<a class="jxr_linenumber" name="1623" href="#1623">1623</a> 			error = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.135"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1624" href="#1624">1624</a> 		}
+<a class="jxr_linenumber" name="1625" href="#1625">1625</a> 		String message = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="1626" href="#1626">1626</a> 		<strong class="jxr_keyword">if</strong> (error.length() &gt; 1) {
+<a class="jxr_linenumber" name="1627" href="#1627">1627</a> 			<em class="jxr_comment">// error</em>
+<a class="jxr_linenumber" name="1628" href="#1628">1628</a> 			message = Messages.getString(<span class="jxr_string">"RequestInformation.Failure"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.123"</span>) + error; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1629" href="#1629">1629</a> 			AdminGui.environnement.GuiResultat = message;
+<a class="jxr_linenumber" name="1630" href="#1630">1630</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="1631" href="#1631">1631</a> 		}
+<a class="jxr_linenumber" name="1632" href="#1632">1632</a> 		<strong class="jxr_keyword">if</strong> (hostfile != <strong class="jxr_keyword">null</strong> &amp;&amp; hostfile.length() &gt; 1) {
+<a class="jxr_linenumber" name="1633" href="#1633">1633</a> 			future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="1634" href="#1634">1634</a> 			DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), hostfile,
+<a class="jxr_linenumber" name="1635" href="#1635">1635</a> 					ruleToPut, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Hosts"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.SetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1636" href="#1636">1636</a> 							+ AdminGui.environnement.hostId,
+<a class="jxr_linenumber" name="1637" href="#1637">1637</a> 					AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+<a class="jxr_linenumber" name="1638" href="#1638">1638</a> 					DbConstant.ILLEGALVALUE,
+<a class="jxr_linenumber" name="1639" href="#1639">1639</a> 					AdminGui.environnement.networkTransaction);
+<a class="jxr_linenumber" name="1640" href="#1640">1640</a> 			transfer.run();
+<a class="jxr_linenumber" name="1641" href="#1641">1641</a> 			<strong class="jxr_keyword">if</strong> (!future.isSuccess()) {
+<a class="jxr_linenumber" name="1642" href="#1642">1642</a> 				error = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.138"</span>) + hostfile; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1643" href="#1643">1643</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1644" href="#1644">1644</a> 				msg += <span class="jxr_string">" "</span>+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Hosts"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.ConfigTransmitted"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1645" href="#1645">1645</a> 				hostid = future.runner.getSpecialId();
+<a class="jxr_linenumber" name="1646" href="#1646">1646</a> 			}
+<a class="jxr_linenumber" name="1647" href="#1647">1647</a> 		}
+<a class="jxr_linenumber" name="1648" href="#1648">1648</a> 		<strong class="jxr_keyword">if</strong> (error.length() &gt; 1) {
+<a class="jxr_linenumber" name="1649" href="#1649">1649</a> 			<em class="jxr_comment">// error</em>
+<a class="jxr_linenumber" name="1650" href="#1650">1650</a> 			message = Messages.getString(<span class="jxr_string">"RequestInformation.Failure"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.158"</span>) + error; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1651" href="#1651">1651</a> 			AdminGui.environnement.GuiResultat = message;
+<a class="jxr_linenumber" name="1652" href="#1652">1652</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="1653" href="#1653">1653</a> 		}
+<a class="jxr_linenumber" name="1654" href="#1654">1654</a> 		<strong class="jxr_keyword">if</strong> (rulefile != <strong class="jxr_keyword">null</strong> &amp;&amp; rulefile.length() &gt; 1) {
+<a class="jxr_linenumber" name="1655" href="#1655">1655</a> 			future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="1656" href="#1656">1656</a> 			DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), rulefile,
+<a class="jxr_linenumber" name="1657" href="#1657">1657</a> 					ruleToPut, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Rules"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.SetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1658" href="#1658">1658</a> 							+ AdminGui.environnement.hostId,
+<a class="jxr_linenumber" name="1659" href="#1659">1659</a> 					AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+<a class="jxr_linenumber" name="1660" href="#1660">1660</a> 					DbConstant.ILLEGALVALUE,
+<a class="jxr_linenumber" name="1661" href="#1661">1661</a> 					AdminGui.environnement.networkTransaction);
+<a class="jxr_linenumber" name="1662" href="#1662">1662</a> 			transfer.run();
+<a class="jxr_linenumber" name="1663" href="#1663">1663</a> 			<strong class="jxr_keyword">if</strong> (!future.isSuccess()) {
+<a class="jxr_linenumber" name="1664" href="#1664">1664</a> 				error += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.142"</span>) + rulefile; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1665" href="#1665">1665</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1666" href="#1666">1666</a> 				msg += <span class="jxr_string">" "</span>+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Rules"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.ConfigTransmitted"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1667" href="#1667">1667</a> 				ruleid = future.runner.getSpecialId();
+<a class="jxr_linenumber" name="1668" href="#1668">1668</a> 			}
+<a class="jxr_linenumber" name="1669" href="#1669">1669</a> 		}
+<a class="jxr_linenumber" name="1670" href="#1670">1670</a> 		<strong class="jxr_keyword">if</strong> (error.length() &gt; 1) {
+<a class="jxr_linenumber" name="1671" href="#1671">1671</a> 			<em class="jxr_comment">// error</em>
+<a class="jxr_linenumber" name="1672" href="#1672">1672</a> 			message = Messages.getString(<span class="jxr_string">"RequestInformation.Failure"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.158"</span>) + error; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1673" href="#1673">1673</a> 			AdminGui.environnement.GuiResultat = message;
+<a class="jxr_linenumber" name="1674" href="#1674">1674</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="1675" href="#1675">1675</a> 		}
+<a class="jxr_linenumber" name="1676" href="#1676">1676</a> 		<strong class="jxr_keyword">boolean</strong> useJson = PartnerConfiguration.useJson(host.getHostid());
+<a class="jxr_linenumber" name="1677" href="#1677">1677</a> 		logger.debug(<span class="jxr_string">"UseJson: "</span>+useJson); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1678" href="#1678">1678</a> 		<strong class="jxr_keyword">if</strong> (useJson) {
+<a class="jxr_linenumber" name="1679" href="#1679">1679</a> 			<strong class="jxr_keyword">if</strong> (businessfile != <strong class="jxr_keyword">null</strong> &amp;&amp; businessfile.length() &gt; 1) {
+<a class="jxr_linenumber" name="1680" href="#1680">1680</a> 				future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="1681" href="#1681">1681</a> 				DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), businessfile,
+<a class="jxr_linenumber" name="1682" href="#1682">1682</a> 						ruleToPut, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Business"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.SetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1683" href="#1683">1683</a> 								+ AdminGui.environnement.hostId,
+<a class="jxr_linenumber" name="1684" href="#1684">1684</a> 						AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+<a class="jxr_linenumber" name="1685" href="#1685">1685</a> 						DbConstant.ILLEGALVALUE,
+<a class="jxr_linenumber" name="1686" href="#1686">1686</a> 						AdminGui.environnement.networkTransaction);
+<a class="jxr_linenumber" name="1687" href="#1687">1687</a> 				transfer.run();
+<a class="jxr_linenumber" name="1688" href="#1688">1688</a> 				<strong class="jxr_keyword">if</strong> (!future.isSuccess()) {
+<a class="jxr_linenumber" name="1689" href="#1689">1689</a> 					error += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.142"</span>) + businessfile; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1690" href="#1690">1690</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1691" href="#1691">1691</a> 					msg += <span class="jxr_string">" "</span>+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Business"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.ConfigTransmitted"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1692" href="#1692">1692</a> 					businessid = future.runner.getSpecialId();
+<a class="jxr_linenumber" name="1693" href="#1693">1693</a> 				}
+<a class="jxr_linenumber" name="1694" href="#1694">1694</a> 			}
+<a class="jxr_linenumber" name="1695" href="#1695">1695</a> 			<strong class="jxr_keyword">if</strong> (error.length() &gt; 1) {
+<a class="jxr_linenumber" name="1696" href="#1696">1696</a> 				<em class="jxr_comment">// error</em>
+<a class="jxr_linenumber" name="1697" href="#1697">1697</a> 				message = Messages.getString(<span class="jxr_string">"RequestInformation.Failure"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.158"</span>) + error; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1698" href="#1698">1698</a> 				AdminGui.environnement.GuiResultat = message;
+<a class="jxr_linenumber" name="1699" href="#1699">1699</a> 				<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="1700" href="#1700">1700</a> 			}
+<a class="jxr_linenumber" name="1701" href="#1701">1701</a> 			<strong class="jxr_keyword">if</strong> (aliasfile != <strong class="jxr_keyword">null</strong> &amp;&amp; aliasfile.length() &gt; 1) {
+<a class="jxr_linenumber" name="1702" href="#1702">1702</a> 				future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="1703" href="#1703">1703</a> 				DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), aliasfile,
+<a class="jxr_linenumber" name="1704" href="#1704">1704</a> 						ruleToPut, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Alias"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.SetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1705" href="#1705">1705</a> 								+ AdminGui.environnement.hostId,
+<a class="jxr_linenumber" name="1706" href="#1706">1706</a> 						AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+<a class="jxr_linenumber" name="1707" href="#1707">1707</a> 						DbConstant.ILLEGALVALUE,
+<a class="jxr_linenumber" name="1708" href="#1708">1708</a> 						AdminGui.environnement.networkTransaction);
+<a class="jxr_linenumber" name="1709" href="#1709">1709</a> 				transfer.run();
+<a class="jxr_linenumber" name="1710" href="#1710">1710</a> 				<strong class="jxr_keyword">if</strong> (!future.isSuccess()) {
+<a class="jxr_linenumber" name="1711" href="#1711">1711</a> 					error += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.142"</span>) + aliasfile; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1712" href="#1712">1712</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1713" href="#1713">1713</a> 					msg += <span class="jxr_string">" "</span>+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Alias"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.ConfigTransmitted"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1714" href="#1714">1714</a> 					aliasid = future.runner.getSpecialId();
+<a class="jxr_linenumber" name="1715" href="#1715">1715</a> 				}
+<a class="jxr_linenumber" name="1716" href="#1716">1716</a> 			}
+<a class="jxr_linenumber" name="1717" href="#1717">1717</a> 			<strong class="jxr_keyword">if</strong> (error.length() &gt; 1) {
+<a class="jxr_linenumber" name="1718" href="#1718">1718</a> 				<em class="jxr_comment">// error</em>
+<a class="jxr_linenumber" name="1719" href="#1719">1719</a> 				message = Messages.getString(<span class="jxr_string">"RequestInformation.Failure"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.158"</span>) + error; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1720" href="#1720">1720</a> 				AdminGui.environnement.GuiResultat = message;
+<a class="jxr_linenumber" name="1721" href="#1721">1721</a> 				<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="1722" href="#1722">1722</a> 			}
+<a class="jxr_linenumber" name="1723" href="#1723">1723</a> 			<strong class="jxr_keyword">if</strong> (rolefile != <strong class="jxr_keyword">null</strong> &amp;&amp; rolefile.length() &gt; 1) {
+<a class="jxr_linenumber" name="1724" href="#1724">1724</a> 				future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="1725" href="#1725">1725</a> 				DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(), rolefile,
+<a class="jxr_linenumber" name="1726" href="#1726">1726</a> 						ruleToPut, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Roles"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.SetConfig"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1727" href="#1727">1727</a> 								+ AdminGui.environnement.hostId,
+<a class="jxr_linenumber" name="1728" href="#1728">1728</a> 						AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+<a class="jxr_linenumber" name="1729" href="#1729">1729</a> 						DbConstant.ILLEGALVALUE,
+<a class="jxr_linenumber" name="1730" href="#1730">1730</a> 						AdminGui.environnement.networkTransaction);
+<a class="jxr_linenumber" name="1731" href="#1731">1731</a> 				transfer.run();
+<a class="jxr_linenumber" name="1732" href="#1732">1732</a> 				<strong class="jxr_keyword">if</strong> (!future.isSuccess()) {
+<a class="jxr_linenumber" name="1733" href="#1733">1733</a> 					error += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.142"</span>) + rolefile; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1734" href="#1734">1734</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1735" href="#1735">1735</a> 					msg += <span class="jxr_string">" "</span>+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Roles"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.ConfigTransmitted"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1736" href="#1736">1736</a> 					roleid = future.runner.getSpecialId();
+<a class="jxr_linenumber" name="1737" href="#1737">1737</a> 				}
+<a class="jxr_linenumber" name="1738" href="#1738">1738</a> 			}
+<a class="jxr_linenumber" name="1739" href="#1739">1739</a> 			<strong class="jxr_keyword">if</strong> (error.length() &gt; 1) {
+<a class="jxr_linenumber" name="1740" href="#1740">1740</a> 				<em class="jxr_comment">// error</em>
+<a class="jxr_linenumber" name="1741" href="#1741">1741</a> 				message = Messages.getString(<span class="jxr_string">"RequestInformation.Failure"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.158"</span>) + error; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1742" href="#1742">1742</a> 				AdminGui.environnement.GuiResultat = message;
+<a class="jxr_linenumber" name="1743" href="#1743">1743</a> 				<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="1744" href="#1744">1744</a> 			}
+<a class="jxr_linenumber" name="1745" href="#1745">1745</a> 		}
+<a class="jxr_linenumber" name="1746" href="#1746">1746</a> 		future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="1747" href="#1747">1747</a> 		ConfigImport importCmd = <strong class="jxr_keyword">new</strong> ConfigImport(future, erazeHost, erazeRule, erazeBusiness, erazeAlias, erazeRole,
+<a class="jxr_linenumber" name="1748" href="#1748">1748</a> 				hostfile, rulefile, businessfile, aliasfile, rolefile,
+<a class="jxr_linenumber" name="1749" href="#1749">1749</a> 				AdminGui.environnement.networkTransaction);
+<a class="jxr_linenumber" name="1750" href="#1750">1750</a> 		importCmd.setSpecialIds(hostid, ruleid, businessid, aliasid, roleid);
+<a class="jxr_linenumber" name="1751" href="#1751">1751</a> 		importCmd.setHost(host);
+<a class="jxr_linenumber" name="1752" href="#1752">1752</a> 		importCmd.run();
+<a class="jxr_linenumber" name="1753" href="#1753">1753</a> 		future.awaitUninterruptibly();
+<a class="jxr_linenumber" name="1754" href="#1754">1754</a> 		<strong class="jxr_keyword">long</strong> time2 = System.currentTimeMillis();
+<a class="jxr_linenumber" name="1755" href="#1755">1755</a> 		<strong class="jxr_keyword">long</strong> delay = time2 - time1;
+<a class="jxr_linenumber" name="1756" href="#1756">1756</a> 		R66Result result = future.getResult();
+<a class="jxr_linenumber" name="1757" href="#1757">1757</a> 		<strong class="jxr_keyword">if</strong> (future.isSuccess()) {
+<a class="jxr_linenumber" name="1758" href="#1758">1758</a> 			String resume = msg;
+<a class="jxr_linenumber" name="1759" href="#1759">1759</a> 			<strong class="jxr_keyword">if</strong> (result.other != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1760" href="#1760">1760</a> 				<strong class="jxr_keyword">if</strong> (useJson) {
+<a class="jxr_linenumber" name="1761" href="#1761">1761</a> 					resume = ((JsonCommandPacket) result.other).getRequest();
+<a class="jxr_linenumber" name="1762" href="#1762">1762</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1763" href="#1763">1763</a> 					resume = ((ValidPacket) result.other).getSheader();
+<a class="jxr_linenumber" name="1764" href="#1764">1764</a> 				}
+<a class="jxr_linenumber" name="1765" href="#1765">1765</a> 				resume += msg;
+<a class="jxr_linenumber" name="1766" href="#1766">1766</a> 			}
+<a class="jxr_linenumber" name="1767" href="#1767">1767</a> 			<strong class="jxr_keyword">if</strong> (result.code == ErrorCode.Warning) {
+<a class="jxr_linenumber" name="1768" href="#1768">1768</a> 				message = Messages.getString(<span class="jxr_string">"RequestInformation.Warned"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.158"</span>) + <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1769" href="#1769">1769</a> 						resume
+<a class="jxr_linenumber" name="1770" href="#1770">1770</a> 						+ Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.72"</span>) + delay; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1771" href="#1771">1771</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1772" href="#1772">1772</a> 				message = Messages.getString(<span class="jxr_string">"RequestInformation.Success"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.158"</span>) + <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1773" href="#1773">1773</a> 						resume
+<a class="jxr_linenumber" name="1774" href="#1774">1774</a> 						+ Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.72"</span>) + delay; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1775" href="#1775">1775</a> 			}
+<a class="jxr_linenumber" name="1776" href="#1776">1776</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1777" href="#1777">1777</a> 			<strong class="jxr_keyword">if</strong> (result.code == ErrorCode.Warning) {
+<a class="jxr_linenumber" name="1778" href="#1778">1778</a> 				message = Messages.getString(<span class="jxr_string">"RequestInformation.Warned"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.158"</span>) + future.getCause() + msg; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1779" href="#1779">1779</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1780" href="#1780">1780</a> 				message = Messages.getString(<span class="jxr_string">"RequestInformation.Failure"</span>)+Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.158"</span>) + future.getCause(); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1781" href="#1781">1781</a> 			}
+<a class="jxr_linenumber" name="1782" href="#1782">1782</a> 		}
+<a class="jxr_linenumber" name="1783" href="#1783">1783</a> 		AdminGui.environnement.GuiResultat = message;
+<a class="jxr_linenumber" name="1784" href="#1784">1784</a> 	}
+<a class="jxr_linenumber" name="1785" href="#1785">1785</a> 
+<a class="jxr_linenumber" name="1786" href="#1786">1786</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> exportLog() {
+<a class="jxr_linenumber" name="1787" href="#1787">1787</a> 		DbHostAuth host = (DbHostAuth) comboBoxServer.getSelectedItem();
+<a class="jxr_linenumber" name="1788" href="#1788">1788</a> 		<strong class="jxr_keyword">if</strong> (host == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1789" href="#1789">1789</a> 			AdminGui.environnement.GuiResultat = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.164"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1790" href="#1790">1790</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="1791" href="#1791">1791</a> 		}
+<a class="jxr_linenumber" name="1792" href="#1792">1792</a> 		<strong class="jxr_keyword">long</strong> time1 = System.currentTimeMillis();
+<a class="jxr_linenumber" name="1793" href="#1793">1793</a> 		<strong class="jxr_keyword">boolean</strong> purgeLog = chckbxPurge.isSelected();
+<a class="jxr_linenumber" name="1794" href="#1794">1794</a> 		<strong class="jxr_keyword">boolean</strong> clean = chckbxClean.isSelected();
+<a class="jxr_linenumber" name="1795" href="#1795">1795</a> 		Timestamp start = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="1796" href="#1796">1796</a> 		Timestamp stop = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="1797" href="#1797">1797</a> 		String sstart = textFieldStart.getText();
+<a class="jxr_linenumber" name="1798" href="#1798">1798</a> 		String sstop = textFieldStop.getText();
+<a class="jxr_linenumber" name="1799" href="#1799">1799</a> 		<strong class="jxr_keyword">if</strong> (sstart != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1800" href="#1800">1800</a> 			start = WaarpStringUtils.fixDate(sstart);
+<a class="jxr_linenumber" name="1801" href="#1801">1801</a> 		}
+<a class="jxr_linenumber" name="1802" href="#1802">1802</a> 		<strong class="jxr_keyword">if</strong> (sstop != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1803" href="#1803">1803</a> 			stop = WaarpStringUtils.fixDate(sstop, start);
+<a class="jxr_linenumber" name="1804" href="#1804">1804</a> 		}
+<a class="jxr_linenumber" name="1805" href="#1805">1805</a> 		<strong class="jxr_keyword">if</strong> (start == <strong class="jxr_keyword">null</strong> &amp;&amp; stop == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1806" href="#1806">1806</a> 			stop = WaarpStringUtils.getTodayMidnight();
+<a class="jxr_linenumber" name="1807" href="#1807">1807</a> 		}
+<a class="jxr_linenumber" name="1808" href="#1808">1808</a> 		<strong class="jxr_keyword">if</strong> (start != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1809" href="#1809">1809</a> 			System.err.println(Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Start"</span>) + (<strong class="jxr_keyword">new</strong> Date(start.getTime())).toString()); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1810" href="#1810">1810</a> 		}
+<a class="jxr_linenumber" name="1811" href="#1811">1811</a> 		<strong class="jxr_keyword">if</strong> (stop != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1812" href="#1812">1812</a> 			System.err.println(Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.Stop"</span>) + (<strong class="jxr_keyword">new</strong> Date(stop.getTime())).toString()); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1813" href="#1813">1813</a> 		}
+<a class="jxr_linenumber" name="1814" href="#1814">1814</a> 		String rulefilter = textFieldLogRule.getText();
+<a class="jxr_linenumber" name="1815" href="#1815">1815</a> 		<strong class="jxr_keyword">if</strong> (rulefilter != <strong class="jxr_keyword">null</strong> &amp;&amp; rulefilter.isEmpty()) {
+<a class="jxr_linenumber" name="1816" href="#1816">1816</a> 			rulefilter = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="1817" href="#1817">1817</a> 		}
+<a class="jxr_linenumber" name="1818" href="#1818">1818</a> 		String hostfilter = textFieldLogHost.getText();
+<a class="jxr_linenumber" name="1819" href="#1819">1819</a> 		<strong class="jxr_keyword">if</strong> (hostfilter != <strong class="jxr_keyword">null</strong> &amp;&amp; hostfilter.isEmpty()) {
+<a class="jxr_linenumber" name="1820" href="#1820">1820</a> 			hostfilter = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="1821" href="#1821">1821</a> 		}
+<a class="jxr_linenumber" name="1822" href="#1822">1822</a> 		
+<a class="jxr_linenumber" name="1823" href="#1823">1823</a> 		R66Future future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="1824" href="#1824">1824</a> 		<strong class="jxr_keyword">boolean</strong> useJson = PartnerConfiguration.useJson(host.getHostid());
+<a class="jxr_linenumber" name="1825" href="#1825">1825</a> 		logger.debug(<span class="jxr_string">"UseJson: "</span>+useJson); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1826" href="#1826">1826</a> 		<strong class="jxr_keyword">if</strong> (useJson) {
+<a class="jxr_linenumber" name="1827" href="#1827">1827</a> 			LogExtendedExport export = <strong class="jxr_keyword">new</strong> LogExtendedExport(future, clean, purgeLog, start,
+<a class="jxr_linenumber" name="1828" href="#1828">1828</a> 							stop, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, rulefilter, hostfilter,
+<a class="jxr_linenumber" name="1829" href="#1829">1829</a> 							chckbxPending.isSelected(), chckbxRunning.isSelected(), chckbxDone.isSelected(), chckbxInError.isSelected(),
+<a class="jxr_linenumber" name="1830" href="#1830">1830</a> 							AdminGui.environnement.networkTransaction, host);
+<a class="jxr_linenumber" name="1831" href="#1831">1831</a> 			export.run();
+<a class="jxr_linenumber" name="1832" href="#1832">1832</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1833" href="#1833">1833</a> 			LogExport export = <strong class="jxr_keyword">new</strong> LogExport(future, purgeLog, clean, start, stop,
+<a class="jxr_linenumber" name="1834" href="#1834">1834</a> 					AdminGui.environnement.networkTransaction);
+<a class="jxr_linenumber" name="1835" href="#1835">1835</a> 			export.setHost(host);
+<a class="jxr_linenumber" name="1836" href="#1836">1836</a> 			export.run();
+<a class="jxr_linenumber" name="1837" href="#1837">1837</a> 		}
+<a class="jxr_linenumber" name="1838" href="#1838">1838</a> 		future.awaitUninterruptibly();
+<a class="jxr_linenumber" name="1839" href="#1839">1839</a> 		<strong class="jxr_keyword">long</strong> time2 = System.currentTimeMillis();
+<a class="jxr_linenumber" name="1840" href="#1840">1840</a> 		<strong class="jxr_keyword">long</strong> delay = time2 - time1;
+<a class="jxr_linenumber" name="1841" href="#1841">1841</a> 		R66Result result = future.getResult();
+<a class="jxr_linenumber" name="1842" href="#1842">1842</a> 		String message = <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="1843" href="#1843">1843</a> 		<strong class="jxr_keyword">if</strong> (future.isSuccess()) {
+<a class="jxr_linenumber" name="1844" href="#1844">1844</a> 			AbstractLocalPacket packet = (AbstractLocalPacket) result.other;
+<a class="jxr_linenumber" name="1845" href="#1845">1845</a> 			String value = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="1846" href="#1846">1846</a> 			<strong class="jxr_keyword">if</strong> (packet != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1847" href="#1847">1847</a> 				String fileExported = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="1848" href="#1848">1848</a> 				<strong class="jxr_keyword">if</strong> (useJson) {
+<a class="jxr_linenumber" name="1849" href="#1849">1849</a> 					value = ((JsonCommandPacket) packet).getRequest();
+<a class="jxr_linenumber" name="1850" href="#1850">1850</a> 					LogResponseJsonPacket node = (LogResponseJsonPacket) ((JsonCommandPacket) packet).getJsonRequest();
+<a class="jxr_linenumber" name="1851" href="#1851">1851</a> 					fileExported = node.getFilename();
+<a class="jxr_linenumber" name="1852" href="#1852">1852</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1853" href="#1853">1853</a> 					value = ((ValidPacket) packet).getSheader();
+<a class="jxr_linenumber" name="1854" href="#1854">1854</a> 					String[] values = value.split(<span class="jxr_string">" "</span>);
+<a class="jxr_linenumber" name="1855" href="#1855">1855</a> 					fileExported = values[0];
+<a class="jxr_linenumber" name="1856" href="#1856">1856</a> 				}
+<a class="jxr_linenumber" name="1857" href="#1857">1857</a> 				textFieldResult.setText(fileExported);
+<a class="jxr_linenumber" name="1858" href="#1858">1858</a> 				<em class="jxr_comment">// download logs</em>
+<a class="jxr_linenumber" name="1859" href="#1859">1859</a> 				<strong class="jxr_keyword">if</strong> (fileExported != <strong class="jxr_keyword">null</strong> &amp;&amp; ! fileExported.isEmpty()) {
+<a class="jxr_linenumber" name="1860" href="#1860">1860</a> 					String ruleToExport = (String) textRuleToExportLog.getSelectedItem();
+<a class="jxr_linenumber" name="1861" href="#1861">1861</a> 					<strong class="jxr_keyword">if</strong> (ruleToExport == <strong class="jxr_keyword">null</strong> || ruleToExport.isEmpty()) {
+<a class="jxr_linenumber" name="1862" href="#1862">1862</a> 						message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.170"</span>) + fileExported + Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.171"</span>); <em class="jxr_comment">//$NON-NLS-1$ //$NON-NLS-2$</em>
+<a class="jxr_linenumber" name="1863" href="#1863">1863</a> 					} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1864" href="#1864">1864</a> 						future = <strong class="jxr_keyword">new</strong> R66Future(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="1865" href="#1865">1865</a> 						DirectTransfer transfer = <strong class="jxr_keyword">new</strong> DirectTransfer(future, host.getHostid(),
+<a class="jxr_linenumber" name="1866" href="#1866">1866</a> 								fileExported,
+<a class="jxr_linenumber" name="1867" href="#1867">1867</a> 								ruleToExport, Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.172"</span>) <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1868" href="#1868">1868</a> 										+ AdminGui.environnement.hostId,
+<a class="jxr_linenumber" name="1869" href="#1869">1869</a> 								AdminGui.environnement.isMD5, Configuration.configuration.BLOCKSIZE,
+<a class="jxr_linenumber" name="1870" href="#1870">1870</a> 								DbConstant.ILLEGALVALUE,
+<a class="jxr_linenumber" name="1871" href="#1871">1871</a> 								AdminGui.environnement.networkTransaction);
+<a class="jxr_linenumber" name="1872" href="#1872">1872</a> 						transfer.run();
+<a class="jxr_linenumber" name="1873" href="#1873">1873</a> 						<strong class="jxr_keyword">if</strong> (!future.isSuccess()) {
+<a class="jxr_linenumber" name="1874" href="#1874">1874</a> 							message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.170"</span>) + fileExported + <span class="jxr_string">"\n"</span>; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1875" href="#1875">1875</a> 						} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1876" href="#1876">1876</a> 							textFieldResult.setText(future.getResult().file.getTrueFile()
+<a class="jxr_linenumber" name="1877" href="#1877">1877</a> 									.getAbsolutePath());
+<a class="jxr_linenumber" name="1878" href="#1878">1878</a> 						}
+<a class="jxr_linenumber" name="1879" href="#1879">1879</a> 					}
+<a class="jxr_linenumber" name="1880" href="#1880">1880</a> 				}
+<a class="jxr_linenumber" name="1881" href="#1881">1881</a> 			}
+<a class="jxr_linenumber" name="1882" href="#1882">1882</a> 			<strong class="jxr_keyword">if</strong> (result.code == ErrorCode.Warning) {
+<a class="jxr_linenumber" name="1883" href="#1883">1883</a> 				message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.175"</span>, Messages.getString(<span class="jxr_string">"RequestInformation.Warned"</span>)) + <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1884" href="#1884">1884</a> 						(result.other != <strong class="jxr_keyword">null</strong> ? value :
+<a class="jxr_linenumber" name="1885" href="#1885">1885</a> 								Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.71"</span>)) <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1886" href="#1886">1886</a> 						+ Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.72"</span>) + delay+<span class="jxr_string">"\n"</span>; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1887" href="#1887">1887</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1888" href="#1888">1888</a> 				message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.175"</span>, Messages.getString(<span class="jxr_string">"RequestInformation.Success"</span>)) + <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1889" href="#1889">1889</a> 						(result.other != <strong class="jxr_keyword">null</strong> ? value :
+<a class="jxr_linenumber" name="1890" href="#1890">1890</a> 								Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.71"</span>)) <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1891" href="#1891">1891</a> 						+ Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.72"</span>) + delay; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1892" href="#1892">1892</a> 			}
+<a class="jxr_linenumber" name="1893" href="#1893">1893</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1894" href="#1894">1894</a> 			<strong class="jxr_keyword">if</strong> (result.code == ErrorCode.Warning) {
+<a class="jxr_linenumber" name="1895" href="#1895">1895</a> 				message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.175"</span>, Messages.getString(<span class="jxr_string">"RequestInformation.Warned"</span>)) + future.getCause(); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1896" href="#1896">1896</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1897" href="#1897">1897</a> 				message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.175"</span>, Messages.getString(<span class="jxr_string">"RequestInformation.Failure"</span>)) + future.getCause(); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1898" href="#1898">1898</a> 			}
+<a class="jxr_linenumber" name="1899" href="#1899">1899</a> 		}
+<a class="jxr_linenumber" name="1900" href="#1900">1900</a> 		AdminGui.environnement.GuiResultat = message;
+<a class="jxr_linenumber" name="1901" href="#1901">1901</a> 	}
+<a class="jxr_linenumber" name="1902" href="#1902">1902</a> 
+<a class="jxr_linenumber" name="1903" href="#1903">1903</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> shutdown() {
+<a class="jxr_linenumber" name="1904" href="#1904">1904</a> 		DbHostAuth host = (DbHostAuth) comboBoxServer.getSelectedItem();
+<a class="jxr_linenumber" name="1905" href="#1905">1905</a> 		<strong class="jxr_keyword">if</strong> (host == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1906" href="#1906">1906</a> 			AdminGui.environnement.GuiResultat = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.164"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1907" href="#1907">1907</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="1908" href="#1908">1908</a> 		}
+<a class="jxr_linenumber" name="1909" href="#1909">1909</a> 		String skey = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="1910" href="#1910">1910</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="1911" href="#1911">1911</a> 			<strong class="jxr_keyword">char</strong>[] pwd = passwordField.getPassword();
+<a class="jxr_linenumber" name="1912" href="#1912">1912</a> 			<strong class="jxr_keyword">if</strong> (pwd == <strong class="jxr_keyword">null</strong> || pwd.length == 0) {
+<a class="jxr_linenumber" name="1913" href="#1913">1913</a> 				AdminGui.environnement.GuiResultat = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.186"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1914" href="#1914">1914</a> 				<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="1915" href="#1915">1915</a> 			}
+<a class="jxr_linenumber" name="1916" href="#1916">1916</a> 			skey = <strong class="jxr_keyword">new</strong> String(pwd);
+<a class="jxr_linenumber" name="1917" href="#1917">1917</a> 		} <strong class="jxr_keyword">catch</strong> (NullPointerException e) {
+<a class="jxr_linenumber" name="1918" href="#1918">1918</a> 			AdminGui.environnement.GuiResultat = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.186"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1919" href="#1919">1919</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="1920" href="#1920">1920</a> 		}
+<a class="jxr_linenumber" name="1921" href="#1921">1921</a> 		<strong class="jxr_keyword">long</strong> time1 = System.currentTimeMillis();
+<a class="jxr_linenumber" name="1922" href="#1922">1922</a> 		byte[] key;
+<a class="jxr_linenumber" name="1923" href="#1923">1923</a> 		key = FilesystemBasedDigest.passwdCrypt(skey.getBytes(WaarpStringUtils.UTF8));
+<a class="jxr_linenumber" name="1924" href="#1924">1924</a> 		AbstractLocalPacket packet = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="1925" href="#1925">1925</a> 		<strong class="jxr_keyword">if</strong> (rdbtnShutdown.isSelected()) {
+<a class="jxr_linenumber" name="1926" href="#1926">1926</a> 			<strong class="jxr_keyword">if</strong> (chckbxRestart.isSelected()) {
+<a class="jxr_linenumber" name="1927" href="#1927">1927</a> 				packet = <strong class="jxr_keyword">new</strong> ShutdownPacket(key, (byte) 1);
+<a class="jxr_linenumber" name="1928" href="#1928">1928</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1929" href="#1929">1929</a> 				packet = <strong class="jxr_keyword">new</strong> ShutdownPacket(key);
+<a class="jxr_linenumber" name="1930" href="#1930">1930</a> 			}
+<a class="jxr_linenumber" name="1931" href="#1931">1931</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1932" href="#1932">1932</a> 			packet = <strong class="jxr_keyword">new</strong> BlockRequestPacket(chckbxBlockUnblock.isSelected(), key);
+<a class="jxr_linenumber" name="1933" href="#1933">1933</a> 		}
+<a class="jxr_linenumber" name="1934" href="#1934">1934</a> 		String message = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="1935" href="#1935">1935</a> 		<strong class="jxr_keyword">final</strong> SocketAddress socketServerAddress;
+<a class="jxr_linenumber" name="1936" href="#1936">1936</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="1937" href="#1937">1937</a> 			socketServerAddress = host.getSocketAddress();
+<a class="jxr_linenumber" name="1938" href="#1938">1938</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
+<a class="jxr_linenumber" name="1939" href="#1939">1939</a> 			message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.187"</span>) + Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.188"</span>) + host.getHostid(); <em class="jxr_comment">//$NON-NLS-1$ //$NON-NLS-2$</em>
+<a class="jxr_linenumber" name="1940" href="#1940">1940</a> 			AdminGui.environnement.GuiResultat = message;
+<a class="jxr_linenumber" name="1941" href="#1941">1941</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="1942" href="#1942">1942</a> 		}
+<a class="jxr_linenumber" name="1943" href="#1943">1943</a> 		LocalChannelReference localChannelReference = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="1944" href="#1944">1944</a> 		localChannelReference = AdminGui.environnement.networkTransaction
+<a class="jxr_linenumber" name="1945" href="#1945">1945</a> 				.createConnectionWithRetry(socketServerAddress, host.isSsl(), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="1946" href="#1946">1946</a> 		<strong class="jxr_keyword">if</strong> (localChannelReference == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1947" href="#1947">1947</a> 			message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.187"</span>) + Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.188"</span>) + host.getHostid(); <em class="jxr_comment">//$NON-NLS-1$ //$NON-NLS-2$</em>
+<a class="jxr_linenumber" name="1948" href="#1948">1948</a> 			AdminGui.environnement.GuiResultat = message;
+<a class="jxr_linenumber" name="1949" href="#1949">1949</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="1950" href="#1950">1950</a> 		}
+<a class="jxr_linenumber" name="1951" href="#1951">1951</a> 		<strong class="jxr_keyword">if</strong> (rdbtnShutdown.isSelected()) {
+<a class="jxr_linenumber" name="1952" href="#1952">1952</a> 			localChannelReference.sessionNewState(R66FiniteDualStates.SHUTDOWN);
+<a class="jxr_linenumber" name="1953" href="#1953">1953</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1954" href="#1954">1954</a> 			localChannelReference.sessionNewState(R66FiniteDualStates.BUSINESSR);
+<a class="jxr_linenumber" name="1955" href="#1955">1955</a> 		}
+<a class="jxr_linenumber" name="1956" href="#1956">1956</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="1957" href="#1957">1957</a> 			ChannelUtils.writeAbstractLocalPacket(localChannelReference, packet, false);
+<a class="jxr_linenumber" name="1958" href="#1958">1958</a> 		} <strong class="jxr_keyword">catch</strong> (OpenR66ProtocolPacketException e) {
+<a class="jxr_linenumber" name="1959" href="#1959">1959</a> 			message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.187"</span>) + Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.190"</span>) + host.getHostid() <em class="jxr_comment">//$NON-NLS-1$ //$NON-NLS-2$</em>
+<a class="jxr_linenumber" name="1960" href="#1960">1960</a> 					+ <span class="jxr_string">"["</span> + e.getMessage() + <span class="jxr_string">"]"</span>;
+<a class="jxr_linenumber" name="1961" href="#1961">1961</a> 			AdminGui.environnement.GuiResultat = message;
+<a class="jxr_linenumber" name="1962" href="#1962">1962</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="1963" href="#1963">1963</a> 		}
+<a class="jxr_linenumber" name="1964" href="#1964">1964</a> 		localChannelReference.getFutureRequest().awaitUninterruptibly(180, TimeUnit.SECONDS);
+<a class="jxr_linenumber" name="1965" href="#1965">1965</a> 		<strong class="jxr_keyword">if</strong> (localChannelReference.getFutureRequest().isDone()) {
+<a class="jxr_linenumber" name="1966" href="#1966">1966</a> 			R66Result result = localChannelReference.getFutureRequest()
+<a class="jxr_linenumber" name="1967" href="#1967">1967</a> 					.getResult();
+<a class="jxr_linenumber" name="1968" href="#1968">1968</a> 			<strong class="jxr_keyword">if</strong> (localChannelReference.getFutureRequest().isSuccess()) {
+<a class="jxr_linenumber" name="1969" href="#1969">1969</a> 				message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.193"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1970" href="#1970">1970</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1971" href="#1971">1971</a> 				<strong class="jxr_keyword">if</strong> (result.other instanceof ValidPacket
+<a class="jxr_linenumber" name="1972" href="#1972">1972</a> 						&amp;&amp;
+<a class="jxr_linenumber" name="1973" href="#1973">1973</a> 						((ValidPacket) result.other).getTypeValid() == LocalPacketFactory.SHUTDOWNPACKET) {
+<a class="jxr_linenumber" name="1974" href="#1974">1974</a> 					message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.194"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1975" href="#1975">1975</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (result.code == ErrorCode.Shutdown) {
+<a class="jxr_linenumber" name="1976" href="#1976">1976</a> 					message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.195"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1977" href="#1977">1977</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1978" href="#1978">1978</a> 					message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.196"</span>) + result.toString() + <span class="jxr_string">"["</span> + localChannelReference <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1979" href="#1979">1979</a> 							.getFutureRequest().getCause() + <span class="jxr_string">"]"</span>;
+<a class="jxr_linenumber" name="1980" href="#1980">1980</a> 				}
+<a class="jxr_linenumber" name="1981" href="#1981">1981</a> 			}
+<a class="jxr_linenumber" name="1982" href="#1982">1982</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1983" href="#1983">1983</a> 			message = Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.199"</span>); <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1984" href="#1984">1984</a> 			localChannelReference.getLocalChannel().close();
+<a class="jxr_linenumber" name="1985" href="#1985">1985</a> 		}
+<a class="jxr_linenumber" name="1986" href="#1986">1986</a> 		<strong class="jxr_keyword">long</strong> time2 = System.currentTimeMillis();
+<a class="jxr_linenumber" name="1987" href="#1987">1987</a> 		<strong class="jxr_keyword">long</strong> delay = time2 - time1;
+<a class="jxr_linenumber" name="1988" href="#1988">1988</a> 		message += Messages.getString(<span class="jxr_string">"AdminR66OperationsGui.72"</span>) + delay; <em class="jxr_comment">//$NON-NLS-1$</em>
+<a class="jxr_linenumber" name="1989" href="#1989">1989</a> 		AdminGui.environnement.GuiResultat = message;
+<a class="jxr_linenumber" name="1990" href="#1990">1990</a> 	}
+<a class="jxr_linenumber" name="1991" href="#1991">1991</a> 
+<a class="jxr_linenumber" name="1992" href="#1992">1992</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../org/waarp/openr66/serveraction/AdminR66OperationsGui.html">JTextAreaOutputStream</a> <strong class="jxr_keyword">extends</strong> OutputStream {
+<a class="jxr_linenumber" name="1993" href="#1993">1993</a> 		JTextArea ta;
+<a class="jxr_linenumber" name="1994" href="#1994">1994</a> 
+<a class="jxr_linenumber" name="1995" href="#1995">1995</a> 		<strong class="jxr_keyword">public</strong> <a href="../../../../org/waarp/openr66/serveraction/AdminR66OperationsGui.html">JTextAreaOutputStream</a>(JTextArea t) {
+<a class="jxr_linenumber" name="1996" href="#1996">1996</a> 			<strong class="jxr_keyword">super</strong>();
+<a class="jxr_linenumber" name="1997" href="#1997">1997</a> 			ta = t;
+<a class="jxr_linenumber" name="1998" href="#1998">1998</a> 		}
+<a class="jxr_linenumber" name="1999" href="#1999">1999</a> 
+<a class="jxr_linenumber" name="2000" href="#2000">2000</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> write(<strong class="jxr_keyword">int</strong> i) {
+<a class="jxr_linenumber" name="2001" href="#2001">2001</a> 			ta.append(Character.toString((<strong class="jxr_keyword">char</strong>) i));
+<a class="jxr_linenumber" name="2002" href="#2002">2002</a> 		}
+<a class="jxr_linenumber" name="2003" href="#2003">2003</a> 
+<a class="jxr_linenumber" name="2004" href="#2004">2004</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> write(<strong class="jxr_keyword">char</strong>[] buf, <strong class="jxr_keyword">int</strong> off, <strong class="jxr_keyword">int</strong> len) {
+<a class="jxr_linenumber" name="2005" href="#2005">2005</a> 			String s = <strong class="jxr_keyword">new</strong> String(buf, off, len);
+<a class="jxr_linenumber" name="2006" href="#2006">2006</a> 			ta.append(s);
+<a class="jxr_linenumber" name="2007" href="#2007">2007</a> 		}
+<a class="jxr_linenumber" name="2008" href="#2008">2008</a> 
+<a class="jxr_linenumber" name="2009" href="#2009">2009</a> 	}
+<a class="jxr_linenumber" name="2010" href="#2010">2010</a> 
+<a class="jxr_linenumber" name="2011" href="#2011">2011</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
