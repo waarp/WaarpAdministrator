@@ -14,7 +14,7 @@
         <usessl>True</usessl>
         <usehttpcomp>False</usehttpcomp>
         <uselocalexec>False</uselocalexec>
-        <httpadmin>D:\NEWSOURCE\GoldenGateR66\src\main\admin</httpadmin>
+        <httpadmin>D:\GG\R66\httpadmin\i18n</httpadmin>
         <admkeypath>D:\GG\R66\certs\testsslnocert.jks</admkeypath>
         <admkeystorepass>testsslnocert</admkeystorepass>
         <admkeypass>testalias</admkeypass>
@@ -29,6 +29,7 @@
         <serversslport>6667</serversslport>
         <serverhttpport>8066</serverhttpport>
         <serverhttpsport>8067</serverhttpsport>
+        <serverrestport>8068</serverrestport>
     </network>
     <ssl>
         <keypath>D:\GG\R66\certs\testsslnocert.jks</keypath>
@@ -78,4 +79,11 @@
         <dbuser>openr66</dbuser>
         <dbpasswd>openr66</dbpasswd>
     </db>
+	<rest>
+        <restssl>False</restssl>
+        <restdelete>True</restdelete>
+        <resttimelimit>10000</resttimelimit>
+        <restauthenticated>True</restauthenticated>
+        <restauthkey>D:/GG/R66/conf/key.sha256</restauthkey>
+    </rest>
 </config>

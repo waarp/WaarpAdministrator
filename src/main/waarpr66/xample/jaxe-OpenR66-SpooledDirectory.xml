@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?><CONFIG_JAXE>
 <LANGAGE>
-<FICHIER_SCHEMA nom="OpenR66-Server.xsd"/>
+<FICHIER_SCHEMA nom="OpenR66-SpooledDirectory.xsd"/>
 <RACINE element="config"/>
 </LANGAGE>
 
@@ -18,27 +18,6 @@
 <MENU_INSERTION nom="sslhostid"/>
 <MENU_INSERTION nom="cryptokey"/>
 <MENU_INSERTION nom="authentfile"/>
-<MENU_INSERTION nom="serveradmin"/>
-<MENU_INSERTION nom="serverpasswdfile"/>
-<MENU_INSERTION nom="serverpasswd"/>
-<MENU_INSERTION nom="usenossl"/>
-<MENU_INSERTION nom="usessl"/>
-<MENU_INSERTION nom="usehttpcomp"/>
-<MENU_INSERTION nom="uselocalexec"/>
-<MENU_INSERTION nom="lexecaddr"/>
-<MENU_INSERTION nom="lexecport"/>
-<MENU_INSERTION nom="httpadmin"/>
-<MENU_INSERTION nom="checkaddress"/>
-<MENU_INSERTION nom="checkclientaddress"/>
-<MENU_INSERTION nom="pastlimit"/>
-<MENU_INSERTION nom="minimaldelay"/>
-<MENU_INSERTION nom="snmpconfig"/>
-<MENU_INSERTION nom="multiplemonitors"/>
-<MENU_INSERTION nom="serverport"/>
-<MENU_INSERTION nom="serversslport"/>
-<MENU_INSERTION nom="serverhttpport"/>
-<MENU_INSERTION nom="serverhttpsport"/>
-<MENU_INSERTION nom="serverrestport"/>
 <MENU_INSERTION nom="trustuseclientauthenticate"/>
 <MENU_INSERTION nom="serverhome"/>
 <MENU_INSERTION nom="in"/>
@@ -77,29 +56,42 @@
 <MENU_INSERTION nom="dbserver"/>
 <MENU_INSERTION nom="dbuser"/>
 <MENU_INSERTION nom="dbpasswd"/>
-<MENU_INSERTION nom="taskrunnernodb"/>
 <MENU_INSERTION nom="businessids"/>
-<MENU_INSERTION nom="role"/>
-<MENU_INSERTION nom="roleid"/>
-<MENU_INSERTION nom="roleset"/>
+<MENU_INSERTION nom="alias"/>
+<MENU_INSERTION nom="realid"/>
+<MENU_INSERTION nom="aliasid"/>
+<MENU_INSERTION nom="stopfile"/>
+<MENU_INSERTION nom="logWarn"/>
+<MENU_INSERTION nom="spooled"/>
+<MENU_INSERTION nom="name"/>
+<MENU_INSERTION nom="to"/>
+<MENU_INSERTION nom="rule"/>
+<MENU_INSERTION nom="statusfile"/>
+<MENU_INSERTION nom="directory"/>
+<MENU_INSERTION nom="regex"/>
+<MENU_INSERTION nom="recursive"/>
+<MENU_INSERTION nom="elapse"/>
+<MENU_INSERTION nom="submit"/>
+<MENU_INSERTION nom="parallel"/>
+<MENU_INSERTION nom="limitParallel"/>
+<MENU_INSERTION nom="info"/>
+<MENU_INSERTION nom="md5"/>
+<MENU_INSERTION nom="block"/>
+<MENU_INSERTION nom="nolog"/>
+<MENU_INSERTION nom="waarp"/>
+<MENU_INSERTION nom="elapseWaarp"/>
+<MENU_INSERTION nom="minimalSize"/>
 <MENU_INSERTION nom="config"/>
 <MENU_INSERTION nom="comment"/>
 <MENU_INSERTION nom="identity"/>
-<MENU_INSERTION nom="server"/>
-<MENU_INSERTION nom="network"/>
+<MENU_INSERTION nom="client"/>
+<MENU_INSERTION nom="taskrunnernodb"/>
 <MENU_INSERTION nom="ssl"/>
-<MENU_INSERTION nom="directory"/>
 <MENU_INSERTION nom="limit"/>
 <MENU_INSERTION nom="db"/>
 <MENU_INSERTION nom="business"/>
-<MENU_INSERTION nom="roles"/>
 <MENU_INSERTION nom="aliases"/>
-<MENU_INSERTION nom="rest"/>
-<MENU_INSERTION nom="restssl"/>
-<MENU_INSERTION nom="restdelete"/>
-<MENU_INSERTION nom="resttimelimit"/>
-<MENU_INSERTION nom="restauthenticated"/>
-<MENU_INSERTION nom="restauthkey"/>
+<MENU_INSERTION nom="spooleddaemon"/>
 </MENU>
 </MENUS>
 
@@ -116,27 +108,6 @@
 <AFFICHAGE_ELEMENT type="typesimple" element="sslhostid"/>
 <AFFICHAGE_ELEMENT type="typesimple" element="cryptokey"/>
 <AFFICHAGE_ELEMENT type="typesimple" element="authentfile"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="serveradmin"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="serverpasswdfile"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="serverpasswd"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="usenossl"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="usessl"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="usehttpcomp"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="uselocalexec"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="lexecaddr"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="lexecport"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="httpadmin"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="checkaddress"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="checkclientaddress"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="pastlimit"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="minimaldelay"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="snmpconfig"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="multiplemonitors"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="serverport"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="serversslport"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="serverhttpport"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="serverhttpsport"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="serverrestport"/>
 <AFFICHAGE_ELEMENT type="typesimple" element="trustuseclientauthenticate"/>
 <AFFICHAGE_ELEMENT type="typesimple" element="serverhome"/>
 <AFFICHAGE_ELEMENT type="typesimple" element="in"/>
@@ -175,29 +146,42 @@
 <AFFICHAGE_ELEMENT type="typesimple" element="dbserver"/>
 <AFFICHAGE_ELEMENT type="typesimple" element="dbuser"/>
 <AFFICHAGE_ELEMENT type="typesimple" element="dbpasswd"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="taskrunnernodb"/>
 <AFFICHAGE_ELEMENT type="typesimple" element="businessids"/>
-<AFFICHAGE_ELEMENT type="zone" element="role"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="roleid"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="roleset"/>
+<AFFICHAGE_ELEMENT type="zone" element="alias"/>
+<AFFICHAGE_ELEMENT type="typesimple" element="realid"/>
+<AFFICHAGE_ELEMENT type="typesimple" element="aliasid"/>
+<AFFICHAGE_ELEMENT type="typesimple" element="stopfile"/>
+<AFFICHAGE_ELEMENT type="typesimple" element="logWarn"/>
+<AFFICHAGE_ELEMENT type="zone" element="spooled"/>
+<AFFICHAGE_ELEMENT type="typesimple" element="name"/>
+<AFFICHAGE_ELEMENT type="typesimple" element="to"/>
+<AFFICHAGE_ELEMENT type="typesimple" element="rule"/>
+<AFFICHAGE_ELEMENT type="typesimple" element="statusfile"/>
+<AFFICHAGE_ELEMENT type="typesimple" element="directory"/>
+<AFFICHAGE_ELEMENT type="typesimple" element="regex"/>
+<AFFICHAGE_ELEMENT type="typesimple" element="recursive"/>
+<AFFICHAGE_ELEMENT type="typesimple" element="elapse"/>
+<AFFICHAGE_ELEMENT type="typesimple" element="submit"/>
+<AFFICHAGE_ELEMENT type="typesimple" element="parallel"/>
+<AFFICHAGE_ELEMENT type="typesimple" element="limitParallel"/>
+<AFFICHAGE_ELEMENT type="typesimple" element="info"/>
+<AFFICHAGE_ELEMENT type="typesimple" element="md5"/>
+<AFFICHAGE_ELEMENT type="typesimple" element="block"/>
+<AFFICHAGE_ELEMENT type="typesimple" element="nolog"/>
+<AFFICHAGE_ELEMENT type="typesimple" element="waarp"/>
+<AFFICHAGE_ELEMENT type="typesimple" element="elapseWaarp"/>
+<AFFICHAGE_ELEMENT type="typesimple" element="minimalSize"/>
 <AFFICHAGE_ELEMENT type="division" element="config"/>
 <AFFICHAGE_ELEMENT type="typesimple" element="comment"/>
 <AFFICHAGE_ELEMENT type="zone" element="identity"/>
-<AFFICHAGE_ELEMENT type="zone" element="server"/>
-<AFFICHAGE_ELEMENT type="zone" element="network"/>
+<AFFICHAGE_ELEMENT type="zone" element="client"/>
+<AFFICHAGE_ELEMENT type="typesimple" element="taskrunnernodb"/>
 <AFFICHAGE_ELEMENT type="zone" element="ssl"/>
-<AFFICHAGE_ELEMENT type="zone" element="directory"/>
 <AFFICHAGE_ELEMENT type="zone" element="limit"/>
 <AFFICHAGE_ELEMENT type="zone" element="db"/>
 <AFFICHAGE_ELEMENT type="zone" element="business"/>
-<AFFICHAGE_ELEMENT type="zone" element="roles"/>
-<AFFICHAGE_ELEMENT type="zone" element="alias"/>
-<AFFICHAGE_ELEMENT type="zone" element="rest"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="restssl"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="restdelete"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="resttimelimit"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="restauthenticated"/>
-<AFFICHAGE_ELEMENT type="typesimple" element="restauthkey"/>
+<AFFICHAGE_ELEMENT type="zone" element="aliases"/>
+<AFFICHAGE_ELEMENT type="zone" element="spooleddaemon"/>
 </AFFICHAGE_NOEUDS>
 
 <STRINGS>
@@ -269,130 +253,6 @@ Des CryptoKey File containing the key in Des mode for R66 passwords
 <DOCUMENTATION>
 Authentication File containing Authentications for partners
 		                    </DOCUMENTATION>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="serveradmin">
-<TITRE>serveradmin</TITRE>
-<DOCUMENTATION>
-Username for Administrator access
-                        </DOCUMENTATION>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="serverpasswdfile">
-<TITRE>serverpasswdfile</TITRE>
-<DOCUMENTATION>GoldenGate Password File containing the password for Administrator access</DOCUMENTATION>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="serverpasswd">
-<TITRE>serverpasswd</TITRE>
-<DOCUMENTATION>
-	Password for Administrator access using Crypto Key
-	                        </DOCUMENTATION>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="usenossl">
-<TITRE>usenossl</TITRE>
-<DOCUMENTATION>
-True (Default) if R66 will allow no SSL mode connection
-                        </DOCUMENTATION>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="usessl">
-<TITRE>usessl</TITRE>
-<DOCUMENTATION>
-True if R66 will allow SSL mode connection
-                        </DOCUMENTATION>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="usehttpcomp">
-<TITRE>usehttpcomp</TITRE>
-<DOCUMENTATION>
-True if Administrator (HTTPS) will allow HTTP compression
-                        </DOCUMENTATION>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="uselocalexec">
-<TITRE>uselocalexec</TITRE>
-<DOCUMENTATION>
-By default, use the System.exec() but can lead to limitation in performances (JDK limitation). The usage of the GoldenGate LocalExec Daemon tends to reach better performances through execution delegation
-                        </DOCUMENTATION>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="lexecaddr">
-<TITRE>lexecaddr</TITRE>
-<DOCUMENTATION>
-Address of LocalExec Daemon
-                        </DOCUMENTATION>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="lexecport">
-<TITRE>lexecport</TITRE>
-<DOCUMENTATION>
-Port of LocalExec Daemon
-                        </DOCUMENTATION>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="httpadmin">
-<TITRE>httpadmin</TITRE>
-<DOCUMENTATION>
-Home Directory for HTTPS file support for Administrator
-                        </DOCUMENTATION>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="checkaddress">
-<TITRE>checkaddress</TITRE>
-<DOCUMENTATION>
-True if R66 will check remote IP address while accepting a new connection
-                        </DOCUMENTATION>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="checkclientaddress">
-<TITRE>checkclientaddress</TITRE>
-<DOCUMENTATION>
-True if R66 will check remote IP address also for remote Client
-                        </DOCUMENTATION>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="pastlimit">
-<TITRE>pastlimit</TITRE>
-<DOCUMENTATION>
-Monitoring: how long in ms to get back in monitoring
-                        </DOCUMENTATION>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="minimaldelay">
-<TITRE>minimaldelay</TITRE>
-<DOCUMENTATION>
-Monitoring: minimal interval in ms before redo real monitoring
-                        </DOCUMENTATION>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="snmpconfig">
-<TITRE>snmpconfig</TITRE>
-<DOCUMENTATION>
-Configuration XML File for SNMP service
-                        </DOCUMENTATION>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="multiplemonitors">
-<TITRE>multiplemonitors</TITRE>
-<DOCUMENTATION>
-Set the number of servers that act in the same group as a single instance of a OpenR66 File Transfer Monitor
-                        </DOCUMENTATION>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="serverport">
-<TITRE>serverport</TITRE>
-<DOCUMENTATION>
-Port used in NON SSL mode
-                    </DOCUMENTATION>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="serversslport">
-<TITRE>serversslport</TITRE>
-<DOCUMENTATION>
-Port used in SSL mode
-                    </DOCUMENTATION>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="serverhttpport">
-<TITRE>serverhttpport</TITRE>
-<DOCUMENTATION>
-Port used for monitoring in HTTP mode
-                    </DOCUMENTATION>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="serverhttpsport">
-<TITRE>serverhttpsport</TITRE>
-<DOCUMENTATION>
-Port used for Administrator access in HTTPS mode
-                    </DOCUMENTATION>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="serverrestport">
-<TITRE>serverrestport</TITRE>
-<DOCUMENTATION>
-Port used for REST Interface in HTTP(s)
-                    </DOCUMENTATION>
 </STRINGS_ELEMENT>
 <STRINGS_ELEMENT element="trustuseclientauthenticate">
 <TITRE>trustuseclientauthenticate</TITRE>
@@ -529,13 +389,13 @@ Usage of CPU limitation based on Native JDK support, else (False) on Java Sysmon
 <STRINGS_ELEMENT element="cpulimit">
 <TITRE>cpulimit</TITRE>
 <DOCUMENTATION>
-Limit of CPU usage in percentage from 0 to 1
+Limit of CPU usage in percentage from 0 to 1, 1 meaning no limitation
                     </DOCUMENTATION>
 </STRINGS_ELEMENT>
 <STRINGS_ELEMENT element="connlimit">
 <TITRE>connlimit</TITRE>
 <DOCUMENTATION>
-Limit of concurrent connections usage from 0
+Limit of concurrent connections usage from 0, 0 meaning no limitation
                     </DOCUMENTATION>
 </STRINGS_ELEMENT>
 <STRINGS_ELEMENT element="lowcpulimit">
@@ -565,7 +425,7 @@ Delay in ms, minimal as 500ms, best around 1000ms
 <STRINGS_ELEMENT element="limitlowbandwidth">
 <TITRE>limitlowbandwidth</TITRE>
 <DOCUMENTATION>
-Low Limit of Bandwidth when decreasing from 4096
+Low Limit of Bandwidth when decreasing from 1000000 (1MB)
                     </DOCUMENTATION>
 </STRINGS_ELEMENT>
 <STRINGS_ELEMENT element="digest">
@@ -622,77 +482,155 @@ Database User
 Database User's Password
                     </DOCUMENTATION>
 </STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="taskrunnernodb">
-<TITRE>taskrunnernodb</TITRE>
-<DOCUMENTATION>
-When a server with no DB, do R66 will use XML files as permanent information on Transfer Tasks
-		                    </DOCUMENTATION>
-</STRINGS_ELEMENT>
 <STRINGS_ELEMENT element="businessids">
 <TITRE>businessids</TITRE>
 <DOCUMENTATION>
 The host ids (1 by 1) that will be allow to use Business Requests (from version 2.3)
                     </DOCUMENTATION>
 </STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="role">
-<TITRE>role</TITRE>
+<STRINGS_ELEMENT element="alias">
+<TITRE>alias</TITRE>
 <DOCUMENTATION>
-If specified for one host, this will override database roles for ALL hosts (from version 2.4.9). By default, local server should be added as role = FULLADMIN.
-</DOCUMENTATION>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="roleid">
-<TITRE>roleid</TITRE>
-<DOCUMENTATION>
-The host ids (1 by 1) that will override database roles
-</DOCUMENTATION>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="roleset">
-<TITRE>roleset</TITRE>
-<DOCUMENTATION>
-The role assign to this host between NOACCESS,READONLY,TRANSFER,RULE,HOST,LIMIT,SYSTEM,LOGCONTROL,PARTNER(READONLY,TRANSFER),CONFIGADMIN(PARTNER,RULE,HOST),FULLADMIN(CONFIGADMIN,LIMIT,SYSTEM,LOGCONTROL)
-</DOCUMENTATION>
+This will allow alias usage for host ids (from version 2.4.12).
+                    </DOCUMENTATION>
 </STRINGS_ELEMENT>
 <STRINGS_ELEMENT element="realid">
 <TITRE>realid</TITRE>
 <DOCUMENTATION>
 The real host id that will have aliases (locally)
-</DOCUMENTATION>
+                                </DOCUMENTATION>
 </STRINGS_ELEMENT>
 <STRINGS_ELEMENT element="aliasid">
 <TITRE>aliasid</TITRE>
 <DOCUMENTATION>
 The set of aliases assign to this host separated by '|' or blank space
-</DOCUMENTATION>
+                                </DOCUMENTATION>
 </STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="restssl">
-<TITRE>restssl</TITRE>
+<STRINGS_ELEMENT element="stopfile">
+<TITRE>stopfile</TITRE>
 <DOCUMENTATION>
-Is the SERVER REST interface using SSL
-</DOCUMENTATION>
+The unique stop file
+					</DOCUMENTATION>
 </STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="restdelete">
-<TITRE>restdelete</TITRE>
+<STRINGS_ELEMENT element="logWarn">
+<TITRE>logWarn</TITRE>
 <DOCUMENTATION>
-Is the SERVER REST interface allowing delete
-</DOCUMENTATION>
+If True (default) will log as WARN level send and removed files, while False will log it as INFO level.
+                    </DOCUMENTATION>
 </STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="restauthenticated">
-<TITRE>restauthenticated</TITRE>
+<STRINGS_ELEMENT element="spooled">
+<TITRE>spooled</TITRE>
 <DOCUMENTATION>
-Is the SERVER REST interface using authentication
-</DOCUMENTATION>
+This will allow to precise SpooledDirectoryTransfer options directly in the configuration file(from version 2.4.22).
+                    </DOCUMENTATION>
 </STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="resttimelimit">
-<TITRE>resttimelimit</TITRE>
+<STRINGS_ELEMENT element="name">
+<TITRE>name</TITRE>
 <DOCUMENTATION>
-Is the SERVER REST interface using time limit
-</DOCUMENTATION>
+The name of the SpooledDirectory daemon. If not specified, will be host name plus directory names
+                                </DOCUMENTATION>
 </STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="restauthkey">
-<TITRE>restauthkey</TITRE>
+<STRINGS_ELEMENT element="to">
+<TITRE>to</TITRE>
 <DOCUMENTATION>
-SERVER REST interface SHA 256 Key file for request checking
-</DOCUMENTATION>
+The real host id as target (multiple allowed)
+                                </DOCUMENTATION>
+</STRINGS_ELEMENT>
+<STRINGS_ELEMENT element="rule">
+<TITRE>rule</TITRE>
+<DOCUMENTATION>
+The rule to use when submitting or transferring the files
+                                </DOCUMENTATION>
+</STRINGS_ELEMENT>
+<STRINGS_ELEMENT element="statusfile">
+<TITRE>statusfile</TITRE>
+<DOCUMENTATION>
+The status file: must be unique
+                                </DOCUMENTATION>
+</STRINGS_ELEMENT>
+<STRINGS_ELEMENT element="directory">
+<TITRE>directory</TITRE>
+<DOCUMENTATION>
+The directory to spool (can be multiple)
+                                </DOCUMENTATION>
+</STRINGS_ELEMENT>
+<STRINGS_ELEMENT element="regex">
+<TITRE>regex</TITRE>
+<DOCUMENTATION>
+The regular expression to filter file names, as .*\.zip$ for zip files
+                                </DOCUMENTATION>
+</STRINGS_ELEMENT>
+<STRINGS_ELEMENT element="recursive">
+<TITRE>recursive</TITRE>
+<DOCUMENTATION>
+Is the scan of the directories recursive?
+                                </DOCUMENTATION>
+</STRINGS_ELEMENT>
+<STRINGS_ELEMENT element="elapse">
+<TITRE>elapse</TITRE>
+<DOCUMENTATION>
+The interval time in ms used to scan the directories
+                                </DOCUMENTATION>
+</STRINGS_ELEMENT>
+<STRINGS_ELEMENT element="submit">
+<TITRE>submit</TITRE>
+<DOCUMENTATION>
+If true, the daemon will make only submitted transfers, while if false it will make only direct transfers
+                                </DOCUMENTATION>
+</STRINGS_ELEMENT>
+<STRINGS_ELEMENT element="parallel">
+<TITRE>parallel</TITRE>
+<DOCUMENTATION>
+If True, all transfers will be done in parallel than information to Waarp servers, else False means that information will be done only after each transfer set.
+                                </DOCUMENTATION>
+</STRINGS_ELEMENT>
+<STRINGS_ELEMENT element="limitParallel">
+<TITRE>limitParallel</TITRE>
+<DOCUMENTATION>
+The value will limit the number of concurrent direct transfers. 0 means NO LIMIT, while 1 means sequential.
+                                </DOCUMENTATION>
+</STRINGS_ELEMENT>
+<STRINGS_ELEMENT element="info">
+<TITRE>info</TITRE>
+<DOCUMENTATION>
+The information transmitted with each file found
+                                </DOCUMENTATION>
+</STRINGS_ELEMENT>
+<STRINGS_ELEMENT element="md5">
+<TITRE>md5</TITRE>
+<DOCUMENTATION>
+The transfer will use digest mode during packet transfer.
+                                </DOCUMENTATION>
+</STRINGS_ELEMENT>
+<STRINGS_ELEMENT element="block">
+<TITRE>block</TITRE>
+<DOCUMENTATION>
+The block size used during the transfer
+                                </DOCUMENTATION>
+</STRINGS_ELEMENT>
+<STRINGS_ELEMENT element="nolog">
+<TITRE>nolog</TITRE>
+<DOCUMENTATION>
+If true, no trace on database or file will be kept for this transfer on client side (direct mode only)
+                                </DOCUMENTATION>
+</STRINGS_ELEMENT>
+<STRINGS_ELEMENT element="waarp">
+<TITRE>waarp</TITRE>
+<DOCUMENTATION>
+The host name for which the status of this daemon will be sent. Note that the client must be allowed to use BusinessRequest in the targeted host
+                                </DOCUMENTATION>
+</STRINGS_ELEMENT>
+<STRINGS_ELEMENT element="elapseWaarp">
+<TITRE>elapseWaarp</TITRE>
+<DOCUMENTATION>
+The interval time in ms used to inform remote Waarp servers. If set to 0, the information will be done after each directory check, possibly long time, depending on the time spent to submit or directly transfer files
+                                </DOCUMENTATION>
+</STRINGS_ELEMENT>
+<STRINGS_ELEMENT element="minimalSize">
+<TITRE>minimalSize</TITRE>
+<DOCUMENTATION>
+The minimal size of each file that will be transferred (default: 1 byte)
+                                </DOCUMENTATION>
 </STRINGS_ELEMENT>
 <STRINGS_ELEMENT element="config">
 <TITRE>config</TITRE>
@@ -703,17 +641,15 @@ SERVER REST interface SHA 256 Key file for request checking
 <STRINGS_ELEMENT element="identity">
 <TITRE>identity</TITRE>
 </STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="server">
-<TITRE>server</TITRE>
+<STRINGS_ELEMENT element="client">
+<TITRE>client</TITRE>
 </STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="network">
-<TITRE>network</TITRE>
+<STRINGS_ELEMENT element="taskrunnernodb">
+<TITRE>taskrunnernodb</TITRE>
+<DOCUMENTATION>When client with no DB, do R66 will use XML files as permanent information on Transfer Tasks</DOCUMENTATION>
 </STRINGS_ELEMENT>
 <STRINGS_ELEMENT element="ssl">
 <TITRE>ssl</TITRE>
-</STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="directory">
-<TITRE>directory</TITRE>
 </STRINGS_ELEMENT>
 <STRINGS_ELEMENT element="limit">
 <TITRE>limit</TITRE>
@@ -724,14 +660,11 @@ SERVER REST interface SHA 256 Key file for request checking
 <STRINGS_ELEMENT element="business">
 <TITRE>business</TITRE>
 </STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="roles">
-<TITRE>roles</TITRE>
-</STRINGS_ELEMENT>
 <STRINGS_ELEMENT element="aliases">
 <TITRE>aliases</TITRE>
 </STRINGS_ELEMENT>
-<STRINGS_ELEMENT element="rest">
-<TITRE>rest</TITRE>
+<STRINGS_ELEMENT element="spooleddaemon">
+<TITRE>spooleddaemon</TITRE>
 </STRINGS_ELEMENT>
 </STRINGS>
 </CONFIG_JAXE>
