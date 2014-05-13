@@ -1371,6 +1371,7 @@ public class AdminR66OperationsGui extends JFrame {
 				if (packet != null) {
 					resume = packet.getRequest();
 					ConfigExportResponseJsonPacket node = (ConfigExportResponseJsonPacket) packet.getJsonRequest();
+					logger.debug(node.toString());
 					String shost = node.getFilehost();
 					String srule = node.getFilerule();
 					String sbusiness = node.getFilebusiness();
