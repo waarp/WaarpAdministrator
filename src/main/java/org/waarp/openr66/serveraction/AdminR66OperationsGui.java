@@ -46,7 +46,7 @@ import org.waarp.common.database.exception.WaarpDatabaseNoConnectionException;
 import org.waarp.common.database.exception.WaarpDatabaseSqlException;
 import org.waarp.common.digest.FilesystemBasedDigest;
 import org.waarp.common.logging.WaarpInternalLogger;
-import org.waarp.common.logging.WaarpInternalLoggerFactory;
+import org.waarp.common.logging.WaarpWaarpLoggerFactory;
 import org.waarp.common.utility.WaarpStringUtils;
 import org.waarp.openr66.client.DirectTransfer;
 import org.waarp.openr66.context.ErrorCode;
@@ -108,7 +108,7 @@ public class AdminR66OperationsGui extends JFrame {
 	/**
 	 * Internal Logger
 	 */
-	private static final WaarpInternalLogger logger = WaarpInternalLoggerFactory
+	private static final WaarpInternalLogger logger = WaarpWaarpLoggerFactory
 			.getLogger(AdminR66OperationsGui.class);
 	
 	public static AdminR66OperationsGui window;

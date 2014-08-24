@@ -30,13 +30,13 @@ import java.awt.GridBagLayout;
 import javax.swing.JToolBar;
 import javax.swing.JButton;
 
-import org.jboss.netty.logging.InternalLoggerFactory;
+import io.netty.logging.WaarpLoggerFactory;
 import org.waarp.administrator.guipwd.AdminUiPassword;
 import org.waarp.common.database.DbSession;
 import org.waarp.common.database.exception.WaarpDatabaseNoConnectionException;
 import org.waarp.common.database.exception.WaarpDatabaseSqlException;
 import org.waarp.common.logging.WaarpInternalLogger;
-import org.waarp.common.logging.WaarpInternalLoggerFactory;
+import org.waarp.common.logging.WaarpWaarpLoggerFactory;
 import org.waarp.common.logging.WaarpSlf4JLoggerFactory;
 import org.waarp.openr66.client.Message;
 import org.waarp.openr66.configuration.FileBasedConfiguration;
@@ -113,15 +113,15 @@ public class AdminGui {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		InternalLoggerFactory.setDefaultFactory(new WaarpSlf4JLoggerFactory(null));
+		WaarpLoggerFactory.setDefaultFactory(new WaarpSlf4JLoggerFactory(null));
 		if (logger == null) {
-			logger = WaarpInternalLoggerFactory.getLogger(AdminGui.class);
+			logger = WaarpWaarpLoggerFactory.getLogger(AdminGui.class);
 		}
 		if (!getParams(args)) {
 			logger.error(Messages.getString("Configuration.WrongInit")); //$NON-NLS-1$
 			JOptionPane.showMessageDialog(null, Messages.getString("Configuration.WrongInit"), //$NON-NLS-1$
 					"Attention", JOptionPane.WARNING_MESSAGE);
-			if (DbConstant.admin != null && DbConstant.admin.isConnected) {
+			if (DbConstant.admin != null && DbConstant.admin.isActive) {
 				DbConstant.admin.close();
 			}
 			System.exit(1);
