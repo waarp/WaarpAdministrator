@@ -30,13 +30,12 @@ import java.awt.GridBagLayout;
 import javax.swing.JToolBar;
 import javax.swing.JButton;
 
-import io.netty.logging.WaarpLoggerFactory;
 import org.waarp.administrator.guipwd.AdminUiPassword;
 import org.waarp.common.database.DbSession;
 import org.waarp.common.database.exception.WaarpDatabaseNoConnectionException;
 import org.waarp.common.database.exception.WaarpDatabaseSqlException;
-import org.waarp.common.logging.WaarpInternalLogger;
-import org.waarp.common.logging.WaarpWaarpLoggerFactory;
+import org.waarp.common.logging.WaarpLogger;
+import org.waarp.common.logging.WaarpLoggerFactory;
 import org.waarp.common.logging.WaarpSlf4JLoggerFactory;
 import org.waarp.openr66.client.Message;
 import org.waarp.openr66.configuration.FileBasedConfiguration;
@@ -71,7 +70,7 @@ public class AdminGui {
 	/**
 	 * Internal Logger
 	 */
-	static volatile WaarpInternalLogger logger;
+	static volatile WaarpLogger logger;
 
 	public JFrame frmWaarpRCentral;
 	private List<AdminXample> xamples = new ArrayList<AdminXample>();
@@ -115,7 +114,7 @@ public class AdminGui {
 	public static void main(String[] args) {
 		WaarpLoggerFactory.setDefaultFactory(new WaarpSlf4JLoggerFactory(null));
 		if (logger == null) {
-			logger = WaarpWaarpLoggerFactory.getLogger(AdminGui.class);
+			logger = WaarpLoggerFactory.getLogger(AdminGui.class);
 		}
 		if (!getParams(args)) {
 			logger.error(Messages.getString("Configuration.WrongInit")); //$NON-NLS-1$
