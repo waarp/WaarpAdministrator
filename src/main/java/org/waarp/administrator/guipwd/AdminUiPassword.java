@@ -27,14 +27,15 @@ import org.waarp.uip.WaarpUiPassword;
 
 /**
  * Password Gui helper
+ * 
  * @author Frederic Bregier
  *
  */
 public class AdminUiPassword extends WaarpUiPassword {
 
-	private static final long serialVersionUID = -7864989527339637852L;
-	private List<AdminUiPassword> list;
-	
+    private static final long serialVersionUID = -7864989527339637852L;
+    private List<AdminUiPassword> list;
+
     public AdminUiPassword(List<AdminUiPassword> list) throws Exception {
         super(true);
         this.list = list;

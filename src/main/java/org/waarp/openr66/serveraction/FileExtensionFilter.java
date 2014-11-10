@@ -28,48 +28,48 @@ import javax.swing.filechooser.FileFilter;
  * 
  */
 public class FileExtensionFilter extends FileFilter {
-	private String description = "All Files";
-	private String extension = "";
+    private String description = "All Files";
+    private String extension = "";
 
-	public FileExtensionFilter(String extension, String description) {
-		this.description = description;
-		this.extension = extension;
-	}
+    public FileExtensionFilter(String extension, String description) {
+        this.description = description;
+        this.extension = extension;
+    }
 
-	@Override
-	public boolean accept(File f) {
-		if (f.isDirectory()) {
-			return true;
-		}
-		String extension = FileExtensionFilter.getExtension(f);
-		if (extension != null) {
-			if (this.extension.equalsIgnoreCase(extension)) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-		return false;
-	}
+    @Override
+    public boolean accept(File f) {
+        if (f.isDirectory()) {
+            return true;
+        }
+        String extension = FileExtensionFilter.getExtension(f);
+        if (extension != null) {
+            if (this.extension.equalsIgnoreCase(extension)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
 
-	// Description du filtre
-	public String getDescription() {
-		return description;
-	}
+    // Description du filtre
+    public String getDescription() {
+        return description;
+    }
 
-	/**
-	 * Get extension file
-	 * 
-	 * @param f
-	 * @return the extension
-	 */
-	public static String getExtension(File f) {
-		String ext = null;
-		String s = f.getName();
-		int i = s.lastIndexOf('.');
-		if (i > 0 && i < s.length() - 1) {
-			ext = s.substring(i + 1).toLowerCase();
-		}
-		return ext;
-	}
+    /**
+     * Get extension file
+     * 
+     * @param f
+     * @return the extension
+     */
+    public static String getExtension(File f) {
+        String ext = null;
+        String s = f.getName();
+        int i = s.lastIndexOf('.');
+        if (i > 0 && i < s.length() - 1) {
+            ext = s.substring(i + 1).toLowerCase();
+        }
+        return ext;
+    }
 }

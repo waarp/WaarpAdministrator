@@ -20,23 +20,23 @@
  */
 package org.waarp.openr66.r66gui;
 
-
 import org.waarp.administrator.AdminGui;
 
 /**
  * R66 Simple client GUI
+ * 
  * @author Frederic Bregier
  *
  */
 public class AdminSimpleR66ClientGui extends R66ClientGui {
-	
+
     /**
      * Create the application.
      */
     public AdminSimpleR66ClientGui() {
-    	super();
-    	getEnvironment().networkTransaction = AdminGui.environnement.networkTransaction;
-    	extended = true;
+        super();
+        getEnvironment().networkTransaction = AdminGui.environnement.networkTransaction;
+        extended = true;
         initialize();
     }
 
