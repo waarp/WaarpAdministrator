@@ -225,12 +225,14 @@ public class AdminGui {
                     }
                     packet = new TestPacket("MSG", "Administrator checking from " + myhost
                             , 100);
+                    packet.retain();
                     String result = Messages.getString("AdminGui.CheckedHosts");
                     DbSession session = DbConstant.admin != null ? DbConstant.admin.session : null;
                     for (DbHostAuth host : DbHostAuth.getAllHosts(session)) {
                         R66Future future = new R66Future(true);
                         Message mesg = new Message(AdminGui.environnement.networkTransaction, future, host, packet);
                         mesg.run();
+                        packet.retain();
                         future.awaitUninterruptibly();
                         if (future.isSuccess()) {
                             result += "OK: " + host.toString() + "\n";
@@ -238,6 +240,8 @@ public class AdminGui {
                             result += "KO: " + host.toString() + "\n";
                         }
                     }
+                    packet.clear();
+                    ;
                     JOptionPane.showMessageDialog(null, result);
                 } catch (WaarpDatabaseNoConnectionException e) {
                     // TODO Auto-generated catch block
