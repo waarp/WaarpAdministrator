@@ -44,13 +44,13 @@ public class AdminXample extends XAmple {
 
     private static final long serialVersionUID = 6020872788819087355L;
 
-    public boolean stillLaunched = false;
+    private boolean stillLaunched = false;
     private List<AdminXample> list;
 
     public AdminXample(List<AdminXample> list) {
         super();
         this.list = list;
-        stillLaunched = true;
+        setStillLaunched(true);
         this.list.add(this);
     }
 
@@ -58,7 +58,7 @@ public class AdminXample extends XAmple {
         if (!confirmation())
             return;
         saveRuntimeProperties();
-        stillLaunched = false;
+        setStillLaunched(false);
         this.list.remove(this);
         dispose();
     }
@@ -70,7 +70,7 @@ public class AdminXample extends XAmple {
             if (confirmation())
             {
                 saveRuntimeProperties();
-                stillLaunched = false;
+                setStillLaunched(false);
                 this.list.remove(this);
                 dispose();
             }
@@ -144,6 +144,20 @@ public class AdminXample extends XAmple {
         }
         frame.setVisible(true);
         return frame;
+    }
+
+    /**
+     * @return the stillLaunched
+     */
+    public boolean isStillLaunched() {
+        return stillLaunched;
+    }
+
+    /**
+     * @param stillLaunched the stillLaunched to set
+     */
+    private void setStillLaunched(boolean stillLaunched) {
+        this.stillLaunched = stillLaunched;
     }
 
 }
