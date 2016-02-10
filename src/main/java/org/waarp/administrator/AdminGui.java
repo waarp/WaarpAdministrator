@@ -72,10 +72,10 @@ public class AdminGui {
      */
     static volatile WaarpLogger logger;
 
-    public JFrame frmWaarpRCentral;
+    private JFrame frmWaarpRCentral;
     private List<AdminXample> xamples = new ArrayList<AdminXample>();
     private List<AdminUiPassword> passwords = new ArrayList<AdminUiPassword>();
-    public static R66Environment environnement = new R66Environment();
+    private static R66Environment environnement = new R66Environment();
 
     JButton btnEditXml;
     JButton btnCheckPartners;
@@ -104,7 +104,7 @@ public class AdminGui {
             return false;
         }
         Configuration.configuration.pipelineInit();
-        environnement.networkTransaction = new NetworkTransaction();
+        getEnvironnement().networkTransaction = new NetworkTransaction();
         return true;
     }
 
@@ -120,18 +120,18 @@ public class AdminGui {
             logger.error(Messages.getString("Configuration.WrongInit")); //$NON-NLS-1$
             JOptionPane.showMessageDialog(null, Messages.getString("Configuration.WrongInit"), //$NON-NLS-1$
                     "Attention", JOptionPane.WARNING_MESSAGE);
-            if (DbConstant.admin != null && DbConstant.admin.isActive) {
+            if (DbConstant.admin != null && DbConstant.admin.isActive()) {
                 DbConstant.admin.close();
             }
             System.exit(1);
         }
         String[] args2;
 
-        String pwd_gpp = Configuration.configuration.serverKeyFile;
+        String pwd_gpp = Configuration.configuration.getServerKeyFile();
         if (pwd_gpp == null) {
             args2 = new String[] {
                     "-ki",
-                    Configuration.configuration.cryptoFile,
+                    Configuration.configuration.getCryptoFile(),
                     "-pwd",
                     "testpassword",
                     "-clear"
@@ -139,7 +139,7 @@ public class AdminGui {
         } else {
             args2 = new String[] {
                     "-ki",
-                    Configuration.configuration.cryptoFile,
+                    Configuration.configuration.getCryptoFile(),
                     "-pi",
                     pwd_gpp,
                     "-pwd",
@@ -168,7 +168,7 @@ public class AdminGui {
     }
 
     private void langReinit() {
-        frmWaarpRCentral.setTitle(Messages.getString("AdminGui.title") + Configuration.configuration.HOST_ID);
+        frmWaarpRCentral.setTitle(Messages.getString("AdminGui.title") + Configuration.configuration.getHOST_ID());
         btnEditXml.setText(Messages.getString("AdminGui.EditXml"));
         btnCheckPartners.setText(Messages.getString("AdminGui.CheckPartners"));
         btnEditPassword.setText(Messages.getString("AdminGui.EditPassword"));
@@ -183,7 +183,7 @@ public class AdminGui {
      */
     private void initialize() {
         frmWaarpRCentral = new JFrame();
-        frmWaarpRCentral.setTitle("Waarp R66 Central Administrator: " + Configuration.configuration.HOST_ID);
+        frmWaarpRCentral.setTitle("Waarp R66 Central Administrator: " + Configuration.configuration.getHOST_ID());
         frmWaarpRCentral.setBounds(100, 100, 850, 300);
         frmWaarpRCentral.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -218,8 +218,8 @@ public class AdminGui {
                     TestPacket packet;
                     String myhost = null;
                     try {
-                        myhost = (AdminGui.environnement.hostId == null ?
-                                InetAddress.getLocalHost().getHostName() : AdminGui.environnement.hostId);
+                        myhost = (AdminGui.getEnvironnement().hostId == null ?
+                                InetAddress.getLocalHost().getHostName() : AdminGui.getEnvironnement().hostId);
                     } catch (UnknownHostException e) {
                         myhost = Messages.getString("AdminGui.NameUnknown");
                     }
@@ -227,10 +227,10 @@ public class AdminGui {
                             , 100);
                     packet.retain();
                     String result = Messages.getString("AdminGui.CheckedHosts");
-                    DbSession session = DbConstant.admin != null ? DbConstant.admin.session : null;
+                    DbSession session = DbConstant.admin != null ? DbConstant.admin.getSession() : null;
                     for (DbHostAuth host : DbHostAuth.getAllHosts(session)) {
                         R66Future future = new R66Future(true);
-                        Message mesg = new Message(AdminGui.environnement.networkTransaction, future, host, packet);
+                        Message mesg = new Message(AdminGui.getEnvironnement().networkTransaction, future, host, packet);
                         mesg.run();
                         packet.retain();
                         future.awaitUninterruptibly();
@@ -295,13 +295,13 @@ public class AdminGui {
             public void actionPerformed(ActionEvent e) {
                 EventQueue.invokeLater(new Runnable() {
                     public void run() {
-                        if (AdminR66OperationsGui.window != null) {
-                            AdminR66OperationsGui.window.dispose();
-                            AdminR66OperationsGui.window = null;
+                        if (AdminR66OperationsGui.getWindow() != null) {
+                            AdminR66OperationsGui.getWindow().dispose();
+                            AdminR66OperationsGui.setWindow(null);
                         }
                         try {
-                            AdminR66OperationsGui.window = new AdminR66OperationsGui(frmWaarpRCentral);
-                            AdminR66OperationsGui.window.setVisible(true);
+                            AdminR66OperationsGui.setWindow(new AdminR66OperationsGui(frmWaarpRCentral));
+                            AdminR66OperationsGui.getWindow().setVisible(true);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -385,7 +385,7 @@ public class AdminGui {
     private void quit() {
         List<AdminXample> list = new ArrayList<AdminXample>();
         for (AdminXample xample : xamples) {
-            if (xample.stillLaunched) {
+            if (xample.isStillLaunched()) {
                 list.add(xample);
             }
         }
@@ -405,5 +405,12 @@ public class AdminGui {
         }
         frmWaarpRCentral.dispose();
         System.exit(0);
+    }
+
+    /**
+     * @return the environnement
+     */
+    public static R66Environment getEnvironnement() {
+        return environnement;
     }
 }

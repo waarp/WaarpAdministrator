@@ -44,7 +44,7 @@ public class R66Dialog extends JDialog {
      */
     private static final long serialVersionUID = -6105635300084413738L;
     private final JPanel contentPanel = new JPanel();
-    public JEditorPane textPaneDialog;
+    private JEditorPane textPaneDialog;
 
     /**
      * Create the dialog.
@@ -60,10 +60,10 @@ public class R66Dialog extends JDialog {
             JScrollPane scrollPane = new JScrollPane();
             contentPanel.add(scrollPane);
             {
-                textPaneDialog = new JEditorPane();
-                scrollPane.setViewportView(textPaneDialog);
-                textPaneDialog.setEditable(false);
-                textPaneDialog.setContentType("text/html");
+                setTextPaneDialog(new JEditorPane());
+                scrollPane.setViewportView(getTextPaneDialog());
+                getTextPaneDialog().setEditable(false);
+                getTextPaneDialog().setContentType("text/html");
             }
         }
         {
@@ -74,7 +74,7 @@ public class R66Dialog extends JDialog {
                 JButton okButton = new JButton("OK");
                 okButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        AdminR66OperationsGui.window.enableAllButtons();
+                        AdminR66OperationsGui.getWindow().enableAllButtons();
                         dispose();
                     }
                 });
@@ -84,6 +84,20 @@ public class R66Dialog extends JDialog {
             }
         }
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+    }
+
+    /**
+     * @return the textPaneDialog
+     */
+    public JEditorPane getTextPaneDialog() {
+        return textPaneDialog;
+    }
+
+    /**
+     * @param textPaneDialog the textPaneDialog to set
+     */
+    public void setTextPaneDialog(JEditorPane textPaneDialog) {
+        this.textPaneDialog = textPaneDialog;
     }
 
 }
