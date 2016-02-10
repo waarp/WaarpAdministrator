@@ -52,7 +52,7 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = -6105635300084413738L;
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> JPanel contentPanel = <strong class="jxr_keyword">new</strong> JPanel();
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>      <strong class="jxr_keyword">public</strong> JEditorPane textPaneDialog;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>      <strong class="jxr_keyword">private</strong> JEditorPane textPaneDialog;
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment">     * Create the dialog.</em>
@@ -68,10 +68,10 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>              JScrollPane scrollPane = <strong class="jxr_keyword">new</strong> JScrollPane();
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>              contentPanel.add(scrollPane);
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>              {
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>                  textPaneDialog = <strong class="jxr_keyword">new</strong> JEditorPane();
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>                  scrollPane.setViewportView(textPaneDialog);
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>                  textPaneDialog.setEditable(false);
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>                  textPaneDialog.setContentType(<span class="jxr_string">"text/html"</span>);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>                  setTextPaneDialog(<strong class="jxr_keyword">new</strong> JEditorPane());
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>                  scrollPane.setViewportView(getTextPaneDialog());
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>                  getTextPaneDialog().setEditable(false);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>                  getTextPaneDialog().setContentType(<span class="jxr_string">"text/html"</span>);
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>              }
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>          }
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>          {
@@ -82,7 +82,7 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>                  JButton okButton = <strong class="jxr_keyword">new</strong> JButton(<span class="jxr_string">"OK"</span>);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>                  okButton.addActionListener(<strong class="jxr_keyword">new</strong> ActionListener() {
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>                      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> actionPerformed(ActionEvent e) {
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>                          AdminR66OperationsGui.window.enableAllButtons();
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>                          AdminR66OperationsGui.getWindow().enableAllButtons();
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>                          dispose();
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>                      }
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>                  });
@@ -94,9 +94,23 @@
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>          <strong class="jxr_keyword">this</strong>.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>      }
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  }
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">     * @return the textPaneDialog</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>      <strong class="jxr_keyword">public</strong> JEditorPane getTextPaneDialog() {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>          <strong class="jxr_keyword">return</strong> textPaneDialog;
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>      }
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">     * @param textPaneDialog the textPaneDialog to set</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setTextPaneDialog(JEditorPane textPaneDialog) {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>         <strong class="jxr_keyword">this</strong>.textPaneDialog = textPaneDialog;
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>     }
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2009&#x2013;2014 <a href="http://www.waarp.it">Waarp</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2009&#x2013;2016 <a href="http://www.waarp.it">Waarp</a>. All rights reserved.</div>
 </body>
 </html>

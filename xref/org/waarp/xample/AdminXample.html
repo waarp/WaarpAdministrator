@@ -52,13 +52,13 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 6020872788819087355L;
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> stillLaunched = false;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> stillLaunched = false;
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>      <strong class="jxr_keyword">private</strong> List&lt;AdminXample&gt; list;
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>      <strong class="jxr_keyword">public</strong> <a href="../../../org/waarp/xample/AdminXample.html">AdminXample</a>(List&lt;AdminXample&gt; list) {
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>          <strong class="jxr_keyword">super</strong>();
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>          <strong class="jxr_keyword">this</strong>.list = list;
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>          stillLaunched = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>          setStillLaunched(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>          <strong class="jxr_keyword">this</strong>.list.add(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>      }
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  
@@ -66,7 +66,7 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>          <strong class="jxr_keyword">if</strong> (!confirmation())
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>              <strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>          saveRuntimeProperties();
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>          stillLaunched = false;
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>          setStillLaunched(false);
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>          <strong class="jxr_keyword">this</strong>.list.remove(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>          dispose();
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>      }
@@ -78,7 +78,7 @@
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>              <strong class="jxr_keyword">if</strong> (confirmation())
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>              {
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>                  saveRuntimeProperties();
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>                  stillLaunched = false;
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>                  setStillLaunched(false);
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>                  <strong class="jxr_keyword">this</strong>.list.remove(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>                  dispose();
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>              }
@@ -154,9 +154,23 @@
 <a class="jxr_linenumber" name="L146" href="#L146">146</a>         <strong class="jxr_keyword">return</strong> frame;
 <a class="jxr_linenumber" name="L147" href="#L147">147</a>     }
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> }
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">     * @return the stillLaunched</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isStillLaunched() {
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>         <strong class="jxr_keyword">return</strong> stillLaunched;
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>     }
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">     * @param stillLaunched the stillLaunched to set</em>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> setStillLaunched(<strong class="jxr_keyword">boolean</strong> stillLaunched) {
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>         <strong class="jxr_keyword">this</strong>.stillLaunched = stillLaunched;
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>     }
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2009&#x2013;2014 <a href="http://www.waarp.it">Waarp</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2009&#x2013;2016 <a href="http://www.waarp.it">Waarp</a>. All rights reserved.</div>
 </body>
 </html>
