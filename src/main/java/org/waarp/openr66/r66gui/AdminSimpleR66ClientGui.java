@@ -35,7 +35,7 @@ public class AdminSimpleR66ClientGui extends R66ClientGui {
      */
     public AdminSimpleR66ClientGui() {
         super();
-        getEnvironment().networkTransaction = AdminGui.environnement.networkTransaction;
+        getEnvironment().networkTransaction = AdminGui.getEnvironnement().networkTransaction;
         extended = true;
         initialize();
     }
