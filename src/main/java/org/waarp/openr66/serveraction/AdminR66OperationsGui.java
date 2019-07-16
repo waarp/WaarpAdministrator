@@ -202,12 +202,8 @@ public class AdminR66OperationsGui extends JFrame {
         System.setOut(new PrintStream(new JTextAreaOutputStream(textPaneLog)));
         DbSession session = DbConstant.admin != null ? DbConstant.admin.getSession() : null;
         try {
-            comboBoxServer = new JComboBox(DbHostAuth.getAllHosts(session));
+            comboBoxServer = new JComboBox(DbHostAuth.getAllHosts());
         } catch (WaarpDatabaseNoConnectionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return;
-        } catch (WaarpDatabaseSqlException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             return;
@@ -1207,16 +1203,12 @@ public class AdminR66OperationsGui extends JFrame {
             int idx = comboBoxServer.getSelectedIndex();
             comboBoxServer.removeAllItems();
             DbSession session = DbConstant.admin != null ? DbConstant.admin.getSession() : null;
-            for (DbHostAuth auth : DbHostAuth.getAllHosts(session)) {
+            for (DbHostAuth auth : DbHostAuth.getAllHosts()) {
                 //System.err.println("Add: "+auth.toString());
                 comboBoxServer.addItem(auth);
             }
             comboBoxServer.setSelectedIndex(idx);
         } catch (WaarpDatabaseNoConnectionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return;
-        } catch (WaarpDatabaseSqlException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             return;
